@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Move Tracker</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+
+:root{
+  --bg:#0B0B0B;
+  --surface:#17171a;
+  --surface-2:#1f1f23;
+  --primary:#143D59;
+  --secondary:#1ABC9C;
+  --accent:#2ECC71;
+  --border:rgba(255,255,255,0.09);
+  --text:#e9eae8;
+  --muted:#9aa19f;
+  --danger:#c17c6c;
+}
+
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Roboto',sans-serif;padding-bottom:40px;}
+
+.header{background:linear-gradient(135deg, var(--primary), var(--bg) 140%);padding:1.8rem 1.4rem 1.4rem;border-bottom:1px solid var(--border);}
+.eyebrow{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;font-weight:500;}
+h1{font-weight:900;font-size:clamp(1.5rem,5vw,2.1rem);margin:0 0 0.3rem;letter-spacing:-0.01em;}
+.route{font-size:0.82rem;color:var(--muted);font-weight:400;}
+
+.tabs{display:flex;gap:0.35rem;max-width:820px;margin:1.1rem auto 0;padding:0 1.2rem;overflow-x:auto;}
+.tab-btn{flex:1;min-width:80px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'Roboto',sans-serif;font-weight:500;font-size:0.82rem;padding:0.55rem 0.5rem;border-radius:8px 8px 0 0;cursor:pointer;border-bottom:none;}
+.tab-btn.active{color:var(--text);background:var(--surface-2);box-shadow:inset 0 2px 0 var(--accent);}
+
+.wrap{max-width:820px;margin:0 auto;padding:1.1rem 1.2rem 0;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+.subnav{display:flex;gap:0.4rem;margin-bottom:1rem;}
+.subnav-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'Roboto',sans-serif;font-weight:500;font-size:0.78rem;padding:0.4rem 0.9rem;border-radius:20px;cursor:pointer;}
+.subnav-btn.active{color:var(--text);background:var(--secondary);border-color:var(--secondary);}
+.subview{display:none;}
+.subview.active{display:block;}
+
+.add-category{display:flex;gap:0.5rem;margin-bottom:1.4rem;}
+.add-category input{flex:1;padding:0.65rem 0.85rem;border:1px solid var(--border);border-radius:6px;font-family:'Roboto',sans-serif;font-size:0.88rem;background:var(--surface);color:var(--text);}
+.add-category input::placeholder{color:var(--muted);}
+.add-category button{background:var(--primary);color:var(--text);border:none;border-radius:6px;padding:0 1.1rem;font-family:'Roboto',sans-serif;font-weight:500;font-size:0.82rem;cursor:pointer;}
+.add-category button:hover{filter:brightness(1.2);}
+
+.category{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:0.9rem;overflow:hidden;}
+.cat-head{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1rem;background:var(--surface-2);border-bottom:1px solid var(--border);gap:0.6rem;}
+.cat-head-left{display:flex;align-items:center;gap:0.55rem;min-width:0;}
+.cat-arrow{flex:none;border:none;background:none;color:var(--muted);cursor:pointer;font-size:0.7rem;transition:transform 0.2s;padding:0.1rem;}
+.cat-arrow.collapsed{transform:rotate(-90deg);}
+.cat-title{font-weight:700;font-size:0.96rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cat-badge{font-size:0.66rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:0.15rem 0.5rem;border-radius:20px;flex:none;}
+.cat-actions{display:flex;align-items:center;gap:0.5rem;flex:none;}
+.cat-del{border:none;background:none;color:var(--muted);cursor:pointer;font-size:0.85rem;padding:0.15rem 0.3rem;}
+.cat-del:hover{color:var(--danger);}
+.cat-confirm{border:none;background:var(--danger);color:#fff;cursor:pointer;font-size:0.72rem;padding:0.25rem 0.55rem;border-radius:5px;font-family:'Roboto',sans-serif;font-weight:500;}
+.cat-cancel{border:none;background:none;color:var(--muted);cursor:pointer;font-size:0.72rem;padding:0.25rem 0.4rem;font-family:'Roboto',sans-serif;}
+.cat-body{padding:0.3rem 1rem 0.9rem;}
+.cat-body.collapsed{display:none;}
+
+.item{display:flex;align-items:center;gap:0.65rem;padding:0.5rem 0.1rem;border-bottom:1px dashed var(--border);flex-wrap:wrap;}
+.item:last-child{border-bottom:none;}
+.check{width:19px;height:19px;flex:none;border:2px solid var(--primary);border-radius:5px;cursor:pointer;background:var(--surface);position:relative;}
+.check:hover{border-color:var(--accent);}
+.check.checked{background:var(--accent);border-color:var(--accent);}
+.check.checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:#0B0B0B;font-weight:700;}
+.item-text{font-size:0.9rem;line-height:1.35;flex:1;min-width:120px;border-radius:4px;padding:0.1rem 0.3rem;margin:-0.1rem -0.3rem;}
+.item-text:focus{outline:none;background:var(--surface-2);}
+.item-text.done{text-decoration:line-through;color:var(--muted);}
+.cat-title:focus{outline:none;background:rgba(255,255,255,0.06);border-radius:4px;padding:0 0.2rem;margin:0 -0.2rem;}
+.date-input{background:var(--surface-2);border:1px solid var(--border);color:var(--muted);font-family:'Roboto',sans-serif;font-size:0.72rem;border-radius:5px;padding:0.15rem 0.3rem;flex:none;width:118px;color-scheme:dark;}
+.cost-input{background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-family:'Roboto',sans-serif;font-size:0.78rem;border-radius:5px;padding:0.2rem 0.4rem;flex:none;width:78px;text-align:right;}
+.cost-input::placeholder{color:var(--muted);}
+.item-del{border:none;background:none;color:var(--border);cursor:pointer;font-size:0.85rem;padding:0 0.15rem;flex:none;}
+.item:hover .item-del{color:var(--muted);}
+
+.add-item-row{display:flex;gap:0.5rem;margin-top:0.4rem;padding-top:0.5rem;flex-wrap:wrap;}
+.add-item-row input[type=text]{flex:1;min-width:100px;border:none;border-bottom:1px solid var(--border);padding:0.35rem 0.2rem;font-family:'Roboto',sans-serif;font-size:0.86rem;background:transparent;color:var(--text);}
+.add-item-row input.add-cost{flex:none;width:70px;border:none;border-bottom:1px solid var(--border);padding:0.35rem 0.2rem;font-family:'Roboto',sans-serif;font-size:0.82rem;background:transparent;color:var(--text);text-align:right;}
+.add-item-row input:focus{outline:none;border-color:var(--accent);}
+.add-item-row button{border:none;background:none;color:var(--accent);font-weight:500;font-size:0.83rem;cursor:pointer;}
+.empty-cat{font-size:0.83rem;color:var(--muted);font-style:italic;padding:0.5rem 0.1rem;}
+
+.reset-row{display:flex;align-items:center;gap:0.6rem;justify-content:center;margin-top:1.2rem;}
+.reset-link{font-size:0.72rem;color:var(--muted);cursor:pointer;text-decoration:underline;}
+.reset-link.armed{color:var(--danger);font-weight:700;text-decoration:none;}
+.reset-cancel{font-size:0.72rem;color:var(--muted);cursor:pointer;text-decoration:underline;}
+
+.meter-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem 1.05rem;margin-top:1.3rem;}
+.meter-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.55rem;}
+.meter-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);font-weight:500;}
+.meter-stat{font-weight:900;font-size:1.1rem;}
+.meter-track{position:relative;height:9px;background:rgba(255,255,255,0.07);border-radius:20px;}
+.meter-fill{height:100%;background:linear-gradient(90deg, var(--primary), var(--accent));border-radius:20px;transition:width 0.4s ease;width:0%;}
+.meter-sub{margin-top:0.5rem;font-size:0.74rem;color:var(--muted);}
+
+.cal-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem;}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;}
+.cal-nav button{background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:6px;width:32px;height:32px;cursor:pointer;font-size:0.9rem;}
+.cal-month{font-weight:700;font-size:1rem;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-dow{text-align:center;font-size:0.68rem;color:var(--muted);padding-bottom:0.3rem;}
+.cal-day{aspect-ratio:1;border-radius:8px;background:var(--surface-2);border:1px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:0.82rem;position:relative;min-height:38px;}
+.cal-day.empty{background:transparent;cursor:default;}
+.cal-day.has-items{border-color:var(--accent);}
+.cal-day.selected{background:rgba(46,204,113,0.18);border-color:var(--accent);}
+.cal-day .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);position:absolute;bottom:5px;}
+.cal-panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;}
+.cal-panel-title{font-weight:700;font-size:0.9rem;margin-bottom:0.6rem;}
+.cal-item{display:flex;align-items:center;gap:0.55rem;padding:0.4rem 0;border-bottom:1px dashed var(--border);font-size:0.85rem;}
+.cal-item:last-child{border-bottom:none;}
+.cal-item .cat-tag{font-size:0.63rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.4rem;border-radius:4px;flex:none;color:var(--muted);}
+.cal-add-row{display:flex;gap:0.4rem;margin-top:0.7rem;flex-wrap:wrap;}
+.cal-add-row input[type=text]{flex:1;min-width:120px;padding:0.4rem 0.6rem;border:1px solid var(--border);border-radius:6px;background:var(--surface-2);color:var(--text);font-family:'Roboto',sans-serif;font-size:0.82rem;}
+.cal-add-row select{padding:0.4rem 0.5rem;border:1px solid var(--border);border-radius:6px;background:var(--surface-2);color:var(--text);font-family:'Roboto',sans-serif;font-size:0.8rem;}
+.cal-add-row button{border:none;background:var(--primary);color:var(--text);border-radius:6px;padding:0.4rem 0.8rem;font-size:0.8rem;cursor:pointer;}
+
+.acc-table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem;}
+.acc-table tr{border-bottom:1px solid var(--border);}
+.acc-table tr:last-child{border-bottom:none;}
+.acc-table td{padding:0.3rem;}
+.acc-table input, .acc-table select{width:100%;background:transparent;border:none;color:var(--text);font-family:'Roboto',sans-serif;font-size:0.85rem;padding:0.4rem 0.5rem;border-radius:5px;}
+.acc-table input:focus, .acc-table select:focus{outline:none;background:var(--surface-2);}
+.acc-label{font-weight:500;}
+.acc-num{text-align:right;}
+.acc-del{width:34px;text-align:center;}
+.acc-del button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.85rem;}
+.acc-del button:hover{color:var(--danger);}
+.acc-add{margin-top:0;margin-bottom:1.2rem;background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:0.5rem 1rem;font-size:0.82rem;cursor:pointer;font-family:'Roboto',sans-serif;}
+.acc-note{font-size:0.76rem;color:var(--muted);margin-top:0.4rem;margin-bottom:1.3rem;}
+
+.spent-card{background:var(--surface-2);border:1px solid var(--secondary);border-radius:10px;padding:1rem 1.1rem;margin-bottom:1.3rem;}
+.spent-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:0.4rem;}
+.spent-values{display:flex;gap:1.6rem;}
+.spent-values div span{display:block;}
+.spent-cur{font-size:0.68rem;color:var(--muted);}
+.spent-num{font-size:1.3rem;font-weight:900;}
+
+.notes-area{width:100%;min-height:400px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Roboto',sans-serif;font-size:0.92rem;line-height:1.5;padding:1rem;resize:vertical;}
+.notes-area:focus{outline:none;border-color:var(--accent);}
+.notes-note{font-size:0.76rem;color:var(--muted);margin-top:0.5rem;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Personal Departure Checklist</div>
+  <h1 id="headerTitle"></h1>
+  <div class="route" id="headerRoute"></div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="checklist">Checklist</button>
+  <button class="tab-btn" data-tab="shopping">Shopping</button>
+  <button class="tab-btn" data-tab="accommodation">Accommodation</button>
+  <button class="tab-btn" data-tab="notes">Notes</button>
+</div>
+
+<div class="wrap">
+
+  <!-- CHECKLIST -->
+  <div class="tab-panel active" id="tab-checklist">
+    <div class="subnav">
+      <button class="subnav-btn active" data-sub="checklist:list">List</button>
+      <button class="subnav-btn" data-sub="checklist:calendar">Calendar</button>
+    </div>
+
+    <div class="subview active" id="sub-checklist-list">
+      <div class="add-category">
+        <input type="text" id="newCatInput" placeholder="Add a new section…">
+        <button data-addcat="checklist">+ Section</button>
+      </div>
+      <div id="checklistCategories"></div>
+      <div class="meter-card">
+        <div class="meter-top">
+          <span class="meter-label">Packed &amp; done</span>
+          <span class="meter-stat" id="meterStat">0%</span>
+        </div>
+        <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+        <div class="meter-sub" id="meterSub">0 of 0 items done</div>
+      </div>
+      <div class="reset-row" id="resetRow"></div>
+    </div>
+
+    <div class="subview" id="sub-checklist-calendar">
+      <div class="cal-card">
+        <div class="cal-nav">
+          <button id="calPrev">‹</button>
+          <div class="cal-month" id="calMonthLabel"></div>
+          <button id="calNext">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <div class="cal-panel" id="calPanel"></div>
+    </div>
+  </div>
+
+  <!-- SHOPPING -->
+  <div class="tab-panel" id="tab-shopping">
+    <div class="spent-card">
+      <div class="spent-label">Total spent so far</div>
+      <div class="spent-values">
+        <div><span class="spent-cur">INR</span><span class="spent-num" id="spentInr">₹0</span></div>
+        <div><span class="spent-cur">GBP</span><span class="spent-num" id="spentGbp">£0</span></div>
+      </div>
+    </div>
+    <div class="add-category">
+      <input type="text" id="newShopCatInput" placeholder="Add a new section…">
+      <button data-addcat="shopping">+ Section</button>
+    </div>
+    <div id="shoppingCategories"></div>
+  </div>
+
+  <!-- ACCOMMODATION -->
+  <div class="tab-panel" id="tab-accommodation">
+    <table class="acc-table" id="accTable"></table>
+    <button class="acc-add" id="accAddBtn">+ Add place</button>
+    <div class="acc-note">Track places you're looking at — address, rent, whether bills are included, the listing link, and where things stand.</div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="tab-panel" id="tab-notes">
+    <textarea class="notes-area" id="notesArea" placeholder="Jot down anything you don't want to forget…"></textarea>
+    <div class="notes-note">Autosaves as you type.</div>
+  </div>
+
+</div>
+
+<script>
+/* ===================== REUSABLE TEMPLATE CONFIG ===================== */
+/* Swap these values to reuse this tracker for someone else's move.     */
+const CONFIG = {
+  university: "Oxford Brookes",
+  student: "Princy",
+  departureDate: "2026-09-07",
+  colors: {
+    background: "#0B0B0B",
+    primary: "#143D59",
+    secondary: "#1ABC9C",
+    accent: "#2ECC71"
+  }
+};
+/* ====================================================================== */
+
+function hexToRgb(hex){
+  hex = hex.replace('#','');
+  if(hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+  const num = parseInt(hex,16);
+  return {r:(num>>16)&255, g:(num>>8)&255, b:num&255};
+}
+function mix(hex, towardHex, pct){
+  const a = hexToRgb(hex), b = hexToRgb(towardHex);
+  const r = Math.round(a.r + (b.r-a.r)*pct);
+  const g = Math.round(a.g + (b.g-a.g)*pct);
+  const bl = Math.round(a.b + (b.b-a.b)*pct);
+  return `rgb(${r}, ${g}, ${bl})`;
+}
+function luminance(hex){
+  const {r,g,b} = hexToRgb(hex);
+  return (0.299*r + 0.587*g + 0.114*b);
+}
+function applyTheme(){
+  const c = CONFIG.colors;
+  const isDark = luminance(c.background) < 140;
+  const mixTarget = isDark ? '#ffffff' : '#000000';
+  const root = document.documentElement.style;
+  root.setProperty('--bg', c.background);
+  root.setProperty('--surface', mix(c.background, mixTarget, 0.06));
+  root.setProperty('--surface-2', mix(c.background, mixTarget, 0.11));
+  root.setProperty('--primary', c.primary);
+  root.setProperty('--secondary', c.secondary);
+  root.setProperty('--accent', c.accent);
+  root.setProperty('--text', isDark ? '#e9eae8' : '#1b1b1b');
+  root.setProperty('--muted', isDark ? '#9aa19f' : '#6b6b6b');
+  root.setProperty('--border', isDark ? 'rgba(255,255,255,0.09)' : 'rgba(0,0,0,0.09)');
+}
+function applyHeader(){
+  document.getElementById('headerTitle').textContent = `${CONFIG.student} → ${CONFIG.university}`;
+  const dep = new Date(CONFIG.departureDate + 'T00:00:00');
+  const niceDate = dep.toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'});
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diffDays = Math.round((dep - today) / 86400000);
+  let countdown;
+  if(diffDays > 0) countdown = `${diffDays} day${diffDays===1?'':'s'} to departure`;
+  else if(diffDays === 0) countdown = `Departing today`;
+  else countdown = `Departed ${Math.abs(diffDays)} day${Math.abs(diffDays)===1?'':'s'} ago`;
+  document.getElementById('headerRoute').textContent = `${countdown} · ${niceDate}`;
+}
+applyTheme();
+applyHeader();
+
+/* ===================== STATE ===================== */
+const STORAGE_KEY = 'uk-move-tracker-v1';
+let data = null;
+let idCounter = 1;
+let activeTab = 'checklist';
+let activeSub = { checklist: 'list' };
+let calViewYear, calViewMonth;
+(() => { const d = new Date(); calViewYear = d.getFullYear(); calViewMonth = d.getMonth(); })();
+let calSelectedDate = null;
+let pendingDeleteCat = null;
+let resetArmed = false;
+
+function uid(){ return 'i' + (idCounter++) + '_' + Math.random().toString(36).slice(2,7); }
+
+const defaultData = () => ({
+  checklist: [
+    { id:'documents', title:'Documents', collapsed:false, items:[] },
+    { id:'visa', title:'Visa', collapsed:false, items:[] },
+    { id:'finance', title:'Finance', collapsed:false, items:[] },
+    { id:'personal', title:'Personal', collapsed:false, items:[] }
+  ],
+  shopping: [
+    { id:'toiletries', title:'Toiletries', collapsed:false, items:[] },
+    { id:'medicines', title:'Medicines', collapsed:false, items:[] },
+    { id:'packing', title:'Packing Items', collapsed:false, items:[] }
+  ],
+  accommodation: [],
+  notes: ''
+});
+
+/* ===================== STORAGE ===================== */
+async function storageGet(key){
+  if(window.storage && window.storage.get){
+    try{ const r = await window.storage.get(key, false); return r ? r.value : null; }catch(e){ return null; }
+  }
+  try{ return localStorage.getItem(key); }catch(e){ return null; }
+}
+async function storageSet(key, value){
+  if(window.storage && window.storage.set){
+    try{ await window.storage.set(key, value, false); return; }catch(e){}
+  }
+  try{ localStorage.setItem(key, value); }catch(e){}
+}
+async function loadData(){
+  const raw = await storageGet(STORAGE_KEY);
+  data = raw ? JSON.parse(raw) : defaultData();
+  document.getElementById('notesArea').value = data.notes || '';
+  render();
+}
+let saveTimer;
+function saveData(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{ storageSet(STORAGE_KEY, JSON.stringify(data)); }, 300);
+}
+function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str == null ? '' : str; return d.innerHTML; }
+function parseNum(v){ const n = parseFloat(String(v).replace(/[^0-9.-]/g,'')); return isNaN(n) ? 0 : n; }
+
+/* ===================== TABS & SUBNAV ===================== */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.onclick = ()=>{
+    activeTab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b===btn));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active', p.id === 'tab-'+activeTab));
+  };
+});
+document.querySelectorAll('.subnav-btn').forEach(btn=>{
+  btn.onclick = ()=>{
+    const [group, view] = btn.dataset.sub.split(':');
+    activeSub[group] = view;
+    document.querySelectorAll(`[data-sub^="${group}:"]`).forEach(b=>b.classList.toggle('active', b===btn));
+    document.getElementById(`sub-${group}-list`).classList.toggle('active', view==='list');
+    document.getElementById(`sub-${group}-calendar`).classList.toggle('active', view==='calendar');
+    if(view==='calendar') renderCalendar();
+  };
+});
+
+/* ===================== CATEGORY LIST (checklist & shopping share this) ===================== */
+function renderCategoryGroup(kind){
+  const containerId = kind === 'checklist' ? 'checklistCategories' : 'shoppingCategories';
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  data[kind].forEach(cat=>{
+    const catEl = document.createElement('div');
+    catEl.className = 'category';
+    const remaining = cat.items.filter(i=>!i.done).length;
+    const delKey = kind+':'+cat.id;
+    const actionsHtml = pendingDeleteCat === delKey
+      ? `<button class="cat-confirm" data-catconfirm="${cat.id}" data-kind="${kind}">Delete?</button><button class="cat-cancel" data-catcancel="${cat.id}" data-kind="${kind}">Cancel</button>`
+      : `<button class="cat-del" data-catdel="${cat.id}" data-kind="${kind}" title="Delete section">🗑</button>`;
+
+    const itemsHtml = cat.items.length ? cat.items.map(item => {
+      if(kind === 'checklist'){
+        return `
+          <div class="item" data-id="${item.id}">
+            <div class="check ${item.done ? 'checked' : ''}" data-check="${item.id}" data-cat="${cat.id}" data-kind="checklist"></div>
+            <div class="item-text ${item.done ? 'done' : ''}" contenteditable="true" spellcheck="false" data-edit="${item.id}" data-editcat="${cat.id}" data-kind="checklist">${escapeHtml(item.text)}</div>
+            <input type="date" class="date-input" data-dateitem="${item.id}" data-cat="${cat.id}" value="${item.dueDate || ''}">
+            <button class="item-del" data-del="${item.id}" data-cat="${cat.id}" data-kind="checklist" title="Delete">✕</button>
+          </div>`;
+      } else {
+        return `
+          <div class="item" data-id="${item.id}">
+            <div class="check ${item.done ? 'checked' : ''}" data-check="${item.id}" data-cat="${cat.id}" data-kind="shopping"></div>
+            <div class="item-text ${item.done ? 'done' : ''}" contenteditable="true" spellcheck="false" data-edit="${item.id}" data-editcat="${cat.id}" data-kind="shopping">${escapeHtml(item.text)}</div>
+            <input type="text" class="cost-input" placeholder="₹ INR" data-cost="inr" data-item="${item.id}" data-cat="${cat.id}" value="${escapeHtml(item.inr || '')}">
+            <input type="text" class="cost-input" placeholder="£ GBP" data-cost="gbp" data-item="${item.id}" data-cat="${cat.id}" value="${escapeHtml(item.gbp || '')}">
+            <button class="item-del" data-del="${item.id}" data-cat="${cat.id}" data-kind="shopping" title="Delete">✕</button>
+          </div>`;
+      }
+    }).join('') : '<div class="empty-cat">Nothing here yet.</div>';
+
+    const addRowHtml = kind === 'checklist'
+      ? `<div class="add-item-row">
+           <input type="text" placeholder="Add an item…" data-input="${cat.id}" data-kind="checklist">
+           <button data-add="${cat.id}" data-kind="checklist">Add</button>
+         </div>`
+      : `<div class="add-item-row">
+           <input type="text" placeholder="Add an item…" data-input="${cat.id}" data-kind="shopping">
+           <input type="text" class="add-cost" placeholder="₹" data-inputinr="${cat.id}">
+           <input type="text" class="add-cost" placeholder="£" data-inputgbp="${cat.id}">
+           <button data-add="${cat.id}" data-kind="shopping">Add</button>
+         </div>`;
+
+    catEl.innerHTML = `
+      <div class="cat-head">
+        <div class="cat-head-left">
+          <button class="cat-arrow ${cat.collapsed ? 'collapsed' : ''}" data-arrow="${cat.id}" data-kind="${kind}">▼</button>
+          <span class="cat-title" contenteditable="true" spellcheck="false" data-cattitle="${cat.id}" data-kind="${kind}">${escapeHtml(cat.title)}</span>
+          <span class="cat-badge">${remaining} left</span>
+        </div>
+        <div class="cat-actions">${actionsHtml}</div>
+      </div>
+      <div class="cat-body ${cat.collapsed ? 'collapsed' : ''}" data-body="${cat.id}">
+        ${itemsHtml}
+        ${addRowHtml}
+      </div>
+    `;
+    container.appendChild(catEl);
+  });
+
+  attachCategoryEvents(kind);
+}
+
+function attachCategoryEvents(kind){
+  const scopeSelector = kind === 'checklist' ? '#checklistCategories' : '#shoppingCategories';
+  const scope = document.querySelector(scopeSelector);
+
+  scope.querySelectorAll('[data-arrow]').forEach(btn=>{
+    btn.onclick = (e)=>{
+      e.stopPropagation();
+      const cat = data[kind].find(c=>c.id===btn.dataset.arrow);
+      cat.collapsed = !cat.collapsed;
+      render(); saveData();
+    };
+  });
+  scope.querySelectorAll('[data-catdel]').forEach(btn=>{
+    btn.onclick = (e)=>{ e.stopPropagation(); pendingDeleteCat = kind+':'+btn.dataset.catdel; render(); };
+  });
+  scope.querySelectorAll('[data-catconfirm]').forEach(btn=>{
+    btn.onclick = (e)=>{
+      e.stopPropagation();
+      data[kind] = data[kind].filter(c=>c.id!==btn.dataset.catconfirm);
+      pendingDeleteCat = null;
+      render(); saveData();
+    };
+  });
+  scope.querySelectorAll('[data-catcancel]').forEach(btn=>{
+    btn.onclick = (e)=>{ e.stopPropagation(); pendingDeleteCat = null; render(); };
+  });
+  scope.querySelectorAll('[data-check]').forEach(chk=>{
+    chk.onclick = (e)=>{
+      e.stopPropagation();
+      const id = chk.dataset.check, catId = chk.dataset.cat;
+      const cat = data[kind].find(c=>c.id===catId);
+      const item = cat.items.find(i=>i.id===id);
+      item.done = !item.done;
+      render(); saveData();
+    };
+  });
+  scope.querySelectorAll('[data-edit]').forEach(el=>{
+    el.onclick = (e)=> e.stopPropagation();
+    el.onkeydown = (e)=>{ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } };
+    el.onblur = ()=>{
+      const id = el.dataset.edit, catId = el.dataset.editcat;
+      const cat = data[kind].find(c=>c.id===catId);
+      const item = cat.items.find(i=>i.id===id);
+      const val = el.textContent.trim();
+      if(val && val !== item.text){ item.text = val; saveData(); if(kind==='checklist') renderCalendar(); }
+      else if(!val){ el.textContent = item.text; }
+    };
+  });
+  scope.querySelectorAll('[data-cattitle]').forEach(el=>{
+    el.onclick = (e)=> e.stopPropagation();
+    el.onkeydown = (e)=>{ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } };
+    el.onblur = ()=>{
+      const catId = el.dataset.cattitle;
+      const cat = data[kind].find(c=>c.id===catId);
+      const val = el.textContent.trim();
+      if(val && val !== cat.title){ cat.title = val; saveData(); if(kind==='checklist') renderCalendar(); }
+      else if(!val){ el.textContent = cat.title; }
+    };
+  });
+  scope.querySelectorAll('[data-dateitem]').forEach(inp=>{
+    inp.onclick = (e)=> e.stopPropagation();
+    inp.onchange = (e)=>{
+      e.stopPropagation();
+      const id = inp.dataset.dateitem, catId = inp.dataset.cat;
+      const cat = data.checklist.find(c=>c.id===catId);
+      const item = cat.items.find(i=>i.id===id);
+      item.dueDate = inp.value || null;
+      saveData(); renderCalendar();
+    };
+  });
+  scope.querySelectorAll('[data-cost]').forEach(inp=>{
+    inp.onclick = (e)=> e.stopPropagation();
+    inp.oninput = ()=>{
+      const catId = inp.dataset.cat, itemId = inp.dataset.item, field = inp.dataset.cost;
+      const cat = data.shopping.find(c=>c.id===catId);
+      const item = cat.items.find(i=>i.id===itemId);
+      item[field] = inp.value;
+      saveData(); updateSpentTotals();
+    };
+  });
+  scope.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.onclick = (e)=>{
+      e.stopPropagation();
+      const id = btn.dataset.del, catId = btn.dataset.cat;
+      const cat = data[kind].find(c=>c.id===catId);
+      cat.items = cat.items.filter(i=>i.id!==id);
+      render(); saveData();
+    };
+  });
+  scope.querySelectorAll('[data-add]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const catId = btn.dataset.add;
+      const cat = data[kind].find(c=>c.id===catId);
+      const input = scope.querySelector(`[data-input="${catId}"]`);
+      const val = input.value.trim();
+      if(!val) return;
+      if(kind === 'checklist'){
+        cat.items.push({id:uid(), text:val, done:false, dueDate:null});
+      } else {
+        const inrInp = scope.querySelector(`[data-inputinr="${catId}"]`);
+        const gbpInp = scope.querySelector(`[data-inputgbp="${catId}"]`);
+        cat.items.push({id:uid(), text:val, done:false, inr: inrInp.value.trim(), gbp: gbpInp.value.trim()});
+      }
+      render(); saveData();
+      const freshInput = scope.querySelector(`[data-input="${catId}"]`);
+      if(freshInput) freshInput.focus();
+    };
+  });
+  scope.querySelectorAll('[data-input]').forEach(inp=>{
+    inp.onkeydown = (e)=>{ if(e.key==='Enter') scope.querySelector(`[data-add="${inp.dataset.input}"]`).click(); };
+  });
+}
+
+document.querySelectorAll('[data-addcat]').forEach(btn=>{
+  btn.onclick = ()=>{
+    const kind = btn.dataset.addcat;
+    const inputId = kind === 'checklist' ? 'newCatInput' : 'newShopCatInput';
+    const input = document.getElementById(inputId);
+    const val = input.value.trim();
+    if(!val) return;
+    data[kind].push({id:'cat_'+uid(), title:val, collapsed:false, items:[]});
+    input.value=''; render(); saveData();
+  };
+});
+document.getElementById('newCatInput').onkeydown = (e)=>{ if(e.key==='Enter') document.querySelector('[data-addcat="checklist"]').click(); };
+document.getElementById('newShopCatInput').onkeydown = (e)=>{ if(e.key==='Enter') document.querySelector('[data-addcat="shopping"]').click(); };
+
+/* ===================== PROGRESS METER (checklist only) ===================== */
+function totalCounts(){
+  let done=0, total=0;
+  data.checklist.forEach(c=>{ c.items.forEach(i=>{ total++; if(i.done) done++; }); });
+  return {done, total};
+}
+function renderMeter(){
+  const {done, total} = totalCounts();
+  const pct = total === 0 ? 0 : Math.round((done/total)*100);
+  document.getElementById('meterStat').textContent = pct + '%';
+  document.getElementById('meterFill').style.width = pct + '%';
+  document.getElementById('meterSub').textContent = `${done} of ${total} items done · ${total-done} left`;
+}
+
+/* ===================== RESET ===================== */
+function renderResetRow(){
+  const row = document.getElementById('resetRow');
+  if(resetArmed){
+    row.innerHTML = `<span class="reset-link armed" id="resetLink">Tap to confirm — wipes everything</span><span class="reset-cancel" id="resetCancel">cancel</span>`;
+  } else {
+    row.innerHTML = `<span class="reset-link" id="resetLink">reset all data</span>`;
+  }
+  document.getElementById('resetLink').onclick = ()=>{
+    if(resetArmed){
+      data = defaultData();
+      resetArmed = false;
+      document.getElementById('notesArea').value = '';
+      render(); saveData();
+    } else {
+      resetArmed = true;
+      renderResetRow();
+    }
+  };
+  const cancelEl = document.getElementById('resetCancel');
+  if(cancelEl) cancelEl.onclick = ()=>{ resetArmed = false; renderResetRow(); };
+}
+
+/* ===================== CALENDAR (built from checklist due dates) ===================== */
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function getAllDatedEntries(){
+  const out = [];
+  data.checklist.forEach(cat=>{
+    cat.items.forEach(it=>{ if(it.dueDate) out.push({id:it.id, text:it.text, catTitle:cat.title, catId:cat.id, dueDate:it.dueDate, done:it.done}); });
+  });
+  return out;
+}
+
+function renderCalendar(){
+  document.getElementById('calMonthLabel').textContent = `${MONTH_NAMES[calViewMonth]} ${calViewYear}`;
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  ['S','M','T','W','T','F','S'].forEach(d=>{
+    const el = document.createElement('div'); el.className='cal-dow'; el.textContent=d; grid.appendChild(el);
+  });
+  const firstDay = new Date(calViewYear, calViewMonth, 1).getDay();
+  const daysInMonth = new Date(calViewYear, calViewMonth+1, 0).getDate();
+  const dated = getAllDatedEntries();
+  for(let i=0;i<firstDay;i++){ const el=document.createElement('div'); el.className='cal-day empty'; grid.appendChild(el); }
+  for(let d=1; d<=daysInMonth; d++){
+    const iso = `${calViewYear}-${String(calViewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const entries = dated.filter(e=>e.dueDate===iso);
+    const el = document.createElement('div');
+    el.className = 'cal-day' + (entries.length ? ' has-items' : '') + (iso===calSelectedDate ? ' selected' : '');
+    el.innerHTML = `<span>${d}</span>` + (entries.length ? '<span class="dot"></span>' : '');
+    el.onclick = ()=>{ calSelectedDate = iso; renderCalendar(); };
+    grid.appendChild(el);
+  }
+  const panel = document.getElementById('calPanel');
+  if(!calSelectedDate){ panel.innerHTML = '<div class="empty-cat">Tap a date to see or add items.</div>'; return; }
+  const entries = dated.filter(e=>e.dueDate===calSelectedDate);
+  const dObj = new Date(calSelectedDate+'T00:00:00');
+  const niceDate = dObj.toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'long', year:'numeric'});
+  const catOptions = data.checklist.map(c=>`<option value="${c.id}">${escapeHtml(c.title)}</option>`).join('');
+  panel.innerHTML = `
+    <div class="cal-panel-title">${niceDate}</div>
+    ${entries.length ? entries.map(e => `
+      <div class="cal-item">
+        <span class="cat-tag">${escapeHtml(e.catTitle)}</span>
+        <span style="flex:1;${e.done?'text-decoration:line-through;color:var(--muted);':''}">${escapeHtml(e.text)}</span>
+      </div>`).join('') : '<div class="empty-cat">Nothing due this day.</div>'}
+    <div class="cal-add-row">
+      <input type="text" id="calAddText" placeholder="Add an item for this date…">
+      <select id="calAddCat">${catOptions}</select>
+      <button id="calAddBtn">Add</button>
+    </div>
+  `;
+  document.getElementById('calAddBtn').onclick = ()=>{
+    const text = document.getElementById('calAddText').value.trim();
+    const catId = document.getElementById('calAddCat').value;
+    if(!text) return;
+    const cat = data.checklist.find(c=>c.id===catId);
+    cat.items.push({id:uid(), text, done:false, dueDate:calSelectedDate});
+    render(); saveData();
+  };
+  document.getElementById('calAddText').onkeydown = (e)=>{ if(e.key==='Enter') document.getElementById('calAddBtn').click(); };
+}
+document.getElementById('calPrev').onclick = ()=>{ calViewMonth--; if(calViewMonth<0){calViewMonth=11; calViewYear--;} renderCalendar(); };
+document.getElementById('calNext').onclick = ()=>{ calViewMonth++; if(calViewMonth>11){calViewMonth=0; calViewYear++;} renderCalendar(); };
+
+/* ===================== SHOPPING SPEND TOTAL ===================== */
+function updateSpentTotals(){
+  let totalInr = 0, totalGbp = 0;
+  data.shopping.forEach(cat=>{
+    cat.items.forEach(it=>{ totalInr += parseNum(it.inr); totalGbp += parseNum(it.gbp); });
+  });
+  document.getElementById('spentInr').textContent = '₹' + totalInr.toLocaleString('en-IN');
+  document.getElementById('spentGbp').textContent = '£' + totalGbp.toLocaleString('en-GB');
+}
+
+/* ===================== ACCOMMODATION ===================== */
+function renderAccommodation(){
+  const table = document.getElementById('accTable');
+  table.innerHTML = `
+    <tr style="opacity:0.6;font-size:0.68rem;">
+      <td class="acc-label" style="padding-left:0.7rem;">Address</td>
+      <td class="acc-num">Rent</td>
+      <td class="acc-num">Bills Incl.</td>
+      <td class="acc-num">Link</td>
+      <td class="acc-num">Status</td>
+      <td></td>
+    </tr>
+  ` + data.accommodation.map(row => `
+    <tr>
+      <td><input type="text" class="acc-label" data-afield="address" data-arow="${row.id}" value="${escapeHtml(row.address)}" placeholder="Address"></td>
+      <td><input type="text" class="acc-num" data-afield="rent" data-arow="${row.id}" value="${escapeHtml(row.rent)}" placeholder="£/mo"></td>
+      <td>
+        <select data-afield="bills" data-arow="${row.id}">
+          <option value="" ${row.bills===''?'selected':''}>—</option>
+          <option value="y" ${row.bills==='y'?'selected':''}>Yes</option>
+          <option value="n" ${row.bills==='n'?'selected':''}>No</option>
+        </select>
+      </td>
+      <td><input type="text" class="acc-num" data-afield="link" data-arow="${row.id}" value="${escapeHtml(row.link)}" placeholder="URL"></td>
+      <td>
+        <select data-afield="status" data-arow="${row.id}">
+          <option value="Interested" ${row.status==='Interested'?'selected':''}>Interested</option>
+          <option value="Applied" ${row.status==='Applied'?'selected':''}>Applied</option>
+          <option value="Rejected" ${row.status==='Rejected'?'selected':''}>Rejected</option>
+        </select>
+      </td>
+      <td class="acc-del"><button data-adel="${row.id}">✕</button></td>
+    </tr>`).join('');
+  table.querySelectorAll('[data-afield]').forEach(el=>{
+    el.oninput = el.onchange = ()=>{
+      const row = data.accommodation.find(r=>r.id===el.dataset.arow);
+      row[el.dataset.afield] = el.value;
+      saveData();
+    };
+  });
+  table.querySelectorAll('[data-adel]').forEach(btn=>{
+    btn.onclick = ()=>{ data.accommodation = data.accommodation.filter(r=>r.id!==btn.dataset.adel); render(); saveData(); };
+  });
+}
+document.getElementById('accAddBtn').onclick = ()=>{
+  data.accommodation.push({id:uid(), address:'', rent:'', bills:'', link:'', status:'Interested'});
+  render(); saveData();
+};
+
+/* ===================== NOTES ===================== */
+let notesSaveTimer;
+document.getElementById('notesArea').addEventListener('input', (e)=>{
+  data.notes = e.target.value;
+  clearTimeout(notesSaveTimer);
+  notesSaveTimer = setTimeout(saveData, 300);
+});
+
+/* ===================== MASTER RENDER ===================== */
+function render(){
+  renderCategoryGroup('checklist');
+  renderCategoryGroup('shopping');
+  renderMeter();
+  renderResetRow();
+  renderCalendar();
+  updateSpentTotals();
+  renderAccommodation();
+}
+loadData();
+</script>
+</body>
+</html>
