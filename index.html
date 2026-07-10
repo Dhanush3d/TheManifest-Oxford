@@ -347,20 +347,7 @@ async function nativeStorageSet(key, value){
   return false;
 }
 
-// Fills in any missing top-level or nested keys from defaultData() without
-// touching existing data. Safe to call every load, forever — this is what
-// lets new features get added later without resetting anyone's saved data.
-function mergeWithDefaults(record){
-  const base = defaultData();
-  if(!record || typeof record !== 'object') return base;
-  const merged = Object.assign({}, base, record);
-  // arrays/objects need their own defaults if missing or wrong type
-  if(!Array.isArray(merged.checklist)) merged.checklist = base.checklist;
-  if(!Array.isArray(merged.shopping)) merged.shopping = base.shopping;
-  if(!Array.isArray(merged.accommodation)) merged.accommodation = base.accommodation;
-  if(typeof merged.notes !== 'string') merged.notes = base.notes;
-  return merged;
-}
+async function cloudGet(){
   const res = await fetch('/api/data');
   if(!res.ok) throw new Error('cloud get failed: ' + res.status);
   const json = await res.json();
@@ -384,12 +371,12 @@ async function loadData(){
 
   try{
     const record = await cloudGet();
-    data = mergeWithDefaults(record || data);
+    data = (record && record.checklist) ? record : (data || defaultData());
     setSyncStatus('☁ synced', true);
   }catch(e){
     if(!data){
       const nativeRaw = await nativeStorageGet(STORAGE_KEY);
-      data = nativeRaw ? mergeWithDefaults(JSON.parse(nativeRaw)) : defaultData();
+      data = nativeRaw ? JSON.parse(nativeRaw) : defaultData();
     }
     setSyncStatus('⚠ offline — using local copy', false);
   }
