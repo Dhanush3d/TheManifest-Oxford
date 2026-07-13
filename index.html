@@ -211,62 +211,29 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 .spent-num{font-size:1.2rem;font-weight:900;}
 
 /* ===================== TRAVEL ITINERARY ===================== */
-.itin-head-row{display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;justify-content:space-between;}
-.itin-select{background:var(--surface-2);border:1px solid var(--border);color:var(--text);border-radius:7px;padding:0.35rem 0.6rem;font-family:'Roboto',sans-serif;font-size:0.78rem;}
-.itin-range{font-size:0.72rem;color:var(--muted);}
-.itin-box{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:0.7rem 0.85rem;margin-top:0.9rem;}
-.itin-box-title{font-size:0.72rem;font-weight:700;color:var(--secondary);margin-bottom:0.4rem;display:flex;align-items:center;gap:0.35rem;}
-.itin-box ul{margin:0;padding-left:1.1rem;font-size:0.8rem;color:var(--text);line-height:1.6;}
-.itin-box ul li{margin-bottom:0.1rem;}
-.itin-day{margin-top:1.1rem;}
-.itin-day-head{display:flex;align-items:baseline;gap:0.6rem;}
-.itin-day-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none;}
-.itin-day-title{font-weight:700;font-size:0.86rem;}
-.itin-day-date{font-size:0.7rem;color:var(--muted);}
-.itin-day-body{margin-left:1.15rem;border-left:2px solid var(--border);padding-left:0.9rem;margin-top:0.4rem;}
-.itin-slot-label{font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin:0.5rem 0 0.25rem;}
-.itin-slot-label:first-child{margin-top:0;}
-.itin-day-body ul{margin:0 0 0.2rem;padding-left:1.1rem;font-size:0.82rem;line-height:1.55;}
-
-.itin-trip-meta{display:flex;justify-content:space-between;align-items:baseline;gap:0.6rem;margin-top:0.5rem;flex-wrap:wrap;}
-.itin-trip-name{font-weight:700;font-size:0.9rem;border-radius:4px;padding:0 0.2rem;margin:0 -0.2rem;}
-.itin-trip-name:focus, .itin-range:focus{outline:none;background:rgba(255,255,255,0.06);border-radius:4px;}
-.itin-trip-del{border:none;background:none;color:var(--muted);cursor:pointer;font-size:0.8rem;padding:0.15rem 0.3rem;flex:none;}
-.itin-trip-del:hover{color:var(--danger);}
-.itin-line-list{list-style:none;margin:0;padding:0;}
-.itin-line-list li{display:flex;align-items:center;gap:0.4rem;padding:0.15rem 0;font-size:0.8rem;}
-.itin-line-text{flex:1;border-radius:4px;padding:0.05rem 0.3rem;margin:0 -0.3rem;line-height:1.5;}
-.itin-line-text:focus{outline:none;background:rgba(255,255,255,0.06);}
-.itin-line-del{border:none;background:none;color:var(--border);cursor:pointer;font-size:0.75rem;flex:none;padding:0 0.1rem;}
-.itin-line-list li:hover .itin-line-del{color:var(--muted);}
-.itin-line-add{display:flex;gap:0.4rem;margin-top:0.4rem;}
-.itin-line-add input{flex:1;background:transparent;border:none;border-bottom:1px solid var(--border);padding:0.3rem 0.1rem;font-size:0.8rem;color:var(--text);font-family:'Roboto',sans-serif;}
-.itin-line-add input:focus{outline:none;border-color:var(--accent);}
-.itin-line-add button{border:none;background:none;color:var(--accent);font-weight:500;font-size:0.8rem;cursor:pointer;flex:none;}
-
-.itin-day-head{position:relative;}
-.itin-day-title, .itin-day-date{border-radius:4px;padding:0 0.2rem;margin:0 -0.2rem;}
-.itin-day-title:focus, .itin-day-date:focus{outline:none;background:rgba(255,255,255,0.06);}
-.itin-day-del{margin-left:auto;border:none;background:none;color:var(--border);cursor:pointer;font-size:0.75rem;flex:none;}
-.itin-day:hover .itin-day-del{color:var(--muted);}
-.itin-slot{margin-bottom:0.3rem;}
-.itin-slot-label-row{display:flex;align-items:center;gap:0.4rem;}
-.itin-slot-label{flex:1;border-radius:4px;padding:0 0.2rem;margin:0.5rem -0.2rem 0.25rem;}
-.itin-slot-label:first-child{margin-top:0;}
-.itin-slot-label:focus{outline:none;background:rgba(255,255,255,0.06);}
-.itin-slot-del{border:none;background:none;color:var(--border);cursor:pointer;font-size:0.7rem;flex:none;}
-.itin-slot:hover .itin-slot-del{color:var(--muted);}
-.itin-day-body ul li{display:flex;align-items:center;gap:0.4rem;}
-.itin-day-body ul li .itin-line-text{flex:1;}
-.itin-slot-item-del{border:none;background:none;color:var(--border);cursor:pointer;font-size:0.7rem;flex:none;}
-.itin-day-body ul li:hover .itin-slot-item-del{color:var(--muted);}
-.itin-add-slot-row, .itin-add-item-row{display:flex;gap:0.4rem;margin-top:0.35rem;}
-.itin-add-slot-row input, .itin-add-item-row input{flex:1;background:transparent;border:none;border-bottom:1px dashed var(--border);padding:0.25rem 0.1rem;font-size:0.78rem;color:var(--text);font-family:'Roboto',sans-serif;}
-.itin-add-slot-row input:focus, .itin-add-item-row input:focus{outline:none;border-color:var(--accent);}
-.itin-add-slot-row button, .itin-add-item-row button{border:none;background:none;color:var(--accent);font-weight:500;font-size:0.78rem;cursor:pointer;flex:none;}
-.itin-add-day-btn{border:1px dashed var(--border);background:none;color:var(--muted);font-size:0.78rem;border-radius:6px;padding:0.45rem 0.8rem;cursor:pointer;margin-top:0.9rem;font-family:'Roboto',sans-serif;width:100%;}
-.itin-add-day-btn:hover{color:var(--accent);border-color:var(--accent);}
-
+.trip-select{background:var(--surface-2);border:1px solid var(--border);color:white;padding:9px 14px;border-radius:8px;font-size:14px;}
+.trip-add-btn{background:var(--accent);border:none;width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:18px;font-weight:bold;color:#08130d;}
+.trip-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.trip-name{font-size:20px;font-weight:700;outline:none;}
+.trip-date{font-size:14px;color:var(--muted);outline:none;}
+.trip-card{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:18px;}
+.trip-card-title{font-weight:700;color:var(--secondary);margin-bottom:10px;font-size:15px;}
+.trip-card ul{margin:0;padding-left:20px;}
+.trip-card li{margin-bottom:8px;line-height:1.6;}
+.trip-small-btn{margin-top:12px;background:none;border:1px dashed var(--border);color:var(--muted);padding:7px 12px;border-radius:6px;cursor:pointer;}
+.trip-small-btn:hover{border-color:var(--accent);color:var(--accent);}
+.trip-day{margin-top:30px;}
+.trip-day-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.trip-dot{width:10px;height:10px;background:var(--accent);border-radius:50%;}
+.trip-day-title{font-weight:700;font-size:18px;}
+.trip-day-date{font-size:13px;color:var(--muted);}
+.trip-section{margin-left:18px;border-left:2px solid var(--border);padding-left:20px;margin-bottom:20px;}
+.trip-section-title{font-weight:700;color:#95a5a6;text-transform:uppercase;font-size:13px;margin-bottom:8px;letter-spacing:.5px;}
+.trip-section ul{margin:0;padding-left:18px;}
+.trip-section li{margin-bottom:8px;line-height:1.7;}
+.trip-day-btn{width:100%;padding:11px;background:none;border:1px dashed var(--border);border-radius:8px;cursor:pointer;color:var(--muted);font-size:15px;margin-top:18px;}
+.trip-day-btn:hover{color:var(--accent);border-color:var(--accent);}
+ 
 /* ===================== BUDGET SECTION ===================== */
 .budget-panel{grid-column:1 / -1;}
 .budget-top-row{display:flex;gap:0.9rem;flex-wrap:wrap;margin-bottom:1rem;}
@@ -417,7 +384,6 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
             </div>
           </div>
           <div class="trip-progress-msg">
-            <div class="big" id="tripMsgBig">Let's get started!</div>
           </div>
         </div>
       </div>
@@ -429,9 +395,6 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
           <table class="mini-table">
             <tr><th>#</th><th>Company</th><th>Role</th><th>Status</th><th>Salary Range</th><th>Date Applied</th></tr>
             <tr><td>1</td><td>Google (UK)</td><td>Product Manager</td><td><span class="pill pill-working">Working</span></td><td>£80k – £120k</td><td>2024/08/01</td></tr>
-            <tr><td>2</td><td>Spotify</td><td>Song Source Engineer</td><td><span class="pill pill-applied">Applied</span></td><td>£60k – £90k</td><td>2024/08/12</td></tr>
-            <tr><td>3</td><td>Adobe</td><td>Exp. Data Analyst</td><td><span class="pill pill-interviewing">Interviewing</span></td><td>£70k – £110k</td><td>2024/08/22</td></tr>
-            <tr><td>4</td><td>Startup (Acme)</td><td>Marketing Lead</td><td><span class="pill pill-rejected">Rejected</span></td><td>–</td><td>2024/08/22</td></tr>
           </table>
         </div>
       </div>
@@ -450,37 +413,30 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 
       <!-- TRAVEL ITINERARY -->
       <div class="panel">
-        <div class="itin-head-row">
+        <div class="panel-head">
           <div class="panel-title">Travel Itinerary</div>
-          <select class="itin-select" id="itinTripSelect"></select>
-          <button class="itin-trip-del" id="itinTripDelBtn" title="Delete this trip">✕</button>
-        </div>
-        <div class="itin-trip-meta">
-          <span class="itin-trip-name" contenteditable="true" spellcheck="false" id="itinTripName"></span>
-          <span class="itin-range" contenteditable="true" spellcheck="false" id="itinTripRange"></span>
-        </div>
-
-        <div class="itin-box">
-          <div class="itin-box-title">Flight Details</div>
-          <ul class="itin-line-list" id="itinFlightList"></ul>
-          <div class="itin-line-add">
-            <input type="text" id="itinFlightInput" placeholder="Add a line…">
-            <button id="itinFlightAddBtn">Add</button>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <select id="tripSelect" class="trip-select"> </select>
+              <button class="trip-add-btn" id="addTripBtn">＋</button>
+            </div>
           </div>
-        </div>
-        <div class="itin-box">
-          <div class="itin-box-title">Accommodation</div>
-          <ul class="itin-line-list" id="itinStayList"></ul>
-          <div class="itin-line-add">
-            <input type="text" id="itinStayInput" placeholder="Add a line…">
-            <button id="itinStayAddBtn">Add</button>
+              <div class="trip-header">
+                <div id="tripName"contenteditable="true"class="trip-name">Tokyo Trip</div>
+                <div id="tripDate"contenteditable="true"class="trip-date">Dec 1 – Dec 5</div>
+              </div>
+          <div class="trip-card">
+              <div class="trip-card-title">Flight Details</div>
+                  <ul id="flightList"></ul>
+              <button class="trip-small-btn"id="addFlightBtn">+ Add Flight Detail</button>
           </div>
-        </div>
-
-        <div id="itinDaysContainer"></div>
-
-        <button class="itin-add-day-btn" id="itinAddDayBtn">+ Add Day</button>
-      </div>
+          <div class="trip-card">
+            <div class="trip-card-title">Accommodation</div><ul id="hotelList"></ul>
+            <button class="trip-small-btn"id="addHotelBtn">+ Add Accommodation</button>
+          </div>
+            <div id="daysContainer">
+          </div>
+             <button class="trip-day-btn"id="addDayBtn">+ Add Day</button>
+          </div>
 
       <!-- QUICK NOTE -->
       <div class="panel">
@@ -1168,10 +1124,7 @@ function renderTripProgress(){
   const r = 34, circumference = 2 * Math.PI * r;
   circle.style.strokeDasharray = circumference;
   circle.style.strokeDashoffset = circumference * (1 - pct/100);
-  const msgEl = document.getElementById('tripMsgBig');
-  if(total === 0) msgEl.textContent = "Let's get started!";
   else if(pct === 100) msgEl.textContent = "All done!";
-  else msgEl.textContent = "You're doing great!";
 }
 
 /* ===================== RESET ===================== */
