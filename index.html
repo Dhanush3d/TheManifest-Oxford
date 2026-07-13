@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dhanush</title>
+<title>Princy's Dashboard</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Playfair+Display:wght@600;700&display=swap');
 
@@ -47,7 +47,7 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 .stat-num{font-size:1.35rem;font-weight:900;line-height:1;}
 .stat-label{font-size:0.66rem;color:var(--muted);margin-top:0.25rem;text-align:center;}
 
-/* ----  grid ---- */
+/* ---- dashboard grid ---- */
 .dash-grid{display:grid;grid-template-columns:1fr;gap:1.1rem;align-items:start;}
 @media(min-width:980px){ .dash-grid{grid-template-columns:0.95fr 1.15fr;} }
 
@@ -193,6 +193,8 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 .pill-select.bills-n{background:rgba(231,76,60,0.18);color:var(--red);}
 .pill-select.bills-empty{background:rgba(255,255,255,0.08);color:var(--muted);}
 .pill-select option{background:var(--surface-2);color:var(--text);}
+.app-cell{border-radius:4px;padding:0.1rem 0.3rem;margin:-0.1rem -0.3rem;display:inline-block;min-width:24px;}
+.app-cell:focus{outline:none;background:rgba(255,255,255,0.06);}
 
 /* ===================== QUICK NOTE ===================== */
 .notes-area{width:100%;min-height:110px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Roboto',sans-serif;font-size:0.86rem;line-height:1.5;padding:0.7rem 0.85rem;resize:vertical;}
@@ -315,7 +317,7 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 
 /* ===================== RESPONSIVE ===================== */
 @media(max-width:640px){
-  .{padding:1.1rem 0.9rem 0;}
+  .dashboard{padding:1.1rem 0.9rem 0;}
   .dash-header{flex-direction:column;}
   .stat-row{width:100%;}
   .stat-card{flex:1;}
@@ -324,12 +326,12 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 </head>
 <body>
 
-<div class="">
+<div class="dashboard">
 
   <!-- HEADER -->
   <div class="dash-header">
     <div class="header-left">
-      <h1 id="headerTitle">Dhanush</h1>
+      <h1 id="headerTitle">Princy</h1>
       <div class="sync-status" id="syncStatus"></div>
     </div>
     <div class="stat-row">
@@ -414,16 +416,16 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
         </div>
       </div>
 
-      <!-- APPLICATION TRACKER (static) -->
+      <!-- APPLICATION TRACKER (editable) -->
       <div class="panel">
-        <div class="panel-title" style="margin-bottom:0.7rem;">Application Tracker</div>
+        <div class="panel-head">
+          <div class="panel-title">Application Tracker</div>
+          <button class="acc-add-btn" id="appAddBtn">+ Add</button>
+        </div>
         <div class="mini-table-wrap">
           <table class="mini-table">
-            <tr><th>#</th><th>Company</th><th>Role</th><th>Status</th><th>Salary Range</th><th>Date Applied</th></tr>
-            <tr><td>1</td><td>Google (UK)</td><td>Product Manager</td><td><span class="pill pill-working">Working</span></td><td>£80k – £120k</td><td>2024/08/01</td></tr>
-            <tr><td>2</td><td>Spotify</td><td>Song Source Engineer</td><td><span class="pill pill-applied">Applied</span></td><td>£60k – £90k</td><td>2024/08/12</td></tr>
-            <tr><td>3</td><td>Adobe</td><td>Exp. Data Analyst</td><td><span class="pill pill-interviewing">Interviewing</span></td><td>£70k – £110k</td><td>2024/08/22</td></tr>
-            <tr><td>4</td><td>Startup (Acme)</td><td>Marketing Lead</td><td><span class="pill pill-rejected">Rejected</span></td><td>–</td><td>2024/08/22</td></tr>
+            <tr><th>#</th><th>Company</th><th>Role</th><th>Status</th><th>Salary Range</th><th>Date Applied</th><th></th></tr>
+            <tbody id="appTableBody"></tbody>
           </table>
         </div>
       </div>
@@ -638,7 +640,8 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 /* ===================== REUSABLE TEMPLATE CONFIG ===================== */
 /* Swap these values to reuse this tracker for someone else's move.     */
 const CONFIG = {
-  student: "Dhanush",
+  university: "Oxford Brookes",
+  student: "Princy",
   departureDate: "2026-09-07",
   colors: {
     background: "#0B0B0B",
@@ -722,6 +725,12 @@ const defaultData = () => ({
   checklist: [],
   shopping: [],
   accommodation: [],
+  applications: [
+    {id: uid(), company:'Google (UK)', role:'Product Manager', status:'Working', salary:'£80k – £120k', dateApplied:'2024/08/01'},
+    {id: uid(), company:'Spotify', role:'Song Source Engineer', status:'Applied', salary:'£60k – £90k', dateApplied:'2024/08/12'},
+    {id: uid(), company:'Adobe', role:'Exp. Data Analyst', status:'Interviewing', salary:'£70k – £110k', dateApplied:'2024/08/22'},
+    {id: uid(), company:'Startup (Acme)', role:'Marketing Lead', status:'Rejected', salary:'–', dateApplied:'2024/08/22'}
+  ],
   travel: {
     activeTripId: 'trip_tokyo_default',
     trips: [
@@ -803,6 +812,7 @@ function mergeWithDefaults(record){
   if(!Array.isArray(merged.checklist)) merged.checklist = base.checklist;
   if(!Array.isArray(merged.shopping)) merged.shopping = base.shopping;
   if(!Array.isArray(merged.accommodation)) merged.accommodation = base.accommodation;
+  if(!Array.isArray(merged.applications)) merged.applications = base.applications;
   if(typeof merged.notes !== 'string') merged.notes = base.notes;
   ['checklist','shopping'].forEach(kind=>{
     merged[kind].forEach(cat=>{
@@ -1340,6 +1350,59 @@ document.getElementById('accAddBtn').onclick = ()=>{
   render(); saveData();
 };
 
+/* ===================== APPLICATION TRACKER ===================== */
+function appPillClass(status){
+  if(status === 'Working') return 'pill-working';
+  if(status === 'Applied') return 'pill-applied';
+  if(status === 'Interviewing') return 'pill-interviewing';
+  return 'pill-rejected';
+}
+function renderApplications(){
+  const tbody = document.getElementById('appTableBody');
+  tbody.innerHTML = data.applications.map((row, idx) => `
+    <tr>
+      <td>${idx + 1}</td>
+      <td><span class="app-cell" contenteditable="true" spellcheck="false" data-afield="company" data-arow="${row.id}">${escapeHtml(row.company)}</span></td>
+      <td><span class="app-cell" contenteditable="true" spellcheck="false" data-afield="role" data-arow="${row.id}">${escapeHtml(row.role)}</span></td>
+      <td>
+        <select class="pill-select ${appPillClass(row.status)}" data-afield="status" data-arow="${row.id}">
+          <option value="Working" ${row.status==='Working'?'selected':''}>Working</option>
+          <option value="Applied" ${row.status==='Applied'?'selected':''}>Applied</option>
+          <option value="Interviewing" ${row.status==='Interviewing'?'selected':''}>Interviewing</option>
+          <option value="Rejected" ${row.status==='Rejected'?'selected':''}>Rejected</option>
+        </select>
+      </td>
+      <td><span class="app-cell" contenteditable="true" spellcheck="false" data-afield="salary" data-arow="${row.id}">${escapeHtml(row.salary)}</span></td>
+      <td><span class="app-cell" contenteditable="true" spellcheck="false" data-afield="dateApplied" data-arow="${row.id}">${escapeHtml(row.dateApplied)}</span></td>
+      <td class="acc-del"><button data-appdel="${row.id}">✕</button></td>
+    </tr>`).join('');
+
+  tbody.querySelectorAll('[contenteditable][data-afield]').forEach(el=>{
+    el.onkeydown = (e)=>{ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } };
+    el.onblur = ()=>{
+      const row = data.applications.find(r=>r.id===el.dataset.arow);
+      if(!row) return;
+      row[el.dataset.afield] = el.textContent.trim();
+      saveData();
+    };
+  });
+  tbody.querySelectorAll('select[data-afield]').forEach(sel=>{
+    sel.onchange = ()=>{
+      const row = data.applications.find(r=>r.id===sel.dataset.arow);
+      if(!row) return;
+      row[sel.dataset.afield] = sel.value;
+      render(); saveData();
+    };
+  });
+  tbody.querySelectorAll('[data-appdel]').forEach(btn=>{
+    btn.onclick = ()=>{ data.applications = data.applications.filter(r=>r.id!==btn.dataset.appdel); render(); saveData(); };
+  });
+}
+document.getElementById('appAddBtn').onclick = ()=>{
+  data.applications.push({id:uid(), company:'', role:'', status:'Working', salary:'', dateApplied:''});
+  render(); saveData();
+};
+
 /* ===================== TRAVEL ITINERARY ===================== */
 function getActiveTrip(){
   const t = data.travel;
@@ -1637,6 +1700,7 @@ function render(){
   renderCalendar();
   updateSpentTotals();
   renderAccommodation();
+  renderApplications();
   renderTravel();
   initSortables();
 }
