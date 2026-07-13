@@ -32,10 +32,10 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Roboto',sans-s
 .dashboard{max-width:1440px;margin:0 auto;padding:1.5rem 1.4rem 0;}
 
 /* ---- header ---- */
-.dash-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin-bottom:1.3rem;}
+.dash-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin-bottom:1.3rem;background:linear-gradient(135deg, var(--primary), var(--secondary));border-radius:16px;padding:1.5rem 1.75rem;border:1px solid var(--border);}
 .header-left{min-width:200px;}
 .eyebrow-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.7rem;}
-.eyebrow-tag{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+.eyebrow-tag{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.75);font-weight:700;}
 .eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
 .eyebrow-tag.pill{color:var(--accent);}
 h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-spacing:-0.01em;}
@@ -43,7 +43,7 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 .sync-status{font-size:0.78rem;font-weight:500;}
 
 .stat-row{display:flex;gap:0.7rem;flex:none;}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0.85rem 1.3rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:105px;}
+.stat-card{background:rgba(0,0,0,0.22);border:1px solid rgba(255,255,255,0.18);border-radius:12px;padding:0.85rem 1.3rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:105px;}
 .stat-num{font-size:1.35rem;font-weight:900;line-height:1;}
 .stat-label{font-size:0.66rem;color:var(--muted);margin-top:0.25rem;text-align:center;}
 
@@ -112,7 +112,7 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 .add-item-row button{border:none;background:none;color:var(--accent);font-weight:500;font-size:0.83rem;cursor:pointer;}
 .empty-cat{font-size:0.83rem;color:var(--muted);font-style:italic;padding:0.5rem 0.1rem;}
 
-.reset-row{display:flex;align-items:center;gap:0.6rem;justify-content:center;margin-top:0.3rem;}
+.reset-row{display:flex;align-items:center;gap:0.6rem;justify-content:center;margin:1.5rem 0 0.5rem;}
 .reset-link{font-size:0.72rem;color:var(--muted);cursor:pointer;text-decoration:underline;}
 .reset-link.armed{color:var(--danger);font-weight:700;text-decoration:none;}
 .reset-cancel{font-size:0.72rem;color:var(--muted);cursor:pointer;text-decoration:underline;}
@@ -184,6 +184,15 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 .acc-add-btn{background:var(--accent);color:#08130d;border:none;border-radius:7px;padding:0.35rem 0.8rem;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'Roboto',sans-serif;}
 .acc-add-btn:hover{filter:brightness(1.08);}
 .acc-note{font-size:0.72rem;color:var(--muted);margin-top:0.6rem;}
+.pill-select{border:none;font-family:'Roboto',sans-serif;font-weight:600;font-size:0.72rem;padding:0.28rem 0.6rem;border-radius:20px;cursor:pointer;width:auto!important;}
+.pill-select:focus{outline:none;}
+.pill-select.status-approved{background:rgba(46,204,113,0.18);color:var(--accent);}
+.pill-select.status-interested{background:rgba(52,152,219,0.18);color:var(--blue);}
+.pill-select.status-rejected{background:rgba(231,76,60,0.18);color:var(--red);}
+.pill-select.bills-y{background:rgba(46,204,113,0.18);color:var(--accent);}
+.pill-select.bills-n{background:rgba(231,76,60,0.18);color:var(--red);}
+.pill-select.bills-empty{background:rgba(255,255,255,0.08);color:var(--muted);}
+.pill-select option{background:var(--surface-2);color:var(--text);}
 
 /* ===================== QUICK NOTE ===================== */
 .notes-area{width:100%;min-height:110px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Roboto',sans-serif;font-size:0.86rem;line-height:1.5;padding:0.7rem 0.85rem;resize:vertical;}
@@ -326,14 +335,9 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
         <span class="eyebrow-tag pill">Checklist</span>
       </div>
       <h1 id="headerTitle">Princy</h1>
-      <div class="route" id="headerRoute"></div>
       <div class="sync-status" id="syncStatus"></div>
     </div>
     <div class="stat-row">
-      <div class="stat-card">
-        <div class="stat-num" id="statTasksLeft">0</div>
-        <div class="stat-label">Tasks Left</div>
-      </div>
       <div class="stat-card">
         <div class="stat-num" id="statDaysToGo">0</div>
         <div class="stat-label">Days to Go</div>
@@ -347,17 +351,20 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
     <!-- ============ LEFT COLUMN ============ -->
     <div class="col-left">
 
-      <div class="add-category">
-        <input type="text" id="newCatInput" placeholder="Add a new section…">
-        <button data-addcat="checklist">+ Section</button>
+      <!-- CHECKLIST -->
+      <div class="panel">
+        <div class="panel-title" style="margin-bottom:0.7rem;">Checklist</div>
+        <div class="add-category">
+          <input type="text" id="newCatInput" placeholder="Add a new section…">
+          <button data-addcat="checklist">+ Section</button>
+        </div>
+        <div id="checklistCategories"></div>
       </div>
-      <div id="checklistCategories"></div>
-      <div class="reset-row" id="resetRow"></div>
 
-      <!-- SHOPPING DASHBOARD -->
+      <!-- SHOPPING -->
       <div class="panel">
         <div class="panel-head">
-          <div class="panel-title">Shopping Dashboard</div>
+          <div class="panel-title">Shopping</div>
           <div class="currency-toggle">
             <button class="cur-btn active" data-cur="inr">INR</button>
             <button class="cur-btn" data-cur="gbp">GBP</button>
@@ -375,40 +382,6 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
             <div><span class="spent-cur">GBP</span><span class="spent-num" id="spentGbp">£0</span></div>
           </div>
         </div>
-      </div>
-
-      <!-- TRAVEL ITINERARY -->
-      <div class="panel">
-        <div class="itin-head-row">
-          <div class="panel-title">Travel Itinerary</div>
-          <select class="itin-select" id="itinTripSelect"></select>
-          <button class="itin-trip-del" id="itinTripDelBtn" title="Delete this trip">✕</button>
-        </div>
-        <div class="itin-trip-meta">
-          <span class="itin-trip-name" contenteditable="true" spellcheck="false" id="itinTripName"></span>
-          <span class="itin-range" contenteditable="true" spellcheck="false" id="itinTripRange"></span>
-        </div>
-
-        <div class="itin-box">
-          <div class="itin-box-title">Flight Details</div>
-          <ul class="itin-line-list" id="itinFlightList"></ul>
-          <div class="itin-line-add">
-            <input type="text" id="itinFlightInput" placeholder="Add a line…">
-            <button id="itinFlightAddBtn">Add</button>
-          </div>
-        </div>
-        <div class="itin-box">
-          <div class="itin-box-title">Accommodation</div>
-          <ul class="itin-line-list" id="itinStayList"></ul>
-          <div class="itin-line-add">
-            <input type="text" id="itinStayInput" placeholder="Add a line…">
-            <button id="itinStayAddBtn">Add</button>
-          </div>
-        </div>
-
-        <div id="itinDaysContainer"></div>
-
-        <button class="itin-add-day-btn" id="itinAddDayBtn">+ Add Day</button>
       </div>
 
     </div>
@@ -445,21 +418,7 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
           </div>
           <div class="trip-progress-msg">
             <div class="big" id="tripMsgBig">Let's get started!</div>
-            <div class="small">Keep going</div>
           </div>
-        </div>
-      </div>
-
-      <!-- ASSIGNMENT (static) -->
-      <div class="panel">
-        <div class="panel-title" style="margin-bottom:0.7rem;">Assignment</div>
-        <div class="mini-table-wrap">
-          <table class="mini-table">
-            <tr><th>#</th><th>Task name</th><th>Status</th><th>Due</th><th>Priority</th><th>Note</th></tr>
-            <tr><td>1</td><td>Karban View</td><td>–</td><td>–</td><td>–</td><td class="note-cell">–</td></tr>
-            <tr><td>2</td><td>Write Research Paper</td><td><span class="pill pill-done">Done</span></td><td>2024/11/20</td><td><span class="pill pill-high">High</span></td><td class="note-cell">Need to gather sources on climate change.</td></tr>
-            <tr><td>3</td><td>Submit Job Application</td><td><span class="pill pill-todo">ToDo</span></td><td>2024/11/30</td><td><span class="pill pill-high">High</span></td><td class="note-cell">Applied to XYZ Company.</td></tr>
-          </table>
         </div>
       </div>
 
@@ -489,11 +448,44 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
         <div class="acc-note">Track places you're looking at — address, rent, whether bills are included, the listing link, and where things stand.</div>
       </div>
 
+      <!-- TRAVEL ITINERARY -->
+      <div class="panel">
+        <div class="itin-head-row">
+          <div class="panel-title">Travel Itinerary</div>
+          <select class="itin-select" id="itinTripSelect"></select>
+          <button class="itin-trip-del" id="itinTripDelBtn" title="Delete this trip">✕</button>
+        </div>
+        <div class="itin-trip-meta">
+          <span class="itin-trip-name" contenteditable="true" spellcheck="false" id="itinTripName"></span>
+          <span class="itin-range" contenteditable="true" spellcheck="false" id="itinTripRange"></span>
+        </div>
+
+        <div class="itin-box">
+          <div class="itin-box-title">Flight Details</div>
+          <ul class="itin-line-list" id="itinFlightList"></ul>
+          <div class="itin-line-add">
+            <input type="text" id="itinFlightInput" placeholder="Add a line…">
+            <button id="itinFlightAddBtn">Add</button>
+          </div>
+        </div>
+        <div class="itin-box">
+          <div class="itin-box-title">Accommodation</div>
+          <ul class="itin-line-list" id="itinStayList"></ul>
+          <div class="itin-line-add">
+            <input type="text" id="itinStayInput" placeholder="Add a line…">
+            <button id="itinStayAddBtn">Add</button>
+          </div>
+        </div>
+
+        <div id="itinDaysContainer"></div>
+
+        <button class="itin-add-day-btn" id="itinAddDayBtn">+ Add Day</button>
+      </div>
+
       <!-- QUICK NOTE -->
       <div class="panel">
         <div class="panel-title" style="margin-bottom:0.6rem;">Quick Note</div>
         <textarea class="notes-area" id="notesArea" placeholder="Write something…"></textarea>
-        <div class="notes-note">Autosaves as you type.</div>
       </div>
 
     </div>
@@ -644,6 +636,9 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
     </div>
 
   </div>
+
+  <div class="reset-row" id="resetRow"></div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
@@ -698,7 +693,6 @@ function applyTheme(){
 let daysToGo = 0;
 function applyHeader(){
   document.getElementById('headerTitle').textContent = CONFIG.student;
-  document.getElementById('headerRoute').textContent = `${CONFIG.student} → ${CONFIG.university}`;
   const dep = new Date(CONFIG.departureDate + 'T00:00:00');
   const today = new Date(); today.setHours(0,0,0,0);
   const diffDays = Math.round((dep - today) / 86400000);
@@ -1168,7 +1162,6 @@ function renderTripProgress(){
   const {done, total} = totalCounts();
   const remaining = total - done;
   const pct = total === 0 ? 0 : Math.round((done/total)*100);
-  document.getElementById('statTasksLeft').textContent = remaining;
   document.getElementById('tripPct').textContent = pct + '%';
   document.getElementById('tripSub').textContent = `${done} of ${total} items done · ${remaining} left`;
   const circle = document.getElementById('tripRingCircle');
@@ -1178,8 +1171,7 @@ function renderTripProgress(){
   const msgEl = document.getElementById('tripMsgBig');
   if(total === 0) msgEl.textContent = "Let's get started!";
   else if(pct === 100) msgEl.textContent = "All done!";
-  else if(pct >= 50) msgEl.textContent = "You're doing great!";
-  else msgEl.textContent = "Keep it up!";
+  else msgEl.textContent = "You're doing great!";
 }
 
 /* ===================== RESET ===================== */
@@ -1323,7 +1315,7 @@ function renderAccommodation(){
       <td><input type="text" class="acc-label" data-afield="address" data-arow="${row.id}" value="${escapeHtml(row.address)}" placeholder="Address"></td>
       <td><input type="text" class="acc-num" data-afield="rent" data-arow="${row.id}" value="${escapeHtml(row.rent)}" placeholder="£/mo"></td>
       <td>
-        <select data-afield="bills" data-arow="${row.id}">
+        <select class="pill-select ${row.bills==='y'?'bills-y':row.bills==='n'?'bills-n':'bills-empty'}" data-afield="bills" data-arow="${row.id}">
           <option value="" ${row.bills===''?'selected':''}>—</option>
           <option value="y" ${row.bills==='y'?'selected':''}>Yes</option>
           <option value="n" ${row.bills==='n'?'selected':''}>No</option>
@@ -1331,18 +1323,24 @@ function renderAccommodation(){
       </td>
       <td><input type="text" class="acc-num" data-afield="link" data-arow="${row.id}" value="${escapeHtml(row.link)}" placeholder="URL"></td>
       <td>
-        <select data-afield="status" data-arow="${row.id}">
+        <select class="pill-select status-${row.status==='Approved'?'approved':row.status==='Rejected'?'rejected':'interested'}" data-afield="status" data-arow="${row.id}">
           <option value="Interested" ${row.status==='Interested'?'selected':''}>Interested</option>
-          <option value="Applied" ${row.status==='Applied'?'selected':''}>Applied</option>
+          <option value="Approved" ${row.status==='Approved'?'selected':''}>Approved</option>
           <option value="Rejected" ${row.status==='Rejected'?'selected':''}>Rejected</option>
         </select>
       </td>
       <td class="acc-del"><button data-adel="${row.id}">✕</button></td>
     </tr>`).join('');
   table.querySelectorAll('[data-afield]').forEach(el=>{
-    el.oninput = el.onchange = ()=>{
+    el.oninput = ()=>{
       const row = data.accommodation.find(r=>r.id===el.dataset.arow);
       row[el.dataset.afield] = el.value;
+      saveData();
+    };
+    el.onchange = ()=>{
+      const row = data.accommodation.find(r=>r.id===el.dataset.arow);
+      row[el.dataset.afield] = el.value;
+      if(el.tagName === 'SELECT'){ render(); }
       saveData();
     };
   });
