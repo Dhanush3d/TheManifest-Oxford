@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Princy's Dashboard</title>
+<title>Dhanush's Dashboard</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Playfair+Display:wght@600;700&display=swap');
 
@@ -331,7 +331,7 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
   <!-- HEADER -->
   <div class="dash-header">
     <div class="header-left">
-      <h1 id="headerTitle">Princy</h1>
+      <h1 id="headerTitle">Dhanush</h1>
       <div class="sync-status" id="syncStatus"></div>
     </div>
     <div class="stat-row">
@@ -447,6 +447,7 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
         <div class="itin-head-row">
           <div class="panel-title">Travel Itinerary</div>
           <select class="itin-select" id="itinTripSelect"></select>
+          <button class="acc-add-btn" id="itinAddTripBtn">+ Add Trip</button>
           <button class="itin-trip-del" id="itinTripDelBtn" title="Delete this trip">✕</button>
         </div>
         <div class="itin-trip-meta">
@@ -640,8 +641,7 @@ h1{font-weight:900;font-size:clamp(1.7rem,4vw,2.3rem);margin:0 0 0.25rem;letter-
 /* ===================== REUSABLE TEMPLATE CONFIG ===================== */
 /* Swap these values to reuse this tracker for someone else's move.     */
 const CONFIG = {
-  university: "Oxford Brookes",
-  student: "Princy",
+  student: "Dhanush",
   departureDate: "2026-09-07",
   colors: {
     background: "#0B0B0B",
@@ -1415,12 +1415,12 @@ function renderTravel(){
   const select = document.getElementById('itinTripSelect');
   const delBtn = document.getElementById('itinTripDelBtn');
   if(!t || !t.trips.length){
-    select.innerHTML = '<option>No trips yet</option>';
+    select.innerHTML = '<option value="">No trips yet</option>';
     document.getElementById('itinTripName').textContent = '';
     document.getElementById('itinTripRange').textContent = '';
     document.getElementById('itinFlightList').innerHTML = '';
     document.getElementById('itinStayList').innerHTML = '';
-    document.getElementById('itinDaysContainer').innerHTML = '<div class="empty-cat">No trips yet. Add one below.</div>';
+    document.getElementById('itinDaysContainer').innerHTML = '<div class="empty-cat">No trips yet. Click "+ Add Trip" to start one.</div>';
     if(delBtn) delBtn.style.visibility = 'hidden';
     attachTravelStaticEvents();
     return;
@@ -1429,7 +1429,7 @@ function renderTravel(){
 
   select.innerHTML = t.trips.map(trip =>
     `<option value="${trip.id}" ${trip.id===t.activeTripId?'selected':''}>${escapeHtml(trip.name)}</option>`
-  ).join('') + `<option value="__new__">+ Add New Trip</option>`;
+  ).join('');
 
   const trip = getActiveTrip();
   document.getElementById('itinTripName').textContent = trip.name;
@@ -1485,19 +1485,25 @@ function renderTravel(){
 
 function attachTravelStaticEvents(){
   const select = document.getElementById('itinTripSelect');
+
+  function addNewTrip(){
+    const name = prompt('Name this trip:');
+    if(!name || !name.trim()) return false;
+    const newTrip = {id:'trip_'+uid(), name:name.trim(), range:'', flight:[], stay:[], days:[]};
+    data.travel.trips.push(newTrip);
+    data.travel.activeTripId = newTrip.id;
+    render(); saveData();
+    return true;
+  }
+
   select.onchange = ()=>{
-    if(select.value === '__new__'){
-      const name = prompt('Name this trip:');
-      if(!name || !name.trim()){ renderTravel(); return; }
-      const newTrip = {id:'trip_'+uid(), name:name.trim(), range:'', flight:[], stay:[], days:[]};
-      data.travel.trips.push(newTrip);
-      data.travel.activeTripId = newTrip.id;
-      render(); saveData();
-      return;
-    }
+    if(!select.value) return;
     data.travel.activeTripId = select.value;
     render(); saveData();
   };
+
+  const addTripBtn = document.getElementById('itinAddTripBtn');
+  if(addTripBtn) addTripBtn.onclick = addNewTrip;
 
   const delBtn = document.getElementById('itinTripDelBtn');
   delBtn.onclick = ()=>{
