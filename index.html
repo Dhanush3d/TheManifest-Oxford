@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0095)file:///C:/Users/dhanu/Documents/Codex/2026-07-16/bud-just-few-things-to-fix/outputs/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dhanush's Dashboard</title>
 <style>
@@ -47,7 +47,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 @media(min-width:980px){ .dash-grid{grid-template-columns:0.95fr 1.15fr;} }
 
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.15rem 1.2rem;margin-bottom:1.3rem;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 12px 36px rgba(0,0,0,0.35);}
-.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;position:relative;}
 .panel-title{font-weight:700;font-size:1rem;}
 .icon-btn{width:26px;height:26px;border-radius:7px;border:none;background:rgba(255,255,255,0.06);color:var(--text);font-size:0.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;}
 .icon-btn:hover{background:rgba(255,255,255,0.12);}
@@ -105,15 +105,15 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 
 /* ===== CALENDAR ===== */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
-.cal-nav button{background:rgba(255,255,255,0.06);border:none;color:var(--text);border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:0.85rem;}
+.cal-nav button{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,.05);color:var(--text);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1.2rem;line-height:1;}
 .cal-nav button:hover{background:rgba(255,255,255,0.12);}
 .cal-month{font-weight:700;font-size:1rem;background:rgba(255,255,255,0.05);padding:0.35rem 1rem;border-radius:20px;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
 .cal-dow{text-align:center;font-size:0.72rem;color:var(--muted);padding-bottom:0.3rem;font-weight:600;}
-.cal-day{aspect-ratio:1;border-radius:9px;background:rgba(255,255,255,0.035);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.82rem;position:relative;color:var(--text);}
+.cal-day{aspect-ratio:1;border-radius:9px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,.055);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.82rem;position:relative;color:var(--text);}
 .cal-day.outside{color:#4a4a4d;background:transparent;}
 .cal-day.today-marker{border:1px solid rgba(255,255,255,0.25);}
-.cal-day.selected{background:#2f5aa8;color:#fff;font-weight:700;}
+.cal-day.selected{background:linear-gradient(135deg,#315ac8,#263f8e);border-color:#426ee0;color:#fff;font-weight:700;box-shadow:0 8px 20px rgba(47,90,168,.35);}
 .cal-day .evt-dot{width:4px;height:4px;border-radius:50%;background:#7fb1ff;position:absolute;bottom:5px;}
 .cal-day.selected .evt-dot{background:#fff;}
 
@@ -127,9 +127,11 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .shop-item-name{flex:1;font-size:0.87rem;}
 .shop-item-price{font-size:0.83rem;color:var(--muted);min-width:44px;}
 .shop-divider{height:1px;background:var(--border);margin:0.3rem 0;}
+.shopping-in-tasks{border-top:1px solid var(--border);margin-top:1rem;padding-top:1rem;}
 
 /* ===== TRAVEL ===== */
 .trip-head{display:flex;align-items:center;gap:0.5rem;cursor:pointer;padding:0.3rem 0;}
+.trip-section{border:1px solid var(--border);border-radius:10px;padding:.65rem .75rem;background:rgba(0,0,0,.12);}
 .trip-title{font-weight:700;font-size:0.95rem;flex:1;}
 .trip-total{color:#4ade80;font-weight:700;font-size:0.9rem;}
 .boarding-row{display:flex;align-items:center;gap:0.6rem;margin:0.7rem 0 0.9rem;flex-wrap:wrap;}
@@ -137,8 +139,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .upload-btn{background:rgba(255,255,255,0.08);border:none;color:var(--text);border-radius:7px;padding:0.4rem 0.9rem;font-size:0.8rem;cursor:pointer;}
 .paste-input{flex:1;min-width:120px;background:transparent;border:1px solid var(--border);border-radius:7px;padding:0.4rem 0.7rem;color:var(--text);font-size:0.8rem;}
 .or-text{color:var(--muted);font-size:0.8rem;}
-.day-block{border-top:1px solid var(--border);padding-top:0.7rem;margin-top:0.7rem;}
-.day-head{display:flex;align-items:center;gap:0.55rem;cursor:pointer;}
+.day-block{border-top:1px solid var(--border);padding-top:0.55rem;margin-top:0.55rem;}
+.day-head{display:flex;align-items:center;gap:0.55rem;cursor:pointer;background:rgba(255,255,255,.035);border-radius:7px;padding:.45rem .5rem;}
 .day-plus{width:19px;height:19px;border-radius:5px;background:var(--primary);color:#fff;font-size:0.75rem;display:flex;align-items:center;justify-content:center;flex:none;}
 .day-title{font-weight:600;font-size:0.87rem;flex:1;}
 .day-total{font-size:0.85rem;font-weight:600;}
@@ -148,6 +150,9 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .day-table th{text-align:left;color:var(--muted);font-weight:500;font-size:0.68rem;padding:0.3rem 0.5rem;}
 .day-table td{padding:0.4rem 0.5rem;color:var(--text);}
 .day-table td.note-cell{color:var(--muted);white-space:normal;font-size:0.76rem;}
+.day-head input[type="date"]{background:transparent;border:0;color:var(--muted);font:inherit;max-width:132px;}
+.col-right{display:flex;flex-direction:column;}.col-right>.panel:nth-child(3){order:-1;}
+@media(max-width:560px){.day-head{flex-wrap:wrap}.day-total{width:100%;padding-left:27px}.day-head input[type="date"]{margin-left:27px}.money-pair{font-size:.7rem}.shop-item{flex-wrap:wrap}.shop-item-name{min-width:50%;}}
 
 .reset-row{text-align:center;margin-top:1.5rem;}
 .reset-link{color:var(--danger);font-size:0.78rem;cursor:pointer;display:inline-flex;align-items:center;gap:0.4rem;text-decoration:none;}
@@ -159,6 +164,22 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 [contenteditable="true"]:focus{outline:none;background:rgba(255,255,255,0.09);box-shadow:0 0 0 1px rgba(255,255,255,0.18);}
 .amount-dual{font-size:0.84rem;color:var(--text);font-weight:600;flex:none;white-space:nowrap;}
 .shop-item-price.amount-dual, .shop-cat-total.amount-dual{min-width:auto;}
+.money-pair{display:inline-flex;align-items:center;white-space:nowrap;color:var(--muted);font-size:.78rem;padding:.25rem .4rem;border-radius:6px;cursor:text;}
+.money-pair:hover{background:rgba(255,255,255,.05);}
+.money-pair:focus{outline:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);}
+.bills-toggle{min-width:36px;justify-content:center;background:rgba(34,197,94,.15);color:#4ade80;}
+.bills-toggle.no{background:rgba(239,68,68,.14);color:#f87171;}
+.row-delete{border:0;background:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0 .2rem;}
+.row-delete:hover{color:var(--danger);}
+.trip-add{margin-left:auto;}
+.calendar-events{border-top:1px solid var(--border);margin-top:1rem;padding-top:.75rem;}
+.events-title{font-size:.78rem;font-weight:700;margin-bottom:.5rem;}
+.event-line{display:flex;gap:.45rem;align-items:center;padding:.25rem 0;font-size:.8rem;}
+.event-line span{flex:1;}
+.event-delete{border:0;background:none;color:var(--muted);cursor:pointer;}
+.event-add{display:flex;gap:.45rem;margin-top:.55rem;}
+.event-add input{flex:1;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text);padding:.4rem .55rem;}
+.acc-delete{border:0;background:none;color:var(--muted);font-size:1rem;cursor:pointer;padding:.25rem;}.acc-delete:hover{color:var(--danger);}
 </style>
 </head>
 <body>
@@ -168,7 +189,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
   <div class="dash-header">
     <span class="header-dot"></span>
     <h1 id="profileName" contenteditable="true" spellcheck="false">Dhanush</h1>
-    <span class="save-status" id="saveStatus"></span>
+    <span class="save-status" id="saveStatus">Saved offline</span>
   </div>
 
   <div class="dash-grid">
@@ -180,10 +201,111 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
         <div class="panel-head">
           <div class="panel-title">Tasks</div>
           <button class="icon-btn" id="tasksAddTop">+</button>
+          <div class="block-menu" id="blockMenu" style="bottom:auto;top:31px;left:auto;right:0;">
+            <div class="block-menu-item" data-block="heading"><span class="bmi-icon">H</span> Heading</div><div class="block-menu-item" data-block="text"><span class="bmi-icon">T</span> Text</div><div class="block-menu-item" data-block="toggle">Toggle</div><div class="block-menu-item" data-block="todo">To-do</div><div class="block-menu-item" data-block="paidtodo">To-do with price</div><div class="block-menu-item" data-block="bulleted">Bulleted List</div><div class="block-menu-item" data-block="numbered">Numbered List</div><div class="block-menu-item" data-block="divider">Divider</div>
+            <div class="menu-sep"></div><div class="block-menu-item">Text color</div><div class="swatch-row"><div class="swatch" data-color="#9a9a9e" style="background:#9a9a9e"></div><div class="swatch" data-color="#f5f5f5" style="background:#f5f5f5"></div><div class="swatch" data-color="#3b82f6" style="background:#3b82f6"></div><div class="swatch" data-color="#22c55e" style="background:#22c55e"></div><div class="swatch" data-color="#ef4444" style="background:#ef4444"></div></div>
+          </div>
         </div>
-        <div id="tasksRoot"></div>
+        <div id="tasksRoot"><div class="task-block ">
+      <div class="task-row">
+        <span class="grip">::</span>
+        <button class="arrow-btn " data-toggle="visa">▾</button>
+        <span class="task-label section" style="color:inherit" contenteditable="true" data-sectiontitle="visa">Visa Application</span>
+        <span class="more-dots" data-deltask="visa" title="Delete">⋯</span>
+      </div>
+      <div class="section-body" style="">
+        <div class="task-row nested">
+      <span class="grip">::</span>
+      <span class="arrow-spacer"></span>
+      <div class="check checked" data-check="t1"></div>
+      <span class="task-label done" style="color:" contenteditable="true" data-tasktext="t1">Fill application form</span>
+      <span class="money-pair" contenteditable="true" data-moneytext="task:t1" title="Edit as: GBP 100 · INR 10000">GBP 348 · INR 0</span>
+    </div><div class="task-row nested">
+      <span class="grip">::</span>
+      <span class="arrow-spacer"></span>
+      <div class="check " data-check="t2"></div>
+      <span class="task-label " style="color:" contenteditable="true" data-tasktext="t2">Book appointment</span>
+      
+    </div><div class="task-row nested">
+      <span class="grip">::</span>
+      <span class="arrow-spacer"></span>
+      <div class="check " data-check="t3"></div>
+      <span class="task-label " style="color:" contenteditable="true" data-tasktext="t3">Pay IHS fee</span>
+      <span class="money-pair" contenteditable="true" data-moneytext="task:t3" title="Edit as: GBP 100 · INR 10000">GBP 624 · INR 0</span>
+    </div><div class="task-row nested">
+      <span class="grip">::</span>
+      <span class="arrow-spacer"></span>
+      <div class="check " data-check="t4"></div>
+      <span class="task-label " style="color:" contenteditable="true" data-tasktext="t4">Upload documents</span>
+      
+    </div><div class="task-block nested">
+      <div class="task-row">
+        <span class="grip">::</span>
+        <button class="arrow-btn " data-toggle="docs">▾</button>
+        <span class="task-label section" style="color:inherit" contenteditable="true" data-sectiontitle="docs">Documents</span>
+        <span class="more-dots" data-deltask="docs" title="Delete">⋯</span>
+      </div>
+      <div class="section-body" style="">
+        <div class="task-row nested">
+      <span class="grip">::</span>
+      <span class="arrow-spacer"></span>
+      <div class="check " data-check="d1"></div>
+      <span class="task-label " style="color:" contenteditable="true" data-tasktext="d1">Passport</span>
+      
+    </div><div class="task-row nested">
+      <span class="grip">::</span>
+      <span class="arrow-spacer"></span>
+      <div class="check " data-check="d2"></div>
+      <span class="task-label " style="color:" contenteditable="true" data-tasktext="d2">Photograph</span>
+      
+    </div><div class="task-row nested">
+      <span class="grip">::</span>
+      <span class="arrow-spacer"></span>
+      <div class="check " data-check="d3"></div>
+      <span class="task-label " style="color:" contenteditable="true" data-tasktext="d3">Bank statement</span>
+      
+    </div>
+      </div>
+    </div>
+      </div>
+    </div><div class="task-block ">
+      <div class="task-row">
+        <span class="grip">::</span>
+        <button class="arrow-btn collapsed" data-toggle="accom">▾</button>
+        <span class="task-label section" style="color:inherit" contenteditable="true" data-sectiontitle="accom">Accommodation</span>
+        <span class="more-dots" data-deltask="accom" title="Delete">⋯</span>
+      </div>
+      <div class="section-body" style="display:none;">
+        <div class="task-row nested">
+      <span class="grip">::</span>
+      <span class="arrow-spacer"></span>
+      <div class="check " data-check="a1"></div>
+      <span class="task-label " style="color:" contenteditable="true" data-tasktext="a1">Book temporary stay</span>
+      
+    </div>
+      </div>
+    </div><div class="task-block">
+      <div class="task-row">
+        <span class="grip">::</span>
+        <span class="arrow-spacer" style="width:14px;display:inline-block;"><span style="color:var(--muted);font-size:0.6rem;">●</span></span>
+        <span class="task-label section" style="color:inherit" contenteditable="true" data-bgtitle="buy">Things to buy</span>
+      </div>
+      <div><div class="task-row nested"><span class="grip">::</span><span class="bullet-dot"></span><span class="task-label" contenteditable="true" data-bullettext="b1">Luggage</span></div><div class="task-row nested"><span class="grip">::</span><span class="bullet-dot"></span><span class="task-label" contenteditable="true" data-bullettext="b2">Adapter</span></div></div>
+    </div><div class="divider-line"></div><div class="task-row">
+      <span class="grip">::</span>
+      <span class="num-label">1.</span>
+      <span class="task-label" style="color:inherit" contenteditable="true" data-numtext="n1">Complete biometrics</span>
+    </div><div class="task-row">
+      <span class="grip">::</span>
+      <span class="num-label">2.</span>
+      <span class="task-label" style="color:inherit" contenteditable="true" data-numtext="n2">Wait for decision</span>
+    </div><div class="divider-line"></div><div class="task-row">
+      <span class="grip">::</span>
+      <span class="link-icon">🔗</span>
+      <span class="task-link" contenteditable="true" data-linktext="lnk">Important Links</span>
+    </div></div>
 
-        <div class="add-plus-wrap">
+        <div class="add-plus-wrap" style="display:none">
           <button class="add-plus-btn" id="blockPlusBtn">+</button>
           <div class="block-menu" id="blockMenu">
             <div class="block-menu-item" data-block="heading"><span class="bmi-icon">H</span> Heading</div>
@@ -206,15 +328,119 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
             </div>
           </div>
         </div>
-      </div>
 
       <!-- SHOPPING -->
-      <div class="panel">
+      <div class="shopping-in-tasks">
         <div class="panel-head">
           <div class="panel-title">Shopping</div>
           <button class="icon-btn" id="shopAddBtn">+</button>
         </div>
-        <div id="shopRoot"></div>
+        <div id="shopRoot"><div class="shop-cat">
+      <div class="shop-cat-head" data-shopcat="elec">
+        <button class="arrow-btn ">▾</button>
+        <span class="shop-cat-title" contenteditable="true" data-shopcattitle="elec">Electronics</span>
+        <span class="shop-cat-total amount-dual">GBP 1150 · INR 0</span>
+      </div>
+      <div class="shop-items" style="">
+        
+          <div class="shop-item">
+            <div class="check checked" data-shopcheck="elec:0"></div>
+            <span class="shop-item-name" contenteditable="true" data-shopname="elec:0">Gaming Laptop</span>
+            <span class="money-pair" contenteditable="true" data-moneytext="shop:elec:0" title="Edit as: GBP 100 · INR 10000">GBP 900 · INR 0</span>
+            <span class="more-dots" data-shopdel="elec:0" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
+          </div>
+          <div class="shop-item">
+            <div class="check checked" data-shopcheck="elec:1"></div>
+            <span class="shop-item-name" contenteditable="true" data-shopname="elec:1">Mouse</span>
+            <span class="money-pair" contenteditable="true" data-moneytext="shop:elec:1" title="Edit as: GBP 100 · INR 10000">GBP 50 · INR 0</span>
+            <span class="more-dots" data-shopdel="elec:1" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
+          </div>
+          <div class="shop-item">
+            <div class="check " data-shopcheck="elec:2"></div>
+            <span class="shop-item-name" contenteditable="true" data-shopname="elec:2">Keyboard</span>
+            <span class="money-pair" contenteditable="true" data-moneytext="shop:elec:2" title="Edit as: GBP 100 · INR 10000">GBP 80 · INR 0</span>
+            <span class="more-dots" data-shopdel="elec:2" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
+          </div>
+          <div class="shop-item">
+            <div class="check " data-shopcheck="elec:3"></div>
+            <span class="shop-item-name" contenteditable="true" data-shopname="elec:3">Monitor</span>
+            <span class="money-pair" contenteditable="true" data-moneytext="shop:elec:3" title="Edit as: GBP 100 · INR 10000">GBP 120 · INR 0</span>
+            <span class="more-dots" data-shopdel="elec:3" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
+          </div>
+        <button class="add-plus-btn" data-additem="elec" style="width:auto;padding:0.25rem 0.6rem;font-size:0.75rem;margin-top:0.2rem;">+ Add item</button>
+      </div>
+      <div class="shop-divider"></div>
+    </div><div class="shop-cat">
+      <div class="shop-cat-head" data-shopcat="home">
+        <button class="arrow-btn collapsed">▾</button>
+        <span class="shop-cat-title" contenteditable="true" data-shopcattitle="home">Home Essentials</span>
+        <span class="shop-cat-total amount-dual">GBP 210 · INR 0</span>
+      </div>
+      <div class="shop-items" style="display:none;">
+        
+          <div class="shop-item">
+            <div class="check " data-shopcheck="home:0"></div>
+            <span class="shop-item-name" contenteditable="true" data-shopname="home:0">Bedding set</span>
+            <span class="money-pair" contenteditable="true" data-moneytext="shop:home:0" title="Edit as: GBP 100 · INR 10000">GBP 80 · INR 0</span>
+            <span class="more-dots" data-shopdel="home:0" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
+          </div>
+          <div class="shop-item">
+            <div class="check " data-shopcheck="home:1"></div>
+            <span class="shop-item-name" contenteditable="true" data-shopname="home:1">Kitchenware</span>
+            <span class="money-pair" contenteditable="true" data-moneytext="shop:home:1" title="Edit as: GBP 100 · INR 10000">GBP 130 · INR 0</span>
+            <span class="more-dots" data-shopdel="home:1" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
+          </div>
+        <button class="add-plus-btn" data-additem="home" style="width:auto;padding:0.25rem 0.6rem;font-size:0.75rem;margin-top:0.2rem;">+ Add item</button>
+      </div>
+      <div class="shop-divider"></div>
+    </div><div class="shop-cat">
+      <div class="shop-cat-head" data-shopcat="cloth">
+        <button class="arrow-btn collapsed">▾</button>
+        <span class="shop-cat-title" contenteditable="true" data-shopcattitle="cloth">Clothing</span>
+        <span class="shop-cat-total amount-dual">GBP 340 · INR 0</span>
+      </div>
+      <div class="shop-items" style="display:none;">
+        
+          <div class="shop-item">
+            <div class="check " data-shopcheck="cloth:0"></div>
+            <span class="shop-item-name" contenteditable="true" data-shopname="cloth:0">Winter jacket</span>
+            <span class="money-pair" contenteditable="true" data-moneytext="shop:cloth:0" title="Edit as: GBP 100 · INR 10000">GBP 180 · INR 0</span>
+            <span class="more-dots" data-shopdel="cloth:0" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
+          </div>
+          <div class="shop-item">
+            <div class="check " data-shopcheck="cloth:1"></div>
+            <span class="shop-item-name" contenteditable="true" data-shopname="cloth:1">Shoes</span>
+            <span class="money-pair" contenteditable="true" data-moneytext="shop:cloth:1" title="Edit as: GBP 100 · INR 10000">GBP 160 · INR 0</span>
+            <span class="more-dots" data-shopdel="cloth:1" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
+          </div>
+        <button class="add-plus-btn" data-additem="cloth" style="width:auto;padding:0.25rem 0.6rem;font-size:0.75rem;margin-top:0.2rem;">+ Add item</button>
+      </div>
+      <div class="shop-divider"></div>
+    </div><div class="shop-cat">
+      <div class="shop-cat-head" data-shopcat="docs2">
+        <button class="arrow-btn collapsed">▾</button>
+        <span class="shop-cat-title" contenteditable="true" data-shopcattitle="docs2">Documents &amp; Misc</span>
+        <span class="shop-cat-total amount-dual">GBP 30 · INR 0</span>
+      </div>
+      <div class="shop-items" style="display:none;">
+        
+          <div class="shop-item">
+            <div class="check " data-shopcheck="docs2:0"></div>
+            <span class="shop-item-name" contenteditable="true" data-shopname="docs2:0">Photocopies</span>
+            <span class="money-pair" contenteditable="true" data-moneytext="shop:docs2:0" title="Edit as: GBP 100 · INR 10000">GBP 10 · INR 0</span>
+            <span class="more-dots" data-shopdel="docs2:0" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
+          </div>
+          <div class="shop-item">
+            <div class="check " data-shopcheck="docs2:1"></div>
+            <span class="shop-item-name" contenteditable="true" data-shopname="docs2:1">Folder</span>
+            <span class="money-pair" contenteditable="true" data-moneytext="shop:docs2:1" title="Edit as: GBP 100 · INR 10000">GBP 20 · INR 0</span>
+            <span class="more-dots" data-shopdel="docs2:1" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
+          </div>
+        <button class="add-plus-btn" data-additem="docs2" style="width:auto;padding:0.25rem 0.6rem;font-size:0.75rem;margin-top:0.2rem;">+ Add item</button>
+      </div>
+      <div class="shop-divider"></div>
+    </div></div>
+      </div>
       </div>
 
     </div>
@@ -229,15 +455,145 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
           <button class="icon-btn" id="accAddBtn">+</button>
         </div>
         <table class="acc-table">
-          <tr><th>Name / URL</th><th>Rent</th><th>Bills</th><th>Status</th></tr>
-          <tbody id="accBody"></tbody>
+          <tbody><tr><th>Name / URL</th><th>Rent</th><th>Bills</th><th>Status</th><th></th></tr>
+          </tbody><tbody id="accBody">
+    <tr>
+      <td><div class="acc-name" contenteditable="true" data-accname="0">Student Castle, London</div><a class="acc-url" href="file:///C:/Users/dhanu/Documents/Codex/2026-07-16/bud-just-few-things-to-fix/outputs/index.html#" contenteditable="true" data-accurl="0">studentcastle.com</a></td>
+      <td class="acc-num" contenteditable="true" data-accrent="0">£1,200</td>
+      <td><span class="status-pill bills-toggle " data-accbills="0">Yes</span></td>
+      <td><span class="status-pill status-shortlisted" data-accstatus="0">Shortlisted ▾</span></td><td><button class="acc-delete" data-accdelete="0" title="Delete accommodation">×</button></td>
+    </tr>
+    <tr>
+      <td><div class="acc-name" contenteditable="true" data-accname="1">Drapery Plaza, London</div><a class="acc-url" href="file:///C:/Users/dhanu/Documents/Codex/2026-07-16/bud-just-few-things-to-fix/outputs/index.html#" contenteditable="true" data-accurl="1">draperyplaza.com</a></td>
+      <td class="acc-num" contenteditable="true" data-accrent="1">£1,350</td>
+      <td><span class="status-pill bills-toggle " data-accbills="1">Yes</span></td>
+      <td><span class="status-pill status-review" data-accstatus="1">Under Review ▾</span></td><td><button class="acc-delete" data-accdelete="1" title="Delete accommodation">×</button></td>
+    </tr>
+    <tr>
+      <td><div class="acc-name" contenteditable="true" data-accname="2">Chapter Spitalfields</div><a class="acc-url" href="file:///C:/Users/dhanu/Documents/Codex/2026-07-16/bud-just-few-things-to-fix/outputs/index.html#" contenteditable="true" data-accurl="2">chapter-living.com</a></td>
+      <td class="acc-num" contenteditable="true" data-accrent="2">£1,450</td>
+      <td><span class="status-pill bills-toggle no" data-accbills="2">No</span></td>
+      <td><span class="status-pill status-not" data-accstatus="2">Not Interested ▾</span></td><td><button class="acc-delete" data-accdelete="2" title="Delete accommodation">×</button></td>
+    </tr>
+    <tr>
+      <td><div class="acc-name" contenteditable="true" data-accname="3">The Curve, London</div><a class="acc-url" href="file:///C:/Users/dhanu/Documents/Codex/2026-07-16/bud-just-few-things-to-fix/outputs/index.html#" contenteditable="true" data-accurl="3">thecurve.co.uk</a></td>
+      <td class="acc-num" contenteditable="true" data-accrent="3">£1,100</td>
+      <td><span class="status-pill bills-toggle " data-accbills="3">Yes</span></td>
+      <td><span class="status-pill status-shortlisted" data-accstatus="3">Shortlisted ▾</span></td><td><button class="acc-delete" data-accdelete="3" title="Delete accommodation">×</button></td>
+    </tr></tbody>
         </table>
       </div>
 
-      <!-- TRAVEL -->
+      <!-- TRIPS -->
       <div class="panel">
-        <div class="panel-title" style="margin-bottom:0.6rem;">Travel</div>
-        <div id="travelRoot"></div>
+        <div class="panel-head"><div class="panel-title">Trips</div><button class="icon-btn" id="tripAddBtn">+</button></div>
+        <div id="travelRoot"><div class="trip-section" style="margin-bottom:0.8rem;">
+      <div class="trip-head" data-trip="london">
+        <button class="arrow-btn ">▾</button>
+        <span class="trip-title" contenteditable="true" data-triptitle="london">London Trip</span>
+        <span class="trip-total">Total: 436</span>
+      </div>
+      <div style="">
+        
+      <div class="boarding-row">
+        <span class="boarding-label">Boarding Pass</span>
+        <button class="upload-btn" data-bpupload="london">Upload</button>
+        <span class="or-text">or</span>
+        <input class="paste-input" data-bpinput="london" value="" placeholder="Paste URL here…">
+        
+      </div>
+        <div class="day-block">
+        <div class="day-head" data-day="london:d1">
+          <span class="day-plus" data-addrow="london:d1" title="Add a row">+</span>
+          <span class="day-title" contenteditable="true" data-daytitle="london:d1">Day 1</span>
+          <span>–</span>
+          <input type="date" data-daydate="london:d1" value="2026-08-14" onclick="event.stopPropagation()">
+          <span class="day-total">Total: 436</span>
+          <span class="day-dots" data-delday="london:d1" title="Delete day">⋯</span>
+        </div>
+        <div style="">
+        <div class="day-table-wrap">
+          <table class="day-table">
+            <tbody><tr><th>Places</th><th>Cost</th><th>Food</th><th>Cost</th><th>Stay</th><th>Cost</th><th>Notes</th><th></th></tr>
+            <tr>
+              <td contenteditable="true" data-place="london:d1:0">British Museum</td>
+              <td contenteditable="true" data-pcost="london:d1:0">25</td>
+              <td contenteditable="true" data-food="london:d1:0">Dishoom</td>
+              <td contenteditable="true" data-fcost="london:d1:0">20</td>
+              <td contenteditable="true" data-stay="london:d1:0">Hub by Premier Inn</td>
+              <td contenteditable="true" data-scost="london:d1:0">100</td>
+              <td class="note-cell" contenteditable="true" data-notes="london:d1:0">Near Museum</td><td><button class="row-delete" data-delrow="london:d1:0" title="Delete row">×</button></td>
+            </tr><tr>
+              <td contenteditable="true" data-place="london:d1:1">Tower of London</td>
+              <td contenteditable="true" data-pcost="london:d1:1">34</td>
+              <td contenteditable="true" data-food="london:d1:1">Borough Market</td>
+              <td contenteditable="true" data-fcost="london:d1:1">15</td>
+              <td contenteditable="true" data-stay="london:d1:1">Hub by Premier Inn</td>
+              <td contenteditable="true" data-scost="london:d1:1">100</td>
+              <td class="note-cell" contenteditable="true" data-notes="london:d1:1">—</td><td><button class="row-delete" data-delrow="london:d1:1" title="Delete row">×</button></td>
+            </tr><tr>
+              <td contenteditable="true" data-place="london:d1:2">London Eye</td>
+              <td contenteditable="true" data-pcost="london:d1:2">32</td>
+              <td contenteditable="true" data-food="london:d1:2">Pret A Manger</td>
+              <td contenteditable="true" data-fcost="london:d1:2">10</td>
+              <td contenteditable="true" data-stay="london:d1:2">Hub by Premier Inn</td>
+              <td contenteditable="true" data-scost="london:d1:2">100</td>
+              <td class="note-cell" contenteditable="true" data-notes="london:d1:2">Evening slot</td><td><button class="row-delete" data-delrow="london:d1:2" title="Delete row">×</button></td>
+            </tr>
+          </tbody></table>
+        </div></div>
+      </div><div class="day-block">
+        <div class="day-head" data-day="london:d2">
+          <span class="day-plus" data-addrow="london:d2" title="Add a row">+</span>
+          <span class="day-title" contenteditable="true" data-daytitle="london:d2">Day 2</span>
+          <span>–</span>
+          <input type="date" data-daydate="london:d2" value="2026-08-15" onclick="event.stopPropagation()">
+          <span class="day-total">Total: 0</span>
+          <span class="day-dots" data-delday="london:d2" title="Delete day">⋯</span>
+        </div>
+        <div style="display:none;"></div>
+      </div><div class="day-block">
+        <div class="day-head" data-day="london:d3">
+          <span class="day-plus" data-addrow="london:d3" title="Add a row">+</span>
+          <span class="day-title" contenteditable="true" data-daytitle="london:d3">Day 3</span>
+          <span>–</span>
+          <input type="date" data-daydate="london:d3" value="2026-08-16" onclick="event.stopPropagation()">
+          <span class="day-total">Total: 0</span>
+          <span class="day-dots" data-delday="london:d3" title="Delete day">⋯</span>
+        </div>
+        <div style="display:none;"></div>
+      </div><div class="day-block">
+        <div class="day-head" data-day="london:d4">
+          <span class="day-plus" data-addrow="london:d4" title="Add a row">+</span>
+          <span class="day-title" contenteditable="true" data-daytitle="london:d4">Day 4</span>
+          <span>–</span>
+          <input type="date" data-daydate="london:d4" value="2026-08-17" onclick="event.stopPropagation()">
+          <span class="day-total">Total: 0</span>
+          <span class="day-dots" data-delday="london:d4" title="Delete day">⋯</span>
+        </div>
+        <div style="display:none;"></div>
+      </div>
+        <button class="add-plus-btn" data-addday="london" style="margin-top:0.7rem;font-size:0.78rem;width:auto;padding:0.3rem 0.7rem;gap:0.3rem;">+ Add day</button>
+      </div>
+    </div><div class="trip-section" style="margin-bottom:0.8rem;">
+      <div class="trip-head" data-trip="india">
+        <button class="arrow-btn collapsed">▾</button>
+        <span class="trip-title" contenteditable="true" data-triptitle="india">India Trip</span>
+        <span class="trip-total">Total: 0</span>
+      </div>
+      <div style="display:none;">
+        
+      <div class="boarding-row">
+        <span class="boarding-label">Boarding Pass</span>
+        <button class="upload-btn" data-bpupload="india">Upload</button>
+        <span class="or-text">or</span>
+        <input class="paste-input" data-bpinput="india" value="" placeholder="Paste URL here…">
+        
+      </div>
+        
+        <button class="add-plus-btn" data-addday="india" style="margin-top:0.7rem;font-size:0.78rem;width:auto;padding:0.3rem 0.7rem;gap:0.3rem;">+ Add day</button>
+      </div>
+    </div></div>
       </div>
 
       <!-- CALENDAR -->
@@ -245,9 +601,10 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
         <div class="cal-nav">
           <button id="calPrev">‹</button>
           <div class="cal-month" id="calMonthLabel">August 2026</div>
-          <button id="calNext">��</button>
+          <button id="calNext">  </button>
         </div>
-        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-grid" id="calGrid"><div class="cal-dow">S</div><div class="cal-dow">M</div><div class="cal-dow">T</div><div class="cal-dow">W</div><div class="cal-dow">T</div><div class="cal-dow">F</div><div class="cal-dow">S</div><div class="cal-day outside">26</div><div class="cal-day outside">27</div><div class="cal-day outside">28</div><div class="cal-day outside">29</div><div class="cal-day outside">30</div><div class="cal-day outside">31</div><div class="cal-day" data-calday="2026-08-01" title="Select this date to manage its events">1</div><div class="cal-day" data-calday="2026-08-02" title="Select this date to manage its events">2</div><div class="cal-day" data-calday="2026-08-03" title="Select this date to manage its events">3</div><div class="cal-day today-marker" data-calday="2026-08-04" title="Select this date to manage its events">4</div><div class="cal-day" data-calday="2026-08-05" title="Select this date to manage its events">5</div><div class="cal-day" data-calday="2026-08-06" title="Select this date to manage its events">6</div><div class="cal-day" data-calday="2026-08-07" title="Select this date to manage its events">7<span class="evt-dot"></span></div><div class="cal-day" data-calday="2026-08-08" title="Select this date to manage its events">8</div><div class="cal-day" data-calday="2026-08-09" title="Select this date to manage its events">9</div><div class="cal-day" data-calday="2026-08-10" title="Select this date to manage its events">10</div><div class="cal-day" data-calday="2026-08-11" title="Select this date to manage its events">11</div><div class="cal-day" data-calday="2026-08-12" title="Select this date to manage its events">12</div><div class="cal-day" data-calday="2026-08-13" title="Select this date to manage its events">13</div><div class="cal-day" data-calday="2026-08-14" title="Select this date to manage its events">14</div><div class="cal-day selected" data-calday="2026-08-15" title="Select this date to manage its events">15<span class="evt-dot"></span></div><div class="cal-day" data-calday="2026-08-16" title="Select this date to manage its events">16</div><div class="cal-day" data-calday="2026-08-17" title="Select this date to manage its events">17</div><div class="cal-day" data-calday="2026-08-18" title="Select this date to manage its events">18<span class="evt-dot"></span></div><div class="cal-day" data-calday="2026-08-19" title="Select this date to manage its events">19</div><div class="cal-day" data-calday="2026-08-20" title="Select this date to manage its events">20</div><div class="cal-day" data-calday="2026-08-21" title="Select this date to manage its events">21</div><div class="cal-day" data-calday="2026-08-22" title="Select this date to manage its events">22</div><div class="cal-day" data-calday="2026-08-23" title="Select this date to manage its events">23</div><div class="cal-day" data-calday="2026-08-24" title="Select this date to manage its events">24</div><div class="cal-day" data-calday="2026-08-25" title="Select this date to manage its events">25<span class="evt-dot"></span></div><div class="cal-day" data-calday="2026-08-26" title="Select this date to manage its events">26</div><div class="cal-day" data-calday="2026-08-27" title="Select this date to manage its events">27</div><div class="cal-day" data-calday="2026-08-28" title="Select this date to manage its events">28</div><div class="cal-day" data-calday="2026-08-29" title="Select this date to manage its events">29<span class="evt-dot"></span></div><div class="cal-day" data-calday="2026-08-30" title="Select this date to manage its events">30</div><div class="cal-day" data-calday="2026-08-31" title="Select this date to manage its events">31</div><div class="cal-day outside"></div><div class="cal-day outside"></div><div class="cal-day outside"></div><div class="cal-day outside"></div><div class="cal-day outside"></div></div>
+        <div class="calendar-events" id="calendarEvents"><div class="events-title">Events on 2026-08-15</div><div class="event-line"><span>Event</span><button class="event-delete" data-delevent="0" title="Delete event">×</button></div><div class="event-add"><input id="eventName" placeholder="Add an event for this date"><button class="upload-btn" id="eventAdd">Add</button></div></div>
       </div>
 
     </div>
@@ -338,17 +695,15 @@ let calendar = {
   events:{ '2026-08-07':true, '2026-08-15':true, '2026-08-18':true, '2026-08-25':true, '2026-08-29':true },
 };
 
-/* ===================== CURRENCY ===================== */
-const GBP_TO_INR = 129; // approx mid-market rate
-function dualCurrency(gbp){
-  const n = Number(gbp)||0;
-  const inr = Math.round(n*GBP_TO_INR);
-  return `£${n.toLocaleString()} / ₹${inr.toLocaleString('en-IN')}`;
-}
 function parseGBP(str){
   const m = String(str).replace(/,/g,'').match(/-?\d+(\.\d+)?/);
   return m ? parseFloat(m[0]) : 0;
 }
+/* Manual GBP/INR fields are intentionally independent: no conversion is done. */
+function money(value){ return typeof value==='object' && value ? value : {gbp:Number(value)||0,inr:0}; }
+function moneyFields(value, key){ const m=money(value); return `<span class="money-pair" contenteditable="true" data-moneytext="${key}" title="Edit as: GBP 100 · INR 10000">GBP ${m.gbp} · INR ${m.inr}</span>`; }
+function readMoney(text, fallback){ const values=String(text).match(/-?\d+(?:\.\d+)?/g)||[]; return {gbp:Number(values[0])||0,inr:Number(values[1])||0}; }
+function moneyTotal(items){ return items.reduce((s,item)=>{ const m=money(item.price); return {gbp:s.gbp+m.gbp,inr:s.inr+m.inr}; },{gbp:0,inr:0}); }
 
 /* ===================== EDITABLE BINDING ===================== */
 function bindEditable(selector, onCommit){
@@ -370,7 +725,7 @@ function renderTaskNode(node, nested){
       <div class="task-row">
         <span class="grip">::</span>
         <button class="arrow-btn ${node.collapsed?'collapsed':''}" data-toggle="${node.id}">▾</button>
-        <span class="task-label section" contenteditable="true" data-sectiontitle="${node.id}">${node.title}</span>
+        <span class="task-label section" style="color:${node.color||'inherit'}" contenteditable="true" data-sectiontitle="${node.id}">${node.title}</span>
         <span class="more-dots" data-deltask="${node.id}" title="Delete">⋯</span>
       </div>
       <div class="section-body" style="${node.collapsed?'display:none;':''}">
@@ -384,8 +739,8 @@ function renderTaskNode(node, nested){
       <span class="grip">::</span>
       <span class="arrow-spacer"></span>
       <div class="check ${node.done?'checked':''}" data-check="${node.id}"></div>
-      <span class="task-label ${node.done?'done':''}" contenteditable="true" data-tasktext="${node.id}">${node.text}</span>
-      ${node.paid?`<span class="amount-dual" contenteditable="true" data-taskamount="${node.id}">${dualCurrency(node.amount)}</span>`:''}
+      <span class="task-label ${node.done?'done':''}" style="color:${node.color||''}" contenteditable="true" data-tasktext="${node.id}">${node.text}</span>
+      ${node.paid?moneyFields(node.amount,`task:${node.id}`):''}
     </div>`;
   }
   if(node.type==='bulletgroup'){
@@ -393,7 +748,7 @@ function renderTaskNode(node, nested){
       <div class="task-row">
         <span class="grip">::</span>
         <span class="arrow-spacer" style="width:14px;display:inline-block;"><span style="color:var(--muted);font-size:0.6rem;">●</span></span>
-        <span class="task-label section" contenteditable="true" data-bgtitle="${node.id}">${node.title}</span>
+        <span class="task-label section" style="color:${node.color||'inherit'}" contenteditable="true" data-bgtitle="${node.id}">${node.title}</span>
       </div>
       <div>${node.children.map(c=>`<div class="task-row nested"><span class="grip">::</span><span class="bullet-dot"></span><span class="task-label" contenteditable="true" data-bullettext="${c.id}">${c.text}</span></div>`).join('')}</div>
     </div>`;
@@ -406,7 +761,7 @@ function renderTaskNode(node, nested){
     return `<div class="task-row">
       <span class="grip">::</span>
       <span class="num-label">${idx}.</span>
-      <span class="task-label" contenteditable="true" data-numtext="${node.id}">${node.text}</span>
+      <span class="task-label" style="color:${node.color||'inherit'}" contenteditable="true" data-numtext="${node.id}">${node.text}</span>
     </div>`;
   }
   if(node.type==='link'){
@@ -417,10 +772,10 @@ function renderTaskNode(node, nested){
     </div>`;
   }
   if(node.type==='heading'){
-    return `<div class="task-row"><span class="grip">::</span><span class="task-label section" style="font-size:1rem;" contenteditable="true" data-headtext="${node.id}">${node.text}</span></div>`;
+    return `<div class="task-row"><span class="grip">::</span><span class="task-label section" style="font-size:1rem;color:${node.color||'inherit'}" contenteditable="true" data-headtext="${node.id}">${node.text}</span></div>`;
   }
   if(node.type==='text'){
-    return `<div class="task-row"><span class="grip">::</span><span class="task-label" contenteditable="true" data-texttext="${node.id}">${node.text}</span></div>`;
+    return `<div class="task-row"><span class="grip">::</span><span class="task-label" style="color:${node.color||'inherit'}" contenteditable="true" data-texttext="${node.id}">${node.text}</span></div>`;
   }
   return '';
 }
@@ -449,6 +804,7 @@ function removeNode(list, id){
 }
 
 function wireTasks(){
+  document.querySelectorAll('#tasksRoot [contenteditable]').forEach(el=>el.onfocus=()=>{ const key=Object.keys(el.dataset).find(k=>k!=='color'); if(key) window.selectedTaskNodeId=el.dataset[key]; });
   document.querySelectorAll('[data-toggle]').forEach(btn=>{
     btn.onclick = ()=>{
       const node = findNode(tasks, btn.dataset.toggle);
@@ -478,10 +834,7 @@ function wireTasks(){
   bindEditable('[data-tasktext]', el=>{
     findNode(tasks, el.dataset.tasktext).text = el.textContent.trim();
   });
-  bindEditable('[data-taskamount]', el=>{
-    findNode(tasks, el.dataset.taskamount).amount = parseGBP(el.textContent);
-    renderTasks();
-  });
+  bindEditable('[data-moneytext^="task:"]', el=>{ const [,id]=el.dataset.moneytext.split(':'); findNode(tasks,id).amount=readMoney(el.textContent); renderTasks(); });
   bindEditable('[data-bgtitle]', el=>{
     findNode(tasks, el.dataset.bgtitle).title = el.textContent.trim();
   });
@@ -508,12 +861,13 @@ document.getElementById('blockPlusBtn').onclick = (e)=>{
   document.getElementById('blockMenu').classList.toggle('open');
 };
 document.addEventListener('click', ()=> document.getElementById('blockMenu').classList.remove('open'));
-document.querySelectorAll('.block-menu-item').forEach(item=>{
+document.getElementById('blockMenu').querySelectorAll('.block-menu-item[data-block]').forEach(item=>{
   item.onclick = (e)=>{
     e.stopPropagation();
     const kind = item.dataset.block;
     if(kind==='divider'){ tasks.push({type:'divider', id:uid()}); }
     else if(kind==='todo'){ tasks.push({type:'todo', id:uid(), text:'New to-do', done:false}); }
+    else if(kind==='paidtodo'){ tasks.push({type:'todo', id:uid(), text:'New paid task', done:false, paid:true, amount:{gbp:0,inr:0}}); }
     else if(kind==='bulleted'){ tasks.push({type:'bulletgroup', id:uid(), title:'New list', children:[{type:'bullet',id:uid(),text:'New item'}]}); }
     else if(kind==='numbered'){ tasks.push({type:'numbered', id:uid(), text:'New step'}); }
     else if(kind==='heading'){ tasks.push({type:'heading', id:uid(), text:'New heading'}); }
@@ -524,6 +878,13 @@ document.querySelectorAll('.block-menu-item').forEach(item=>{
     renderTasks();
   };
 });
+document.getElementById('blockMenu').querySelectorAll('.swatch[data-color]').forEach(swatch=>swatch.onclick=(e)=>{
+  e.stopPropagation();
+  if(!window.selectedTaskNodeId) return;
+  const node=findNode(tasks, window.selectedTaskNodeId);
+  if(node){ node.color=swatch.dataset.color; renderTasks(); }
+  document.getElementById('blockMenu').classList.remove('open');
+});
 
 /* ===================== ACCOMMODATION ===================== */
 function renderAccommodation(){
@@ -533,8 +894,8 @@ function renderAccommodation(){
     <tr>
       <td><div class="acc-name" contenteditable="true" data-accname="${i}">${row.name}</div><a class="acc-url" href="#" contenteditable="true" data-accurl="${i}">${row.url}</a></td>
       <td class="acc-num" contenteditable="true" data-accrent="${i}">${row.rent}</td>
-      <td class="acc-num" contenteditable="true" data-accbills="${i}">${row.bills}</td>
-      <td><span class="status-pill ${statusClass[row.status]}" data-accstatus="${i}">${statusLabel[row.status]} ▾</span></td>
+      <td><span class="status-pill bills-toggle ${row.bills==='N'?'no':''}" data-accbills="${i}">${row.bills==='N'?'No':'Yes'}</span></td>
+      <td><span class="status-pill ${statusClass[row.status]}" data-accstatus="${i}">${statusLabel[row.status]} ▾</span></td><td><button class="acc-delete" data-accdelete="${i}" title="Delete accommodation">×</button></td>
     </tr>`).join('');
   document.querySelectorAll('[data-accstatus]').forEach(el=>{
     el.onclick = ()=>{
@@ -545,18 +906,24 @@ function renderAccommodation(){
       renderAccommodation();
     };
   });
+  document.querySelectorAll('[data-accbills]').forEach(el=>el.onclick=()=>{
+    const row=accommodation[el.dataset.accbills]; row.bills=row.bills==='Y'?'N':'Y'; renderAccommodation();
+  });
+  document.querySelectorAll('[data-accdelete]').forEach(el=>el.onclick=()=>{
+    accommodation.splice(Number(el.dataset.accdelete),1); renderAccommodation();
+  });
   document.querySelectorAll('.acc-url').forEach(el=>{
     el.addEventListener('click', e=> e.preventDefault());
   });
   bindEditable('[data-accname]', el=>{ accommodation[el.dataset.accname].name = el.textContent.trim(); });
   bindEditable('[data-accurl]', el=>{ accommodation[el.dataset.accurl].url = el.textContent.trim(); });
   bindEditable('[data-accrent]', el=>{ accommodation[el.dataset.accrent].rent = el.textContent.trim(); });
-  bindEditable('[data-accbills]', el=>{ accommodation[el.dataset.accbills].bills = el.textContent.trim(); });
   scheduleSave();
 }
 
 /* ===================== CALENDAR ===================== */
 function isoDate(y,m,d){ return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+function eventList(iso){ const value=calendar.events[iso]; return Array.isArray(value)?value:(value?['Event']:[]); }
 function renderCalendar(){
   const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const y = calendar.year, m = calendar.month;
@@ -576,22 +943,21 @@ function renderCalendar(){
     let cls = 'cal-day';
     if(iso===calendar.today) cls += ' today-marker';
     if(iso===calendar.selected) cls += ' selected';
-    const dot = calendar.events[iso] ? '<span class="evt-dot"></span>' : '';
-    return `<div class="${cls}" data-calday="${iso}" title="Click to select · click again to toggle an event dot">${c.d}${dot}</div>`;
+    const dot = eventList(iso).length ? '<span class="evt-dot"></span>' : '';
+    return `<div class="${cls}" data-calday="${iso}" title="Select this date to manage its events">${c.d}${dot}</div>`;
   }).join('');
   document.getElementById('calGrid').innerHTML = html;
   document.querySelectorAll('[data-calday]').forEach(el=>{
     el.onclick = ()=>{
       const iso = el.dataset.calday;
-      if(calendar.selected===iso){
-        if(calendar.events[iso]) delete calendar.events[iso];
-        else calendar.events[iso] = true;
-      } else {
-        calendar.selected = iso;
-      }
+      calendar.selected = iso;
       renderCalendar();
     };
   });
+  const selectedEvents=eventList(calendar.selected);
+  document.getElementById('calendarEvents').innerHTML=`<div class="events-title">Events on ${calendar.selected}</div>${selectedEvents.map((name,i)=>`<div class="event-line"><span>${name}</span><button class="event-delete" data-delevent="${i}" title="Delete event">×</button></div>`).join('')||'<div class="event-line"><span style="color:var(--muted)">No events yet</span></div>'}<div class="event-add"><input id="eventName" placeholder="Add an event for this date"><button class="upload-btn" id="eventAdd">Add</button></div>`;
+  document.querySelectorAll('[data-delevent]').forEach(el=>el.onclick=()=>{ const list=eventList(calendar.selected); list.splice(Number(el.dataset.delevent),1); if(list.length) calendar.events[calendar.selected]=list; else delete calendar.events[calendar.selected]; renderCalendar(); });
+  document.getElementById('eventAdd').onclick=()=>{ const input=document.getElementById('eventName'); const name=input.value.trim(); if(!name) return; const list=eventList(calendar.selected); list.push(name); calendar.events[calendar.selected]=list; renderCalendar(); };
   scheduleSave();
 }
 document.getElementById('calPrev').onclick = ()=>{
@@ -604,19 +970,19 @@ document.getElementById('calNext').onclick = ()=>{
 /* ===================== SHOPPING ===================== */
 function renderShopping(){
   document.getElementById('shopRoot').innerHTML = shopping.map(cat=>{
-    const total = cat.items.reduce((s,i)=>s+i.price,0);
+    const total = moneyTotal(cat.items);
     return `<div class="shop-cat">
       <div class="shop-cat-head" data-shopcat="${cat.id}">
         <button class="arrow-btn ${cat.collapsed?'collapsed':''}">▾</button>
         <span class="shop-cat-title" contenteditable="true" data-shopcattitle="${cat.id}">${cat.title}</span>
-        <span class="shop-cat-total amount-dual">${dualCurrency(total)}</span>
+        <span class="shop-cat-total amount-dual">GBP ${total.gbp} · INR ${total.inr}</span>
       </div>
       <div class="shop-items" style="${cat.collapsed?'display:none;':''}">
         ${cat.items.map((it,idx)=>`
           <div class="shop-item">
             <div class="check ${it.paid?'checked':''}" data-shopcheck="${cat.id}:${idx}"></div>
             <span class="shop-item-name" contenteditable="true" data-shopname="${cat.id}:${idx}">${it.name}</span>
-            <span class="shop-item-price amount-dual" contenteditable="true" data-shopprice="${cat.id}:${idx}">${dualCurrency(it.price)}</span>
+            ${moneyFields(it.price,`shop:${cat.id}:${idx}`)}
             <span class="more-dots" data-shopdel="${cat.id}:${idx}" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
           </div>`).join('')}
         <button class="add-plus-btn" data-additem="${cat.id}" style="width:auto;padding:0.25rem 0.6rem;font-size:0.75rem;margin-top:0.2rem;">+ Add item</button>
@@ -664,30 +1030,28 @@ function renderShopping(){
     const [catId, idx] = el.dataset.shopname.split(':');
     shopping.find(c=>c.id===catId).items[idx].name = el.textContent.trim();
   });
-  bindEditable('[data-shopprice]', el=>{
-    const [catId, idx] = el.dataset.shopprice.split(':');
-    shopping.find(c=>c.id===catId).items[idx].price = parseGBP(el.textContent);
-    renderShopping();
-  });
+  bindEditable('[data-moneytext^="shop:"]', el=>{ const [,catId,idx]=el.dataset.moneytext.split(':'); shopping.find(c=>c.id===catId).items[idx].price=readMoney(el.textContent); renderShopping(); });
   scheduleSave();
 }
 
 /* ===================== TRAVEL ===================== */
+function dayTotal(day){ return day.rows.reduce((sum,r)=>sum+(Number(r.pcost)||0)+(Number(r.fcost)||0)+(Number(r.scost)||0),0); }
+function dateInput(date){ const d=new Date(date); return isNaN(d)?'':d.toISOString().slice(0,10); }
 function renderTravel(){
   document.getElementById('travelRoot').innerHTML = trips.map(trip=>{
     const dayRows = trip.days.map(day=>{
       const table = day.rows.length ? `
         <div class="day-table-wrap">
           <table class="day-table">
-            <tr><th>Places</th><th>Cost</th><th>Food</th><th>Cost</th><th>Stay</th><th>Cost</th><th>Notes</th></tr>
+            <tr><th>Places</th><th>Cost</th><th>Food</th><th>Cost</th><th>Stay</th><th>Cost</th><th>Notes</th><th></th></tr>
             ${day.rows.map((r,ridx)=>`<tr>
               <td contenteditable="true" data-place="${trip.id}:${day.id}:${ridx}">${r.place}</td>
-              <td contenteditable="true" data-pcost="${trip.id}:${day.id}:${ridx}">£${r.pcost}</td>
+              <td contenteditable="true" data-pcost="${trip.id}:${day.id}:${ridx}">${r.pcost}</td>
               <td contenteditable="true" data-food="${trip.id}:${day.id}:${ridx}">${r.food}</td>
-              <td contenteditable="true" data-fcost="${trip.id}:${day.id}:${ridx}">£${r.fcost}</td>
+              <td contenteditable="true" data-fcost="${trip.id}:${day.id}:${ridx}">${r.fcost}</td>
               <td contenteditable="true" data-stay="${trip.id}:${day.id}:${ridx}">${r.stay}</td>
-              <td contenteditable="true" data-scost="${trip.id}:${day.id}:${ridx}">£${r.scost}</td>
-              <td class="note-cell" contenteditable="true" data-notes="${trip.id}:${day.id}:${ridx}">${r.notes}</td>
+              <td contenteditable="true" data-scost="${trip.id}:${day.id}:${ridx}">${r.scost}</td>
+              <td class="note-cell" contenteditable="true" data-notes="${trip.id}:${day.id}:${ridx}">${r.notes}</td><td><button class="row-delete" data-delrow="${trip.id}:${day.id}:${ridx}" title="Delete row">×</button></td>
             </tr>`).join('')}
           </table>
         </div>` : '';
@@ -696,8 +1060,8 @@ function renderTravel(){
           <span class="day-plus" data-addrow="${trip.id}:${day.id}" title="Add a row">+</span>
           <span class="day-title" contenteditable="true" data-daytitle="${trip.id}:${day.id}">${day.title}</span>
           <span>–</span>
-          <span contenteditable="true" data-daydate="${trip.id}:${day.id}" style="font-size:0.87rem;">${day.date}</span>
-          <span class="day-total" contenteditable="true" data-daytotal="${trip.id}:${day.id}">${day.total!==null?'£'+day.total:'—'}</span>
+          <input type="date" data-daydate="${trip.id}:${day.id}" value="${dateInput(day.date)}" onclick="event.stopPropagation()">
+          <span class="day-total">Total: ${dayTotal(day)}</span>
           <span class="day-dots" data-delday="${trip.id}:${day.id}" title="Delete day">⋯</span>
         </div>
         <div style="${day.collapsed?'display:none;':''}">${table}</div>
@@ -715,13 +1079,13 @@ function renderTravel(){
         ${bpLink}
       </div>`;
 
-    const tripTotal = trip.days.reduce((s,d)=>s+(d.total||0),0) || (trip.id==='india'?890:0);
+    const tripTotal = trip.days.reduce((s,d)=>s+dayTotal(d),0);
 
     return `<div class="trip-section" style="margin-bottom:0.8rem;">
       <div class="trip-head" data-trip="${trip.id}">
         <button class="arrow-btn ${trip.collapsed?'collapsed':''}">▾</button>
         <span class="trip-title" contenteditable="true" data-triptitle="${trip.id}">${trip.title}</span>
-        <span class="trip-total">£${tripTotal.toLocaleString()}</span>
+        <span class="trip-total">Total: ${tripTotal.toLocaleString()}</span>
       </div>
       <div style="${trip.collapsed?'display:none;':''}">
         ${boarding}
@@ -771,12 +1135,16 @@ function renderTravel(){
       }
     };
   });
+  document.querySelectorAll('[data-delrow]').forEach(el=>el.onclick=(e)=>{
+    e.stopPropagation(); const [tripId,dayId,ridx]=el.dataset.delrow.split(':'); const day=getDay(tripId,dayId); day.rows.splice(Number(ridx),1); renderTravel();
+  });
   document.querySelectorAll('[data-addday]').forEach(el=>{
     el.onclick = (e)=>{
       e.stopPropagation();
       const trip = trips.find(t=>t.id===el.dataset.addday);
       const n = trip.days.length+1;
-      trip.days.push({id:uid(), title:'Day '+n, date:'', total:null, collapsed:false, rows:[]});
+      const previous=trip.days[trip.days.length-1]; const next=previous&&dateInput(previous.date) ? new Date(dateInput(previous.date)+'T00:00:00') : null; if(next) next.setDate(next.getDate()+1);
+      trip.days.push({id:uid(), title:'Day '+n, date:next?next.toISOString().slice(0,10):'', total:null, collapsed:false, rows:[]});
       renderTravel();
     };
   });
@@ -813,14 +1181,8 @@ function renderTravel(){
     const [tripId, dayId] = el.dataset.daytitle.split(':');
     getDay(tripId, dayId).title = el.textContent.trim();
   });
-  bindEditable('[data-daydate]', el=>{
-    const [tripId, dayId] = el.dataset.daydate.split(':');
-    getDay(tripId, dayId).date = el.textContent.trim();
-  });
-  bindEditable('[data-daytotal]', el=>{
-    const [tripId, dayId] = el.dataset.daytotal.split(':');
-    getDay(tripId, dayId).total = parseGBP(el.textContent);
-    renderTravel();
+  document.querySelectorAll('[data-daydate]').forEach(el=>el.onchange=()=>{
+    const [tripId,dayId]=el.dataset.daydate.split(':'); const trip=trips.find(t=>t.id===tripId); const index=trip.days.findIndex(d=>d.id===dayId); if(index<0||!el.value) return; const start=new Date(el.value+'T00:00:00'); trip.days.forEach((day,i)=>{ if(i>=index){ const d=new Date(start); d.setDate(start.getDate()+i-index); day.date=d.toISOString().slice(0,10); }}); renderTravel();
   });
   bindEditable('[data-place]', el=>{
     const [tripId, dayId, ridx] = el.dataset.place.split(':');
@@ -857,9 +1219,9 @@ function renderTravel(){
 }
 
 /* ===================== ADD BUTTONS ===================== */
-document.getElementById('tasksAddTop').onclick = ()=>{
-  tasks.push({type:'todo', id:uid(), text:'New task', done:false});
-  renderTasks();
+document.getElementById('tasksAddTop').onclick = (e)=>{
+  e.stopPropagation();
+  document.getElementById('blockMenu').classList.toggle('open');
 };
 document.getElementById('accAddBtn').onclick = ()=>{
   accommodation.push({name:'New place', url:'example.com', rent:'£0', bills:'—', status:'not'});
@@ -868,6 +1230,10 @@ document.getElementById('accAddBtn').onclick = ()=>{
 document.getElementById('shopAddBtn').onclick = ()=>{
   shopping.push({id:uid(), title:'New category', collapsed:false, items:[]});
   renderShopping();
+};
+document.getElementById('tripAddBtn').onclick = ()=>{
+  trips.push({id:uid(),title:'New trip',collapsed:false,days:[]});
+  renderTravel();
 };
 
 /* ===================== PROFILE ===================== */
@@ -885,9 +1251,20 @@ let loaded = false;
 let saveTimer = null;
 
 function snapshot(){
-  return { profile, tasks, accommodation, shopping, trips, calendar };
+  return { version:2, profile, tasks, accommodation, shopping, trips, calendar };
+}
+function normaliseTasks(list){
+  (list||[]).forEach(node=>{ if(node && node.paid) node.amount=money(node.amount); if(node && node.children) normaliseTasks(node.children); });
+}
+function normaliseState(s){
+  if(!s || typeof s!=='object') return s;
+  if(Array.isArray(s.tasks)) normaliseTasks(s.tasks);
+  if(Array.isArray(s.shopping)) s.shopping.forEach(cat=>(cat.items||[]).forEach(item=>item.price=money(item.price)));
+  if(s.calendar){ s.calendar.events=s.calendar.events||{}; Object.keys(s.calendar.events).forEach(key=>{ if(s.calendar.events[key]===true) s.calendar.events[key]=['Event']; }); }
+  return s;
 }
 function applyState(s){
+  s=normaliseState(s);
   if(!s) return;
   if(s.profile) profile = s.profile;
   if(Array.isArray(s.tasks)) tasks = s.tasks;
@@ -949,7 +1326,8 @@ async function load(){
     const r = await fetch('/api/data');
     if(r.ok){
       const j = await r.json();
-      if(j && j.data){ applyState(j.data); applied = true; }
+      const serverState = j && (j.data || j);
+      if(serverState && (serverState.tasks || serverState.shopping || serverState.profile)){ applyState(serverState); applied = true; }
     }
   }catch(e){}
   // Fall back to the local cache when the server/DB is unreachable
@@ -975,5 +1353,6 @@ document.getElementById('resetLink').onclick = ()=>{
 /* ===================== INIT ===================== */
 load();
 </script>
-</body>
-</html>
+
+
+</body></html>
