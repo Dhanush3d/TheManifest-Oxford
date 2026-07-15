@@ -36,6 +36,12 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .dash-header{display:flex;align-items:center;gap:0.65rem;margin-bottom:1.7rem;}
 .header-dot{width:11px;height:11px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px rgba(34,197,94,0.65);}
 .dash-header h1{font-weight:700;font-size:2rem;margin:0;letter-spacing:-0.01em;}
+.dash-header h1[contenteditable="true"]{cursor:text;border-radius:7px;padding:0.05rem 0.4rem;margin:-0.05rem -0.4rem;}
+.dash-header h1[contenteditable="true"]:hover{background:rgba(255,255,255,0.05);}
+.dash-header h1[contenteditable="true"]:focus{outline:none;background:rgba(255,255,255,0.09);box-shadow:0 0 0 1px rgba(255,255,255,0.18);}
+.save-status{margin-left:auto;font-size:0.75rem;color:var(--muted);opacity:0;transition:opacity .25s;user-select:none;}
+.save-status.show{opacity:1;}
+.save-status.err{color:var(--danger);}
 
 .dash-grid{display:grid;grid-template-columns:1fr;gap:1.3rem;align-items:start;}
 @media(min-width:980px){ .dash-grid{grid-template-columns:0.95fr 1.15fr;} }
@@ -161,7 +167,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 
   <div class="dash-header">
     <span class="header-dot"></span>
-    <h1>Dhanush</h1>
+    <h1 id="profileName" contenteditable="true" spellcheck="false">Dhanush</h1>
+    <span class="save-status" id="saveStatus"></span>
   </div>
 
   <div class="dash-grid">
@@ -238,7 +245,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
         <div class="cal-nav">
           <button id="calPrev">‹</button>
           <div class="cal-month" id="calMonthLabel">August 2026</div>
-          <button id="calNext">›</button>
+          <button id="calNext">��</button>
         </div>
         <div class="cal-grid" id="calGrid"></div>
       </div>
@@ -322,6 +329,15 @@ let trips = [
   {id:'india', title:'India Trip', collapsed:true, days:[]},
 ];
 
+let profile = { name:'Dhanush' };
+
+let calendar = {
+  year:2026, month:7, // August 2026
+  today:'2026-08-04',
+  selected:'2026-08-15',
+  events:{ '2026-08-07':true, '2026-08-15':true, '2026-08-18':true, '2026-08-25':true, '2026-08-29':true },
+};
+
 /* ===================== CURRENCY ===================== */
 const GBP_TO_INR = 129; // approx mid-market rate
 function dualCurrency(gbp){
@@ -340,7 +356,7 @@ function bindEditable(selector, onCommit){
     el.addEventListener('keydown', e=>{
       if(e.key==='Enter'){ e.preventDefault(); el.blur(); }
     });
-    el.addEventListener('blur', ()=> onCommit(el));
+    el.addEventListener('blur', ()=> { onCommit(el); scheduleSave(); });
     el.addEventListener('click', e=> e.stopPropagation());
   });
 }
@@ -355,7 +371,7 @@ function renderTaskNode(node, nested){
         <span class="grip">::</span>
         <button class="arrow-btn ${node.collapsed?'collapsed':''}" data-toggle="${node.id}">▾</button>
         <span class="task-label section" contenteditable="true" data-sectiontitle="${node.id}">${node.title}</span>
-        <span class="more-dots">⋯</span>
+        <span class="more-dots" data-deltask="${node.id}" title="Delete">⋯</span>
       </div>
       <div class="section-body" style="${node.collapsed?'display:none;':''}">
         ${node.children.map(c=>renderTaskNode(c, true)).join('')}
@@ -412,6 +428,7 @@ function renderTaskNode(node, nested){
 function renderTasks(){
   document.getElementById('tasksRoot').innerHTML = tasks.map(n=>renderTaskNode(n,false)).join('');
   wireTasks();
+  scheduleSave();
 }
 
 function findNode(list, id){
@@ -420,6 +437,15 @@ function findNode(list, id){
     if(n.children){ const f = findNode(n.children, id); if(f) return f; }
   }
   return null;
+}
+
+function removeNode(list, id){
+  const i = list.findIndex(n=>n.id===id);
+  if(i>-1){ list.splice(i,1); return true; }
+  for(const n of list){
+    if(n.children && removeNode(n.children, id)) return true;
+  }
+  return false;
 }
 
 function wireTasks(){
@@ -435,6 +461,15 @@ function wireTasks(){
       const node = findNode(tasks, el.dataset.check);
       node.done = !node.done;
       renderTasks();
+    };
+  });
+  document.querySelectorAll('[data-deltask]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      if(confirm('Delete this section and everything inside it?')){
+        removeNode(tasks, el.dataset.deltask);
+        renderTasks();
+      }
     };
   });
   bindEditable('[data-sectiontitle]', el=>{
@@ -517,39 +552,54 @@ function renderAccommodation(){
   bindEditable('[data-accurl]', el=>{ accommodation[el.dataset.accurl].url = el.textContent.trim(); });
   bindEditable('[data-accrent]', el=>{ accommodation[el.dataset.accrent].rent = el.textContent.trim(); });
   bindEditable('[data-accbills]', el=>{ accommodation[el.dataset.accbills].bills = el.textContent.trim(); });
+  scheduleSave();
 }
 
 /* ===================== CALENDAR ===================== */
-let calDate = new Date(2026,7,1); // August 2026
-const eventDays = [7,15,18,25,29];
-const selectedDay = 15;
-const todayMarker = 4;
+function isoDate(y,m,d){ return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
 function renderCalendar(){
   const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('calMonthLabel').textContent = `${monthNames[calDate.getMonth()]} ${calDate.getFullYear()}`;
-  const firstDay = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
-  const startOffset = firstDay.getDay();
-  const daysInMonth = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0).getDate();
-  const daysInPrevMonth = new Date(calDate.getFullYear(), calDate.getMonth(), 0).getDate();
+  const y = calendar.year, m = calendar.month;
+  document.getElementById('calMonthLabel').textContent = `${monthNames[m]} ${y}`;
+  const startOffset = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const daysInPrevMonth = new Date(y, m, 0).getDate();
   let cells = [];
   for(let i=startOffset-1;i>=0;i--) cells.push({d:daysInPrevMonth-i, outside:true});
   for(let d=1; d<=daysInMonth; d++) cells.push({d, outside:false});
-  while(cells.length % 7 !== 0 || cells.length < 42) cells.push({d:cells.length,outside:true});
-  const isAug2026 = (calDate.getMonth()===7 && calDate.getFullYear()===2026);
+  while(cells.length % 7 !== 0 || cells.length < 42) cells.push({d:'',outside:true});
   const dow = ['S','M','T','W','T','F','S'];
   let html = dow.map(d=>`<div class="cal-dow">${d}</div>`).join('');
   html += cells.map(c=>{
+    if(c.outside) return `<div class="cal-day outside">${c.d}</div>`;
+    const iso = isoDate(y,m,c.d);
     let cls = 'cal-day';
-    if(c.outside) cls += ' outside';
-    if(!c.outside && isAug2026 && c.d===todayMarker) cls += ' today-marker';
-    if(!c.outside && isAug2026 && c.d===selectedDay) cls += ' selected';
-    const dot = (!c.outside && isAug2026 && eventDays.includes(c.d)) ? '<span class="evt-dot"></span>' : '';
-    return `<div class="${cls}">${c.d}${dot}</div>`;
+    if(iso===calendar.today) cls += ' today-marker';
+    if(iso===calendar.selected) cls += ' selected';
+    const dot = calendar.events[iso] ? '<span class="evt-dot"></span>' : '';
+    return `<div class="${cls}" data-calday="${iso}" title="Click to select · click again to toggle an event dot">${c.d}${dot}</div>`;
   }).join('');
   document.getElementById('calGrid').innerHTML = html;
+  document.querySelectorAll('[data-calday]').forEach(el=>{
+    el.onclick = ()=>{
+      const iso = el.dataset.calday;
+      if(calendar.selected===iso){
+        if(calendar.events[iso]) delete calendar.events[iso];
+        else calendar.events[iso] = true;
+      } else {
+        calendar.selected = iso;
+      }
+      renderCalendar();
+    };
+  });
+  scheduleSave();
 }
-document.getElementById('calPrev').onclick = ()=>{ calDate.setMonth(calDate.getMonth()-1); renderCalendar(); };
-document.getElementById('calNext').onclick = ()=>{ calDate.setMonth(calDate.getMonth()+1); renderCalendar(); };
+document.getElementById('calPrev').onclick = ()=>{
+  calendar.month--; if(calendar.month<0){ calendar.month=11; calendar.year--; } renderCalendar();
+};
+document.getElementById('calNext').onclick = ()=>{
+  calendar.month++; if(calendar.month>11){ calendar.month=0; calendar.year++; } renderCalendar();
+};
 
 /* ===================== SHOPPING ===================== */
 function renderShopping(){
@@ -567,7 +617,9 @@ function renderShopping(){
             <div class="check ${it.paid?'checked':''}" data-shopcheck="${cat.id}:${idx}"></div>
             <span class="shop-item-name" contenteditable="true" data-shopname="${cat.id}:${idx}">${it.name}</span>
             <span class="shop-item-price amount-dual" contenteditable="true" data-shopprice="${cat.id}:${idx}">${dualCurrency(it.price)}</span>
+            <span class="more-dots" data-shopdel="${cat.id}:${idx}" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
           </div>`).join('')}
+        <button class="add-plus-btn" data-additem="${cat.id}" style="width:auto;padding:0.25rem 0.6rem;font-size:0.75rem;margin-top:0.2rem;">+ Add item</button>
       </div>
       <div class="shop-divider"></div>
     </div>`;
@@ -588,6 +640,23 @@ function renderShopping(){
       renderShopping();
     };
   });
+  document.querySelectorAll('[data-additem]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const cat = shopping.find(c=>c.id===el.dataset.additem);
+      cat.items.push({name:'New item', price:0, paid:false});
+      cat.collapsed = false;
+      renderShopping();
+    };
+  });
+  document.querySelectorAll('[data-shopdel]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const [catId, idx] = el.dataset.shopdel.split(':');
+      shopping.find(c=>c.id===catId).items.splice(idx,1);
+      renderShopping();
+    };
+  });
   bindEditable('[data-shopcattitle]', el=>{
     shopping.find(c=>c.id===el.dataset.shopcattitle).title = el.textContent.trim();
   });
@@ -600,6 +669,7 @@ function renderShopping(){
     shopping.find(c=>c.id===catId).items[idx].price = parseGBP(el.textContent);
     renderShopping();
   });
+  scheduleSave();
 }
 
 /* ===================== TRAVEL ===================== */
@@ -623,24 +693,27 @@ function renderTravel(){
         </div>` : '';
       return `<div class="day-block">
         <div class="day-head" data-day="${trip.id}:${day.id}">
-          <span class="day-plus">+</span>
+          <span class="day-plus" data-addrow="${trip.id}:${day.id}" title="Add a row">+</span>
           <span class="day-title" contenteditable="true" data-daytitle="${trip.id}:${day.id}">${day.title}</span>
           <span>–</span>
           <span contenteditable="true" data-daydate="${trip.id}:${day.id}" style="font-size:0.87rem;">${day.date}</span>
           <span class="day-total" contenteditable="true" data-daytotal="${trip.id}:${day.id}">${day.total!==null?'£'+day.total:'—'}</span>
-          <span class="day-dots">⋯</span>
+          <span class="day-dots" data-delday="${trip.id}:${day.id}" title="Delete day">⋯</span>
         </div>
         <div style="${day.collapsed?'display:none;':''}">${table}</div>
       </div>`;
     }).join('');
 
-    const boarding = trip.id==='london' ? `
+    const bp = trip.boardingPass || '';
+    const bpLink = bp ? `<a class="acc-url" href="${/^https?:\/\//.test(bp)?bp:'#'}" target="_blank" rel="noopener" style="margin-top:0;flex:none;">${bp}</a>` : '';
+    const boarding = `
       <div class="boarding-row">
         <span class="boarding-label">Boarding Pass</span>
-        <button class="upload-btn">Upload</button>
+        <button class="upload-btn" data-bpupload="${trip.id}">Upload</button>
         <span class="or-text">or</span>
-        <input class="paste-input" placeholder="Paste URL here…">
-      </div>` : '';
+        <input class="paste-input" data-bpinput="${trip.id}" value="${bp.replace(/"/g,'&quot;')}" placeholder="Paste URL here…">
+        ${bpLink}
+      </div>`;
 
     const tripTotal = trip.days.reduce((s,d)=>s+(d.total||0),0) || (trip.id==='india'?890:0);
 
@@ -653,6 +726,7 @@ function renderTravel(){
       <div style="${trip.collapsed?'display:none;':''}">
         ${boarding}
         ${dayRows}
+        <button class="add-plus-btn" data-addday="${trip.id}" style="margin-top:0.7rem;font-size:0.78rem;width:auto;padding:0.3rem 0.7rem;gap:0.3rem;">+ Add day</button>
       </div>
     </div>`;
   }).join('');
@@ -668,11 +742,64 @@ function renderTravel(){
   document.querySelectorAll('[data-day]').forEach(el=>{
     el.onclick = (e)=>{
       if(e.target.closest('[contenteditable]')) return;
+      if(e.target.closest('[data-addrow]') || e.target.closest('[data-delday]')) return;
       const [tripId, dayId] = el.dataset.day.split(':');
       const trip = trips.find(t=>t.id===tripId);
       const day = trip.days.find(d=>d.id===dayId);
       day.collapsed = !day.collapsed;
       renderTravel();
+    };
+  });
+  document.querySelectorAll('[data-addrow]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const [tripId, dayId] = el.dataset.addrow.split(':');
+      const day = getDay(tripId, dayId);
+      day.rows.push({place:'New place', pcost:0, food:'', fcost:0, stay:'', scost:0, notes:'—'});
+      day.collapsed = false;
+      renderTravel();
+    };
+  });
+  document.querySelectorAll('[data-delday]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const [tripId, dayId] = el.dataset.delday.split(':');
+      const trip = trips.find(t=>t.id===tripId);
+      if(confirm('Delete this day?')){
+        trip.days = trip.days.filter(d=>d.id!==dayId);
+        renderTravel();
+      }
+    };
+  });
+  document.querySelectorAll('[data-addday]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const trip = trips.find(t=>t.id===el.dataset.addday);
+      const n = trip.days.length+1;
+      trip.days.push({id:uid(), title:'Day '+n, date:'', total:null, collapsed:false, rows:[]});
+      renderTravel();
+    };
+  });
+  document.querySelectorAll('[data-bpinput]').forEach(el=>{
+    el.addEventListener('click', e=> e.stopPropagation());
+    el.addEventListener('change', ()=>{
+      trips.find(t=>t.id===el.dataset.bpinput).boardingPass = el.value.trim();
+      scheduleSave();
+    });
+  });
+  document.querySelectorAll('[data-bpupload]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = 'image/*,.pdf';
+      inp.onchange = ()=>{
+        if(inp.files && inp.files[0]){
+          trips.find(t=>t.id===el.dataset.bpupload).boardingPass = inp.files[0].name;
+          renderTravel();
+        }
+      };
+      inp.click();
     };
   });
 
@@ -726,6 +853,7 @@ function renderTravel(){
     const [tripId, dayId, ridx] = el.dataset.notes.split(':');
     getDay(tripId, dayId).rows[ridx].notes = el.textContent.trim();
   });
+  scheduleSave();
 }
 
 /* ===================== ADD BUTTONS ===================== */
@@ -742,17 +870,110 @@ document.getElementById('shopAddBtn').onclick = ()=>{
   renderShopping();
 };
 
+/* ===================== PROFILE ===================== */
+function renderProfile(){
+  document.getElementById('profileName').textContent = profile.name || 'Dhanush';
+}
+(function bindProfile(){
+  const el = document.getElementById('profileName');
+  el.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } });
+  el.addEventListener('blur', ()=>{ profile.name = el.textContent.trim() || 'Dhanush'; scheduleSave(); });
+})();
+
+/* ===================== PERSISTENCE ===================== */
+let loaded = false;
+let saveTimer = null;
+
+function snapshot(){
+  return { profile, tasks, accommodation, shopping, trips, calendar };
+}
+function applyState(s){
+  if(!s) return;
+  if(s.profile) profile = s.profile;
+  if(Array.isArray(s.tasks)) tasks = s.tasks;
+  if(Array.isArray(s.accommodation)) accommodation = s.accommodation;
+  if(Array.isArray(s.shopping)) shopping = s.shopping;
+  if(Array.isArray(s.trips)) trips = s.trips;
+  if(s.calendar) calendar = s.calendar;
+}
+function renderAll(){
+  renderProfile();
+  renderTasks();
+  renderAccommodation();
+  renderCalendar();
+  renderShopping();
+  renderTravel();
+}
+
+const DEFAULTS = JSON.parse(JSON.stringify(snapshot()));
+
+function setStatus(text, isErr){
+  const el = document.getElementById('saveStatus');
+  el.textContent = text;
+  el.classList.toggle('err', !!isErr);
+  el.classList.add('show');
+  if(!isErr){
+    clearTimeout(setStatus._t);
+    setStatus._t = setTimeout(()=> el.classList.remove('show'), 1500);
+  }
+}
+const LS_KEY = 'move-tracker-cache';
+
+function scheduleSave(){
+  if(!loaded) return;
+  clearTimeout(saveTimer);
+  setStatus('Saving…');
+  saveTimer = setTimeout(doSave, 700);
+}
+async function doSave(){
+  const payload = JSON.stringify(snapshot());
+  // Local cache first (instant, offline-safe)
+  try{ localStorage.setItem(LS_KEY, payload); }catch(e){}
+  // Then sync to the Redis-backed API (source of truth on deploy)
+  try{
+    const r = await fetch('/api/data', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: payload,
+    });
+    if(!r.ok) throw new Error('save failed');
+    setStatus('Saved');
+  }catch(e){
+    setStatus('Saved offline');
+  }
+}
+async function load(){
+  let applied = false;
+  // Prefer the server (Redis) copy so data syncs across devices
+  try{
+    const r = await fetch('/api/data');
+    if(r.ok){
+      const j = await r.json();
+      if(j && j.data){ applyState(j.data); applied = true; }
+    }
+  }catch(e){}
+  // Fall back to the local cache when the server/DB is unreachable
+  if(!applied){
+    try{
+      const cached = localStorage.getItem(LS_KEY);
+      if(cached){ applyState(JSON.parse(cached)); }
+    }catch(e){}
+  }
+  renderAll();
+  loaded = true;
+}
+
 /* ===================== RESET ===================== */
 document.getElementById('resetLink').onclick = ()=>{
-  if(confirm('Reset dashboard to default demo data?')) location.reload();
+  if(!confirm('Reset dashboard to the default data? This will erase your saved changes.')) return;
+  applyState(JSON.parse(JSON.stringify(DEFAULTS)));
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  renderAll();
+  doSave();
 };
 
 /* ===================== INIT ===================== */
-renderTasks();
-renderAccommodation();
-renderCalendar();
-renderShopping();
-renderTravel();
+load();
 </script>
 </body>
 </html>
