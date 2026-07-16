@@ -136,7 +136,9 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .shop-item-name{flex:1;font-size:0.87rem;}
 .shop-item-price{font-size:0.83rem;color:var(--muted);min-width:44px;}
 .shop-divider{height:1px;background:var(--border);margin:0.3rem 0;}
-.shopping-in-tasks{border-top:1px solid var(--border);margin-top:1rem;padding-top:1rem;}
+.panel-grip{cursor:grab;color:var(--muted);margin-right:0.5rem;user-select:none;font-size:0.95rem;line-height:1;flex:none;}
+.panel-grip:active{cursor:grabbing;}
+.panel.drag-over{outline:2px dashed var(--muted);outline-offset:2px;}
 
 /* ===== TRAVEL ===== */
 .trip-head{display:flex;align-items:center;gap:0.5rem;cursor:pointer;padding:0.3rem 0;}
@@ -159,8 +161,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .day-table th{text-align:left;color:var(--muted);font-weight:500;font-size:0.68rem;padding:0.3rem 0.5rem;}
 .day-table td{padding:0.4rem 0.5rem;color:var(--text);}
 .day-table td.note-cell{color:var(--muted);white-space:normal;font-size:0.76rem;}
-.day-head input[type="date"]{background:transparent;border:0;color:var(--muted);font:inherit;max-width:132px;}
-.col-right{display:flex;flex-direction:column;}.col-right>.panel:nth-child(3){order:-1;}
+.day-head input[type="date"]{background:transparent;border:0;color:var(--muted);font-size:0.72rem;max-width:104px;padding:0.1rem 0;}
+.col-right{display:flex;flex-direction:column;}
 @media(max-width:560px){.day-head{flex-wrap:wrap}.day-total{width:100%;padding-left:27px}.day-head input[type="date"]{margin-left:27px}.money-pair{font-size:.7rem}.shop-item{flex-wrap:wrap}.shop-item-name{min-width:50%;}}
 
 .reset-row{text-align:center;margin-top:1.5rem;}
@@ -230,7 +232,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .task-row.dragging{opacity:0.4;}
 
 /* ===== CARRIED-FORWARD DAY DATE ===== */
-.day-date-readonly{color:var(--muted);font-size:0.8rem;cursor:default;}
+.day-date-readonly{color:var(--muted);font-size:0.72rem;cursor:default;}
 
 /* ===== CONFIRM MODAL ===== */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:999;align-items:center;justify-content:center;padding:1rem;}
@@ -260,8 +262,9 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
     <div class="col-left">
 
       <!-- TASKS -->
-      <div class="panel">
+      <div class="panel" data-panelkey="tasks">
         <div class="panel-head">
+          <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
           <div class="panel-title">Tasks</div>
           <span class="panel-total" id="tasksTotalBadge" style="margin-left:auto;"></span>
           <button class="icon-btn" id="tasksAddTop">+</button>
@@ -295,26 +298,23 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
             </div>
           </div>
         </div>
+      </div>
 
       <!-- SHOPPING -->
-      <div class="shopping-in-tasks">
+      <div class="panel" data-panelkey="shopping">
         <div class="panel-head">
+          <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
           <div class="panel-title">Shopping</div>
           <span class="panel-total" id="shopTotalBadge" style="margin-left:auto;"></span>
           <button class="icon-btn" id="shopAddBtn">+</button>
         </div>
         <div id="shopRoot"></div>
       </div>
-      </div>
-
-    </div>
-
-    <!-- RIGHT -->
-    <div class="col-right">
 
       <!-- ACCOMMODATION -->
-      <div class="panel">
+      <div class="panel" data-panelkey="accommodation">
         <div class="panel-head">
+          <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
           <div class="panel-title">Accommodation</div>
           <button class="icon-btn" id="accAddBtn">+</button>
         </div>
@@ -326,14 +326,16 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
         </div>
       </div>
 
-      <!-- TRIPS -->
-      <div class="panel">
-        <div class="panel-head"><div class="panel-title">Travel</div><button class="icon-btn" id="tripAddBtn">+</button></div>
-        <div id="travelRoot"></div>
-      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-right">
 
       <!-- CALENDAR -->
-      <div class="panel">
+      <div class="panel" data-panelkey="calendar">
+        <div class="panel-head" style="margin-bottom:0;">
+          <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
+        </div>
         <div class="cal-nav">
           <button id="calPrev">‹</button>
           <div class="cal-month" id="calMonthLabel">August 2026</div>
@@ -341,6 +343,16 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
         </div>
         <div class="cal-grid" id="calGrid"></div>
         <div class="calendar-events" id="calendarEvents"></div>
+      </div>
+
+      <!-- TRIPS -->
+      <div class="panel" data-panelkey="travel">
+        <div class="panel-head">
+          <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
+          <div class="panel-title">Travel</div>
+          <button class="icon-btn" id="tripAddBtn">+</button>
+        </div>
+        <div id="travelRoot"></div>
       </div>
 
     </div>
@@ -952,10 +964,10 @@ function renderTravel(){
     const bpLink = bp ? `<a class="acc-url" href="${/^https?:\/\//.test(bp)?bp:'#'}" target="_blank" rel="noopener" style="margin-top:0;flex:none;">${bp}</a>` : '';
     const boarding = `
       <div class="boarding-row">
-        <span class="boarding-label">Boarding Pass</span>
+        <span class="boarding-label">Flight Link</span>
         <button class="upload-btn" data-bpupload="${trip.id}">Upload</button>
         <span class="or-text">or</span>
-        <input class="paste-input" data-bpinput="${trip.id}" value="${bp.replace(/"/g,'&quot;')}" placeholder="Paste URL here…">
+        <input class="paste-input" data-bpinput="${trip.id}" value="${bp.replace(/"/g,'&quot;')}" placeholder="Paste flight link here…">
         ${bpLink}
       </div>`;
 
@@ -1135,9 +1147,59 @@ function renderProfile(){
 /* ===================== PERSISTENCE ===================== */
 let loaded = false;
 let saveTimer = null;
+let panelLayout = null; // {left:[...panelkeys], right:[...panelkeys]}
+const DEFAULT_PANEL_LAYOUT = { left:['tasks','shopping','accommodation'], right:['calendar','travel'] };
+
+function savePanelLayout(){
+  panelLayout = {
+    left: Array.from(document.querySelectorAll('.col-left > [data-panelkey]')).map(el=>el.dataset.panelkey),
+    right: Array.from(document.querySelectorAll('.col-right > [data-panelkey]')).map(el=>el.dataset.panelkey)
+  };
+}
+function applyPanelLayout(layout){
+  layout = layout || panelLayout || DEFAULT_PANEL_LAYOUT;
+  const colLeft = document.querySelector('.col-left');
+  const colRight = document.querySelector('.col-right');
+  (layout.left||[]).forEach(key=>{
+    const el = document.querySelector(`[data-panelkey="${key}"]`);
+    if(el) colLeft.appendChild(el);
+  });
+  (layout.right||[]).forEach(key=>{
+    const el = document.querySelector(`[data-panelkey="${key}"]`);
+    if(el) colRight.appendChild(el);
+  });
+}
+function wirePanelDrag(){
+  let draggedPanel = null;
+  document.querySelectorAll('.dash-grid .panel-grip').forEach(grip=>{
+    grip.addEventListener('dragstart', e=>{
+      draggedPanel = grip.closest('[data-panelkey]');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    grip.addEventListener('dragend', ()=>{
+      draggedPanel = null;
+      document.querySelectorAll('.dash-grid [data-panelkey]').forEach(p=>p.classList.remove('drag-over'));
+    });
+  });
+  document.querySelectorAll('.dash-grid [data-panelkey]').forEach(panel=>{
+    panel.addEventListener('dragover', e=>{ e.preventDefault(); if(draggedPanel && draggedPanel!==panel) panel.classList.add('drag-over'); });
+    panel.addEventListener('dragleave', ()=> panel.classList.remove('drag-over'));
+    panel.addEventListener('drop', e=>{
+      e.preventDefault();
+      panel.classList.remove('drag-over');
+      if(!draggedPanel || draggedPanel===panel) return;
+      const rect = panel.getBoundingClientRect();
+      const before = (e.clientY - rect.top) < rect.height/2;
+      panel.parentElement.insertBefore(draggedPanel, before ? panel : panel.nextSibling);
+      draggedPanel = null;
+      savePanelLayout();
+      scheduleSave();
+    });
+  });
+}
 
 function snapshot(){
-  return { version:2, profile, tasks, accommodation, shopping, trips, calendar };
+  return { version:2, profile, tasks, accommodation, shopping, trips, calendar, panelLayout };
 }
 function normaliseTasks(list){
   (list||[]).forEach(node=>{ if(node && node.paid) node.amount=money(node.amount); if(node && node.children) normaliseTasks(node.children); });
@@ -1158,6 +1220,7 @@ function applyState(s){
   if(Array.isArray(s.shopping)) shopping = s.shopping;
   if(Array.isArray(s.trips)) trips = s.trips;
   if(s.calendar) calendar = s.calendar;
+  if(s.panelLayout) panelLayout = s.panelLayout;
 }
 function renderAll(){
   renderProfile();
@@ -1223,7 +1286,9 @@ async function load(){
       if(cached){ applyState(JSON.parse(cached)); }
     }catch(e){}
   }
+  applyPanelLayout();
   renderAll();
+  wirePanelDrag();
   loaded = true;
 }
 
@@ -1232,6 +1297,8 @@ document.getElementById('resetLink').onclick = async ()=>{
   const ok = await showConfirm('Reset the dashboard to blank? This will erase everything currently saved.');
   if(!ok) return;
   applyState(JSON.parse(JSON.stringify(DEFAULTS)));
+  panelLayout = null;
+  applyPanelLayout(DEFAULT_PANEL_LAYOUT);
   try{ localStorage.removeItem(LS_KEY); }catch(e){}
   renderAll();
   doSave();
