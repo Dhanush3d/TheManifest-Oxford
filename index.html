@@ -23,7 +23,15 @@
   --purple:#8b5cf6;
 }
 *{box-sizing:border-box;}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;padding-bottom:50px;}
+html{overflow-x:hidden;width:100%;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;padding-bottom:50px;overflow-x:hidden;width:100%;}
+@media(max-width:600px){
+  html{font-size:14px;}
+  .dashboard{padding:1rem 0.6rem 0 !important;}
+}
+@media(max-width:420px){
+  html{font-size:12.5px;}
+}
 #bgLayer{
   position:fixed;inset:0;z-index:0;
   background:
@@ -49,6 +57,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.15rem 1.2rem;margin-bottom:1.3rem;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 12px 36px rgba(0,0,0,0.35);}
 .panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;position:relative;}
 .panel-title{font-weight:700;font-size:1rem;}
+.panel-total{color:var(--muted);font-size:0.75rem;font-weight:600;white-space:nowrap;}
 .icon-btn{width:26px;height:26px;border-radius:7px;border:none;background:rgba(255,255,255,0.06);color:var(--text);font-size:0.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;}
 .icon-btn:hover{background:rgba(255,255,255,0.12);}
 
@@ -254,9 +263,10 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
       <div class="panel">
         <div class="panel-head">
           <div class="panel-title">Tasks</div>
-          <button class="icon-btn" id="tasksAddTop">+</button>
+          <span class="panel-total" id="tasksTotalBadge"></span>
+          <button class="icon-btn" id="tasksAddTop" style="margin-left:auto;">+</button>
           <div class="block-menu" id="blockMenu" style="bottom:auto;top:31px;left:auto;right:0;">
-            <div class="block-menu-item" data-block="heading"><span class="bmi-icon">H</span> Heading</div><div class="block-menu-item" data-block="text"><span class="bmi-icon">T</span> Text</div><div class="block-menu-item" data-block="toggle">Toggle</div><div class="block-menu-item" data-block="todo">To-do</div><div class="block-menu-item" data-block="paidtodo">To-do with price</div><div class="block-menu-item" data-block="bulleted">Bulleted List</div><div class="block-menu-item" data-block="numbered">Numbered List</div><div class="block-menu-item" data-block="divider">Divider</div>
+            <div class="block-menu-item" data-block="heading"><span class="bmi-icon">H</span> Heading</div><div class="block-menu-item" data-block="text"><span class="bmi-icon">T</span> Text</div><div class="block-menu-item" data-block="toggle">Toggle</div><div class="block-menu-item" data-block="todo">To-do</div><div class="block-menu-item" data-block="bulleted">Bulleted List</div><div class="block-menu-item" data-block="numbered">Numbered List</div><div class="block-menu-item" data-block="divider">Divider</div>
             <div class="menu-sep"></div><div class="block-menu-item">Text color</div><div class="swatch-row"><div class="swatch" data-color="#9a9a9e" style="background:#9a9a9e"></div><div class="swatch" data-color="#f5f5f5" style="background:#f5f5f5"></div><div class="swatch" data-color="#3b82f6" style="background:#3b82f6"></div><div class="swatch" data-color="#22c55e" style="background:#22c55e"></div><div class="swatch" data-color="#ef4444" style="background:#ef4444"></div></div>
           </div>
         </div>
@@ -290,7 +300,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
       <div class="shopping-in-tasks">
         <div class="panel-head">
           <div class="panel-title">Shopping</div>
-          <button class="icon-btn" id="shopAddBtn">+</button>
+          <span class="panel-total" id="shopTotalBadge"></span>
+          <button class="icon-btn" id="shopAddBtn" style="margin-left:auto;">+</button>
         </div>
         <div id="shopRoot"></div>
       </div>
@@ -307,10 +318,12 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
           <div class="panel-title">Accommodation</div>
           <button class="icon-btn" id="accAddBtn">+</button>
         </div>
+        <div style="width:100%;overflow-x:auto;">
         <table class="acc-table">
           <tbody><tr><th>Name</th><th>Rent</th><th>Bills</th><th>Status</th><th></th></tr>
           </tbody><tbody id="accBody"></tbody>
         </table>
+        </div>
       </div>
 
       <!-- TRIPS -->
@@ -455,11 +468,16 @@ function renderTaskNode(node, nested){
         <span class="task-label section" style="color:${node.color||'inherit'}" contenteditable="true" data-bgtitle="${node.id}">${node.title}</span>
         <span class="more-dots" data-deltask="${node.id}" title="Delete list" style="opacity:0.6;margin-left:0;">×</span>
       </div>
-      <div>${node.children.map(c=>`<div class="task-row nested" data-dragid="${c.id}"><span class="grip" draggable="true">::</span><span class="bullet-dot"></span><span class="task-label" contenteditable="true" data-bullettext="${c.id}">${c.text}</span><span class="more-dots" data-delitem="${c.id}" title="Delete item" style="opacity:0.6;margin-left:0;">×</span></div>`).join('')}</div>
+      <div>${node.children.map(c=>`<div class="task-row nested" data-dragid="${c.id}"><span class="grip" draggable="true">::</span><span class="bullet-dot"></span><span class="task-label" contenteditable="true" data-bullettext="${c.id}">${c.text}</span><span class="more-dots" data-delitem="${c.id}" title="Delete item" style="opacity:0.6;margin-left:0;">×</span></div>`).join('')}
+      <div class="nested"><button class="add-plus-btn" data-addbullet="${node.id}" style="width:auto;padding:0.2rem 0.55rem;font-size:0.72rem;margin-top:0.15rem;">+ Add bullet</button></div>
+      </div>
     </div>`;
   }
   if(node.type==='divider'){
-    return `<div class="divider-line"></div>`;
+    return `<div class="task-row" data-dragid="${node.id}" style="padding:0.5rem 0.1rem;">
+      <span class="grip" draggable="true">::</span>
+      <div class="divider-line" style="flex:1;margin:0;"></div>
+    </div>`;
   }
   if(node.type==='numbered'){
     const idx = tasks.filter(t=>t.type==='numbered').indexOf(node)+1;
@@ -487,8 +505,20 @@ function renderTaskNode(node, nested){
   return '';
 }
 
+function tasksTotal(list){
+  return (list||[]).reduce((sum,n)=>{
+    let t = {gbp:0,inr:0};
+    if(n.type==='todo' && n.paid){ const m=money(n.amount); t={gbp:m.gbp,inr:m.inr}; }
+    if(n.children){ const c=tasksTotal(n.children); t={gbp:t.gbp+c.gbp, inr:t.inr+c.inr}; }
+    return {gbp:sum.gbp+t.gbp, inr:sum.inr+t.inr};
+  },{gbp:0,inr:0});
+}
+
 function renderTasks(){
   document.getElementById('tasksRoot').innerHTML = tasks.map(n=>renderTaskNode(n,false)).join('');
+  const total = tasksTotal(tasks);
+  const badge = document.getElementById('tasksTotalBadge');
+  if(badge) badge.textContent = (total.gbp || total.inr) ? `Spent: GBP ${total.gbp} · INR ${total.inr}` : '';
   wireTasks();
   scheduleSave();
 }
@@ -573,6 +603,14 @@ function wireTasks(){
       renderTasks();
     };
   });
+  document.querySelectorAll('[data-addbullet]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const node = findNode(tasks, el.dataset.addbullet);
+      node.children.push({type:'bullet', id:uid(), text:''});
+      renderTasks();
+    };
+  });
   document.querySelectorAll('[data-pricedel]').forEach(el=>{
     el.onclick = (e)=>{
       e.stopPropagation();
@@ -647,7 +685,6 @@ document.getElementById('blockMenu').querySelectorAll('.block-menu-item[data-blo
     const kind = item.dataset.block;
     if(kind==='divider'){ tasks.push({type:'divider', id:uid()}); }
     else if(kind==='todo'){ tasks.push({type:'todo', id:uid(), text:'', done:false}); }
-    else if(kind==='paidtodo'){ tasks.push({type:'todo', id:uid(), text:'', done:false, paid:true, amount:{gbp:0,inr:0}}); }
     else if(kind==='bulleted'){ tasks.push({type:'bulletgroup', id:uid(), title:'', children:[{type:'bullet',id:uid(),text:''}]}); }
     else if(kind==='numbered'){ tasks.push({type:'numbered', id:uid(), text:''}); }
     else if(kind==='heading'){ tasks.push({type:'heading', id:uid(), text:''}); }
@@ -755,6 +792,7 @@ function renderShopping(){
         <button class="arrow-btn ${cat.collapsed?'collapsed':''}">▾</button>
         <span class="shop-cat-title" contenteditable="true" data-shopcattitle="${cat.id}">${cat.title}</span>
         <span class="shop-cat-total amount-dual">GBP ${total.gbp} · INR ${total.inr}</span>
+        <span class="more-dots" data-shopcatdel="${cat.id}" title="Delete category" style="opacity:0.6;margin-left:0.2rem;">×</span>
       </div>
       <div class="shop-items" style="${cat.collapsed?'display:none;':''}">
         ${cat.items.map((it,idx)=>`
@@ -769,6 +807,19 @@ function renderShopping(){
       <div class="shop-divider"></div>
     </div>`;
   }).join('');
+  const grand = shopping.reduce((s,cat)=>{ const t=moneyTotal(cat.items); return {gbp:s.gbp+t.gbp, inr:s.inr+t.inr}; },{gbp:0,inr:0});
+  const shopBadge = document.getElementById('shopTotalBadge');
+  if(shopBadge) shopBadge.textContent = (grand.gbp || grand.inr) ? `Total: GBP ${grand.gbp} · INR ${grand.inr}` : '';
+  document.querySelectorAll('[data-shopcatdel]').forEach(el=>{
+    el.onclick = async (e)=>{
+      e.stopPropagation();
+      const ok = await showConfirm('Delete this category and all its items?');
+      if(ok){
+        shopping = shopping.filter(c=>c.id!==el.dataset.shopcatdel);
+        renderShopping();
+      }
+    };
+  });
   document.querySelectorAll('[data-shopcat]').forEach(el=>{
     el.onclick = (e)=>{
       if(e.target.closest('[contenteditable]')) return;
@@ -1144,6 +1195,9 @@ document.getElementById('resetLink').onclick = async ()=>{
   renderAll();
   doSave();
 };
+
+/* ===================== RECONNECT SYNC ===================== */
+window.addEventListener('online', ()=>{ if(loaded) doSave(); });
 
 /* ===================== INIT ===================== */
 load();
