@@ -66,6 +66,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .task-row{display:flex;align-items:center;gap:0.55rem;padding:0.42rem 0.1rem;position:relative;}
 .task-row:hover .grip{opacity:0.7;}
 .shop-item:hover .grip{opacity:0.7;}
+.shop-cat-head:hover .grip{opacity:0.7;}
+.shop-cat-head.drag-over{outline:2px dashed var(--muted);outline-offset:2px;border-radius:6px;}
 .shop-item.drag-over{outline:2px dashed var(--muted);outline-offset:2px;border-radius:6px;}
 .shop-items.drag-over{outline:2px dashed var(--muted);outline-offset:-2px;border-radius:6px;}
 .task-row:hover .more-dots{opacity:1;}
@@ -841,6 +843,17 @@ document.getElementById('calNext').onclick = ()=>{
 
 /* ===================== SHOPPING ===================== */
 let draggedShopKey = null;
+let draggedShopCatId = null;
+function moveShopCategory(fromId, toId){
+  if(!fromId || !toId || fromId===toId) return;
+  const fromIdx = shopping.findIndex(c=>c.id===fromId);
+  const toIdx = shopping.findIndex(c=>c.id===toId);
+  if(fromIdx===-1 || toIdx===-1) return;
+  const [cat] = shopping.splice(fromIdx, 1);
+  const newToIdx = shopping.findIndex(c=>c.id===toId);
+  shopping.splice(newToIdx, 0, cat);
+  renderShopping();
+}
 function moveShopItem(fromKey, toKey, appendToCatEnd){
   const [fromCat, fromIdxStr] = fromKey.split(':');
   const fromIdx = Number(fromIdxStr);
@@ -871,6 +884,7 @@ function renderShopping(){
     const total = moneyTotal(cat.items);
     return `<div class="shop-cat">
       <div class="shop-cat-head" data-shopcat="${cat.id}">
+        <span class="grip" draggable="true" data-shopcatgrip="${cat.id}">::</span>
         <button class="arrow-btn ${cat.collapsed?'collapsed':''}">▾</button>
         <span class="shop-cat-title" contenteditable="true" data-shopcattitle="${cat.id}">${cat.title}</span>
         <span class="shop-cat-total amount-dual">GBP ${total.gbp} · INR ${total.inr}</span>
@@ -893,6 +907,29 @@ function renderShopping(){
   const grand = shopping.reduce((s,cat)=>{ const t=moneyTotal(cat.items); return {gbp:s.gbp+t.gbp, inr:s.inr+t.inr}; },{gbp:0,inr:0});
   const shopBadge = document.getElementById('shopTotalBadge');
   if(shopBadge) shopBadge.textContent = (grand.gbp || grand.inr) ? `Total: GBP ${grand.gbp} · INR ${grand.inr}` : '';
+  document.querySelectorAll('[data-shopcatgrip]').forEach(grip=>{
+    grip.addEventListener('click', e=>e.stopPropagation());
+    grip.addEventListener('dragstart', e=>{
+      draggedShopCatId = grip.dataset.shopcatgrip;
+      e.dataTransfer.effectAllowed = 'move';
+      e.stopPropagation();
+    });
+    grip.addEventListener('dragend', ()=>{
+      draggedShopCatId = null;
+      document.querySelectorAll('.shop-cat-head.drag-over').forEach(x=>x.classList.remove('drag-over'));
+    });
+  });
+  document.querySelectorAll('[data-shopcat]').forEach(el=>{
+    el.addEventListener('dragover', e=>{ if(draggedShopCatId){ e.preventDefault(); el.classList.add('drag-over'); } });
+    el.addEventListener('dragleave', ()=> el.classList.remove('drag-over'));
+    el.addEventListener('drop', e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      el.classList.remove('drag-over');
+      if(draggedShopCatId) moveShopCategory(draggedShopCatId, el.dataset.shopcat);
+      draggedShopCatId = null;
+    });
+  });
   document.querySelectorAll('[data-shopgrip]').forEach(grip=>{
     grip.addEventListener('dragstart', e=>{
       draggedShopKey = grip.dataset.shopgrip;
