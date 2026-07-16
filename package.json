@@ -1,10 +1,8 @@
 {
-  "name": "uk-move-tracker",
+  "name": "move-tracker",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "node --env-file-if-exists=/vercel/share/.env.project server.js",
-    "start": "node server.js"
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
   }
 }
