@@ -444,6 +444,7 @@ function renderTaskNode(node, nested){
       <div class="check ${node.done?'checked':''}" data-check="${node.id}"></div>
       <span class="task-label ${node.done?'done':''}" style="color:${node.color||''}" contenteditable="true" data-tasktext="${node.id}">${node.text}</span>
       ${priceHtml}
+      <span class="more-dots" data-delitem="${node.id}" title="Delete task" style="opacity:0.6;margin-left:0;">×</span>
     </div>`;
   }
   if(node.type==='bulletgroup'){
@@ -452,8 +453,9 @@ function renderTaskNode(node, nested){
         <span class="grip" draggable="true">::</span>
         <span class="arrow-spacer" style="width:14px;display:inline-block;"><span style="color:var(--muted);font-size:0.6rem;">●</span></span>
         <span class="task-label section" style="color:${node.color||'inherit'}" contenteditable="true" data-bgtitle="${node.id}">${node.title}</span>
+        <span class="more-dots" data-deltask="${node.id}" title="Delete list" style="opacity:0.6;margin-left:0;">×</span>
       </div>
-      <div>${node.children.map(c=>`<div class="task-row nested" data-dragid="${c.id}"><span class="grip" draggable="true">::</span><span class="bullet-dot"></span><span class="task-label" contenteditable="true" data-bullettext="${c.id}">${c.text}</span></div>`).join('')}</div>
+      <div>${node.children.map(c=>`<div class="task-row nested" data-dragid="${c.id}"><span class="grip" draggable="true">::</span><span class="bullet-dot"></span><span class="task-label" contenteditable="true" data-bullettext="${c.id}">${c.text}</span><span class="more-dots" data-delitem="${c.id}" title="Delete item" style="opacity:0.6;margin-left:0;">×</span></div>`).join('')}</div>
     </div>`;
   }
   if(node.type==='divider'){
@@ -465,6 +467,7 @@ function renderTaskNode(node, nested){
       <span class="grip" draggable="true">::</span>
       <span class="num-label">${idx}.</span>
       <span class="task-label" style="color:${node.color||'inherit'}" contenteditable="true" data-numtext="${node.id}">${node.text}</span>
+      <span class="more-dots" data-delitem="${node.id}" title="Delete" style="opacity:0.6;margin-left:0;">×</span>
     </div>`;
   }
   if(node.type==='link'){
@@ -472,13 +475,14 @@ function renderTaskNode(node, nested){
       <span class="grip" draggable="true">::</span>
       <span class="link-icon">🔗</span>
       <span class="task-link" contenteditable="true" data-linktext="${node.id}">${node.text}</span>
+      <span class="more-dots" data-delitem="${node.id}" title="Delete" style="opacity:0.6;margin-left:0;">×</span>
     </div>`;
   }
   if(node.type==='heading'){
-    return `<div class="task-row" data-dragid="${node.id}"><span class="grip" draggable="true">::</span><span class="task-label section" style="font-size:1rem;color:${node.color||'inherit'}" contenteditable="true" data-headtext="${node.id}">${node.text}</span></div>`;
+    return `<div class="task-row" data-dragid="${node.id}"><span class="grip" draggable="true">::</span><span class="task-label section" style="font-size:1rem;color:${node.color||'inherit'}" contenteditable="true" data-headtext="${node.id}">${node.text}</span><span class="more-dots" data-delitem="${node.id}" title="Delete" style="opacity:0.6;margin-left:0;">×</span></div>`;
   }
   if(node.type==='text'){
-    return `<div class="task-row" data-dragid="${node.id}"><span class="grip" draggable="true">::</span><span class="task-label" style="color:${node.color||'inherit'}" contenteditable="true" data-texttext="${node.id}">${node.text}</span></div>`;
+    return `<div class="task-row" data-dragid="${node.id}"><span class="grip" draggable="true">::</span><span class="task-label" style="color:${node.color||'inherit'}" contenteditable="true" data-texttext="${node.id}">${node.text}</span><span class="more-dots" data-delitem="${node.id}" title="Delete" style="opacity:0.6;margin-left:0;">×</span></div>`;
   }
   return '';
 }
@@ -551,6 +555,13 @@ function wireTasks(){
         removeNode(tasks, el.dataset.deltask);
         renderTasks();
       }
+    };
+  });
+  document.querySelectorAll('[data-delitem]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      removeNode(tasks, el.dataset.delitem);
+      renderTasks();
     };
   });
   document.querySelectorAll('[data-priceadd]').forEach(el=>{
