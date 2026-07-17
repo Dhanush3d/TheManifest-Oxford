@@ -24,7 +24,22 @@
 }
 *{box-sizing:border-box;}
 html{overflow-x:hidden;width:100%;}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;padding-bottom:50px;overflow-x:hidden;width:100%;}
+body{
+  margin:0;
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  padding-bottom:50px;
+  overflow-x:hidden;
+  width:100%;
+  background-color:var(--bg);
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(34,197,94,0.08), transparent 42%),
+    radial-gradient(circle at 88% 15%, rgba(59,130,246,0.07), transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(139,92,246,0.06), transparent 50%),
+    linear-gradient(165deg, #0b0d10 0%, #08080a 45%, #0a0b0e 100%);
+  background-attachment:fixed;
+  background-size:cover;
+}
 @media(max-width:600px){
   html{font-size:14px;}
   .dashboard{padding:1rem 0.6rem 0 !important;}
@@ -116,6 +131,17 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .status-shortlisted{background:rgba(59,130,246,0.18);color:#7fb1ff;}
 .status-review{background:rgba(226,165,58,0.18);color:#f0b94d;}
 .status-not{background:rgba(255,255,255,0.08);color:var(--muted);}
+.status-working{background:rgba(34,197,94,0.18);color:var(--accent);}
+.status-applied{background:rgba(59,130,246,0.18);color:#7fb1ff;}
+.status-interviewing{background:rgba(226,165,58,0.18);color:#f0b94d;}
+.status-rejected{background:rgba(239,68,68,0.18);color:#ff8b8b;}
+
+.full-width-stack{margin-top:1.3rem;}
+.app-table{width:100%;border-collapse:collapse;font-size:0.85rem;white-space:nowrap;}
+.app-table th{text-align:left;color:var(--muted);font-weight:500;font-size:0.7rem;padding:0 0.5rem 0.55rem;}
+.app-table td{padding:0.55rem 0.5rem;border-top:1px solid var(--border);vertical-align:middle;}
+.app-company{font-weight:600;}
+@media(max-width:700px){.app-table{font-size:0.78rem;}}
 
 /* ===== CALENDAR ===== */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
@@ -160,7 +186,6 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .day-plus{width:19px;height:19px;border-radius:5px;background:var(--primary);color:#fff;font-size:0.75rem;display:flex;align-items:center;justify-content:center;flex:none;}
 .day-title{font-weight:600;font-size:0.87rem;flex:1;}
 .day-total{font-size:0.85rem;font-weight:600;}
-.day-dots{color:var(--muted);cursor:pointer;padding:0 0.2rem;}
 .day-table-wrap{margin-top:0.7rem;overflow-x:auto;}
 .day-table{width:100%;border-collapse:collapse;font-size:0.78rem;white-space:nowrap;}
 .day-table th{text-align:left;color:var(--muted);font-weight:500;font-size:0.68rem;padding:0.3rem 0.5rem;}
@@ -170,8 +195,9 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .col-right{display:flex;flex-direction:column;}
 @media(max-width:560px){.day-head{flex-wrap:wrap}.day-total{width:100%;padding-left:27px}.day-head input[type="date"]{margin-left:27px}.money-pair{font-size:.7rem}.shop-item{flex-wrap:wrap}.shop-item-name{min-width:50%;}}
 
-.reset-row{text-align:center;margin-top:1.5rem;}
+.reset-row{text-align:center;margin-top:1.5rem;display:flex;justify-content:center;gap:1.4rem;}
 .reset-link{color:var(--danger);font-size:0.78rem;cursor:pointer;display:inline-flex;align-items:center;gap:0.4rem;text-decoration:none;}
+
 .reset-link:hover{text-decoration:underline;}
 
 /* ===== EDITABLE FIELDS ===== */
@@ -204,7 +230,10 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
 .shop-cat-title:empty:before,
 .acc-name:empty:before,
 .trip-title:empty:before,
+.trip-summary-title:empty:before,
+.itin-day-title:empty:before,
 .day-title:empty:before,
+.app-cell:empty:before,
 .acc-num:empty:before{
   content:"Type here…";
   color:var(--muted);
@@ -217,6 +246,42 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
   opacity:.4;
   pointer-events:none;
 }
+
+/* ===== ITINERARY (Notion-style timeline) ===== */
+.trip-layout{display:grid;grid-template-columns:1fr 1.35fr;gap:1.4rem;align-items:start;margin-top:0.8rem;}
+@media(max-width:800px){.trip-layout{grid-template-columns:1fr;}}
+.trip-summary-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.2rem;}
+.trip-summary-title[contenteditable]{font-size:1.2rem;font-weight:700;outline:none;}
+.trip-summary-dates{color:var(--muted);font-size:0.85rem;margin:0.25rem 0 1rem;}
+.trip-summary-section-label{color:var(--accent);font-weight:700;font-size:0.85rem;margin-bottom:0.5rem;}
+.trip-summary-line{font-size:0.85rem;margin-bottom:0.4rem;line-height:1.45;outline:none;}
+.trip-summary-line[contenteditable]:empty:before{content:attr(data-ph);color:var(--muted);opacity:0.55;}
+.trip-summary-key{color:var(--muted);}
+.trip-summary-divider{height:1px;background:var(--border);margin:0.9rem 0;}
+
+.itin-timeline{position:relative;}
+.itin-day{position:relative;padding-left:26px;margin-bottom:1.3rem;}
+.itin-day:last-child{margin-bottom:0.3rem;}
+.itin-dot{position:absolute;left:2px;top:6px;width:9px;height:9px;border-radius:50%;background:var(--accent);}
+.itin-day:not(:last-child)::after{content:'';position:absolute;left:6px;top:17px;bottom:-22px;width:1px;background:var(--border);}
+.itin-day-head{display:flex;align-items:center;gap:0.55rem;margin-bottom:0.5rem;}
+.itin-day-title[contenteditable]{font-weight:700;font-size:0.95rem;outline:none;}
+.itin-day-date{color:var(--muted);font-size:0.78rem;}
+.itin-day-head input[type="date"]{background:transparent;border:0;color:var(--muted);font-size:0.72rem;max-width:104px;padding:0.1rem 0;}
+.itin-heading-row{display:flex;align-items:center;gap:0.4rem;margin:0.6rem 0 0.35rem;}
+.itin-heading[contenteditable]{color:var(--muted);font-weight:700;font-size:0.72rem;letter-spacing:0.4px;text-transform:uppercase;outline:none;}
+.itin-heading[contenteditable]:empty:before{content:'Section heading…';opacity:0.5;text-transform:none;letter-spacing:0;}
+.itin-items{list-style:none;margin:0;padding:0;}
+.itin-item{display:flex;align-items:center;gap:0.45rem;padding:0.18rem 0;font-size:0.85rem;}
+.itin-item::before{content:'•';color:var(--muted);flex:none;}
+.itin-item-text[contenteditable]{flex:1;min-width:0;outline:none;}
+.itin-item-text[contenteditable]:empty:before{content:'Add an activity…';color:var(--muted);opacity:0.5;}
+.itin-item:hover .price-add,.itin-item:hover .price-remove{opacity:1;}
+.itin-item .more-dots{opacity:0;}
+.itin-item:hover .more-dots{opacity:0.6;}
+.itin-add-section{margin:0.3rem 0 0.7rem;}
+.day-dots{opacity:0;flex:none;color:var(--muted);cursor:pointer;font-size:0.9rem;margin-left:auto;}
+.itin-day-head:hover .day-dots{opacity:0.6;}
 
 /* ===== ONE-LINE ACCOMMODATION ===== */
 .acc-table td{white-space:nowrap;}
@@ -279,30 +344,6 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
           </div>
         </div>
         <div id="tasksRoot"></div>
-
-        <div class="add-plus-wrap" style="display:none">
-          <button class="add-plus-btn" id="blockPlusBtn">+</button>
-          <div class="block-menu" id="blockMenu">
-            <div class="block-menu-item" data-block="heading"><span class="bmi-icon">H</span> Heading</div>
-            <div class="block-menu-item" data-block="text"><span class="bmi-icon">T</span> Text</div>
-            <div class="block-menu-item" data-block="toggle"><span class="bmi-icon">▸</span> Toggle</div>
-            <div class="block-menu-item" data-block="todo"><span class="bmi-icon">☑</span> To-do</div>
-            <div class="block-menu-item" data-block="bulleted"><span class="bmi-icon">≡</span> Bulleted List</div>
-            <div class="block-menu-item" data-block="numbered"><span class="bmi-icon">1.</span> Numbered List</div>
-            <div class="block-menu-item" data-block="divider"><span class="bmi-icon">—</span> Divider</div>
-            <div class="menu-sep"></div>
-            <div class="block-menu-item" data-block="color"><span class="bmi-icon">◐</span> Color <span class="bmi-arrow">▸</span></div>
-            <div class="swatch-row">
-              <div class="swatch" style="background:#d9d9d9"></div>
-              <div class="swatch" style="background:#ef4444"></div>
-              <div class="swatch" style="background:#f5a623"></div>
-              <div class="swatch" style="background:#e5e021"></div>
-              <div class="swatch" style="background:#22c55e"></div>
-              <div class="swatch" style="background:#3b82f6"></div>
-              <div class="swatch" style="background:#8b5cf6"></div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- SHOPPING -->
@@ -350,17 +391,37 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-se
         <div class="calendar-events" id="calendarEvents"></div>
       </div>
 
-      <!-- TRIPS -->
-      <div class="panel" data-panelkey="travel">
-        <div class="panel-head">
-          <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
-          <div class="panel-title">Travel</div>
-          <button class="icon-btn" id="tripAddBtn">+</button>
-        </div>
-        <div id="travelRoot"></div>
-      </div>
-
     </div>
+  </div>
+
+  <!-- FULL WIDTH SECTIONS -->
+  <div class="full-width-stack">
+
+    <!-- APPLICATION TRACKER -->
+    <div class="panel" data-panelkey="apptracker">
+      <div class="panel-head">
+        <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
+        <div class="panel-title">Application Tracker</div>
+        <button class="icon-btn" id="appAddBtn" style="margin-left:auto;">+ Add Application</button>
+      </div>
+      <div style="width:100%;overflow-x:auto;">
+        <table class="app-table">
+          <tbody><tr><th>Company</th><th>Role</th><th>Status</th><th>Salary Range</th><th>Date Applied</th><th></th></tr>
+          </tbody><tbody id="appBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TRIPS -->
+    <div class="panel" data-panelkey="travel">
+      <div class="panel-head">
+        <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
+        <div class="panel-title">Travel</div>
+        <button class="icon-btn" id="tripAddBtn">+</button>
+      </div>
+      <div id="travelRoot"></div>
+    </div>
+
   </div>
 
   <div class="reset-row">
@@ -388,6 +449,8 @@ let accommodation = [];
 let shopping = [];
 
 let trips = [];
+
+let applications = [];
 
 let profile = { name:'Dhanush' };
 
@@ -732,10 +795,6 @@ function wireTasks(){
 }
 
 /* block-menu add */
-document.getElementById('blockPlusBtn').onclick = (e)=>{
-  e.stopPropagation();
-  document.getElementById('blockMenu').classList.toggle('open');
-};
 document.addEventListener('click', ()=> document.getElementById('blockMenu').classList.remove('open'));
 document.getElementById('blockMenu').querySelectorAll('.block-menu-item[data-block]').forEach(item=>{
   item.onclick = (e)=>{
@@ -792,6 +851,41 @@ function renderAccommodation(){
   });
   bindEditable('[data-accname]', el=>{ accommodation[el.dataset.accname].name = el.textContent.trim(); });
   bindEditable('[data-accrent]', el=>{ accommodation[el.dataset.accrent].rent = el.textContent.trim(); });
+  scheduleSave();
+}
+
+/* ===================== APPLICATION TRACKER ===================== */
+function renderApplications(){
+  const statusLabel = {working:'Working', applied:'Applied', interviewing:'Interviewing', rejected:'Rejected'};
+  const statusClass = {working:'status-working', applied:'status-applied', interviewing:'status-interviewing', rejected:'status-rejected'};
+  document.getElementById('appBody').innerHTML = applications.map((row,i)=>`
+    <tr>
+      <td><div class="app-cell app-company" contenteditable="true" data-appcompany="${i}">${row.company||''}</div></td>
+      <td class="app-cell" contenteditable="true" data-approle="${i}">${row.role||''}</td>
+      <td><span class="status-pill ${statusClass[row.status]}" data-appstatus="${i}">${statusLabel[row.status]} ▾</span></td>
+      <td class="app-cell" contenteditable="true" data-appsalary="${i}">${row.salaryRange||''}</td>
+      <td class="app-cell" contenteditable="true" data-appdate="${i}">${row.dateApplied||''}</td>
+      <td><button class="acc-delete" data-appdelete="${i}" title="Delete application">×</button></td>
+    </tr>`).join('');
+  document.querySelectorAll('[data-appstatus]').forEach(el=>{
+    el.onclick = ()=>{
+      const i = el.dataset.appstatus;
+      const order = ['working','applied','interviewing','rejected'];
+      const cur = order.indexOf(applications[i].status);
+      applications[i].status = order[(cur+1)%order.length];
+      renderApplications();
+    };
+  });
+  document.querySelectorAll('[data-appdelete]').forEach(el=>{
+    el.onclick = async ()=>{
+      const ok = await showConfirm('Delete this application?');
+      if(ok){ applications.splice(Number(el.dataset.appdelete),1); renderApplications(); }
+    };
+  });
+  bindEditable('[data-appcompany]', el=>{ applications[el.dataset.appcompany].company = el.textContent.trim(); });
+  bindEditable('[data-approle]', el=>{ applications[el.dataset.approle].role = el.textContent.trim(); });
+  bindEditable('[data-appsalary]', el=>{ applications[el.dataset.appsalary].salaryRange = el.textContent.trim(); });
+  bindEditable('[data-appdate]', el=>{ applications[el.dataset.appdate].dateApplied = el.textContent.trim(); });
   scheduleSave();
 }
 
@@ -880,7 +974,12 @@ function moveShopItem(fromKey, toKey, appendToCatEnd){
   renderShopping();
 }
 function renderShopping(){
-  document.getElementById('shopRoot').innerHTML = shopping.map(cat=>{
+  const grand = shopping.reduce((s,cat)=>{ const t=moneyTotal(cat.items); return {gbp:s.gbp+t.gbp, inr:s.inr+t.inr}; },{gbp:0,inr:0});
+  const totalBox = `<div class="shop-total-box">
+    <div class="shop-total-label">Total spent so far</div>
+    <div class="shop-total-values"><span>₹${grand.inr}</span><span>£${grand.gbp}</span></div>
+  </div>`;
+  document.getElementById('shopRoot').innerHTML = totalBox + shopping.map(cat=>{
     const total = moneyTotal(cat.items);
     return `<div class="shop-cat">
       <div class="shop-cat-head" data-shopcat="${cat.id}">
@@ -904,9 +1003,6 @@ function renderShopping(){
       <div class="shop-divider"></div>
     </div>`;
   }).join('');
-  const grand = shopping.reduce((s,cat)=>{ const t=moneyTotal(cat.items); return {gbp:s.gbp+t.gbp, inr:s.inr+t.inr}; },{gbp:0,inr:0});
-  const shopBadge = document.getElementById('shopTotalBadge');
-  if(shopBadge) shopBadge.textContent = (grand.gbp || grand.inr) ? `Total: GBP ${grand.gbp} · INR ${grand.inr}` : '';
   document.querySelectorAll('[data-shopcatgrip]').forEach(grip=>{
     grip.addEventListener('click', e=>e.stopPropagation());
     grip.addEventListener('dragstart', e=>{
@@ -1016,7 +1112,6 @@ function renderShopping(){
 }
 
 /* ===================== TRAVEL ===================== */
-function dayTotal(day){ return day.rows.reduce((sum,r)=>sum+(Number(r.pcost)||0)+(Number(r.fcost)||0)+(Number(r.scost)||0),0); }
 function dateInput(date){ const d=new Date(date); return isNaN(d)?'':d.toISOString().slice(0,10); }
 function formatDisplayDate(iso){
   const d = new Date(iso+'T00:00:00');
@@ -1024,37 +1119,69 @@ function formatDisplayDate(iso){
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
+function tripDateRange(trip){
+  if(!trip.days || !trip.days.length) return '';
+  const first = dateInput(trip.days[0].date);
+  const last = dateInput(trip.days[trip.days.length-1].date);
+  if(!first) return '';
+  if(!last || last===first) return formatDisplayDate(first);
+  return `${formatDisplayDate(first)} – ${formatDisplayDate(last)}`;
+}
+function tripItemsTotal(trip){
+  let out = {gbp:0,inr:0};
+  (trip.days||[]).forEach(day=>{
+    (day.blocks||[]).forEach(block=>{
+      (block.items||[]).forEach(item=>{
+        if(!item.paid) return;
+        const m = money(item.amount);
+        out = {gbp:out.gbp+m.gbp, inr:out.inr+m.inr};
+      });
+    });
+  });
+  return out;
+}
+function getTrip(tripId){ return trips.find(t=>t.id===tripId); }
+function getDay(tripId, dayId){ const t=getTrip(tripId); return t && t.days.find(d=>d.id===dayId); }
+function getItinBlock(tripId, dayId, blockId){ const d=getDay(tripId,dayId); return d && d.blocks.find(b=>b.id===blockId); }
+function getItinItem(tripId, dayId, blockId, itemId){ const b=getItinBlock(tripId,dayId,blockId); return b && b.items.find(i=>i.id===itemId); }
+
+function renderDayBlocks(trip, day){
+  const blocksHtml = (day.blocks||[]).map(block=>`
+    <div class="itin-block">
+      <div class="itin-heading-row">
+        <span class="itin-heading" contenteditable="true" data-itinheading="${trip.id}:${day.id}:${block.id}">${block.heading||''}</span>
+        <span class="more-dots" data-delblock="${trip.id}:${day.id}:${block.id}" title="Delete section" style="opacity:0.5;">×</span>
+      </div>
+      <ul class="itin-items">
+        ${(block.items||[]).map(item=>{
+          const priceHtml = item.paid
+            ? `${moneyFields(item.amount, `itin:${trip.id}:${day.id}:${block.id}:${item.id}`)}<span class="price-remove" data-itinpricedel="${trip.id}:${day.id}:${block.id}:${item.id}" title="Remove cost">×</span>`
+            : `<span class="price-add" data-itinpriceadd="${trip.id}:${day.id}:${block.id}:${item.id}" title="Add a cost">+ cost</span>`;
+          return `<li class="itin-item">
+            <span class="itin-item-text" contenteditable="true" data-itintext="${trip.id}:${day.id}:${block.id}:${item.id}">${item.text||''}</span>
+            ${priceHtml}
+            <span class="more-dots" data-delitinitem="${trip.id}:${day.id}:${block.id}:${item.id}" title="Delete" style="opacity:0.5;margin-left:0;">×</span>
+          </li>`;
+        }).join('')}
+      </ul>
+    </div>`).join('');
+  return blocksHtml + `<button class="add-plus-btn itin-add-section" data-addblock="${trip.id}:${day.id}" style="width:auto;padding:0.22rem 0.6rem;font-size:0.72rem;">+ Add section</button>`;
+}
+
 function renderTravel(){
   document.getElementById('travelRoot').innerHTML = trips.map(trip=>{
-    const dayRows = trip.days.map((day, dayIdx)=>{
-      const table = day.rows.length ? `
-        <div class="day-table-wrap">
-          <table class="day-table">
-            <tr><th>Places</th><th>Cost</th><th>Food</th><th>Cost</th><th>Stay</th><th>Cost</th><th>Notes</th><th></th></tr>
-            ${day.rows.map((r,ridx)=>`<tr>
-              <td contenteditable="true" data-place="${trip.id}:${day.id}:${ridx}">${r.place}</td>
-              <td contenteditable="true" data-pcost="${trip.id}:${day.id}:${ridx}">${r.pcost}</td>
-              <td contenteditable="true" data-food="${trip.id}:${day.id}:${ridx}">${r.food}</td>
-              <td contenteditable="true" data-fcost="${trip.id}:${day.id}:${ridx}">${r.fcost}</td>
-              <td contenteditable="true" data-stay="${trip.id}:${day.id}:${ridx}">${r.stay}</td>
-              <td contenteditable="true" data-scost="${trip.id}:${day.id}:${ridx}">${r.scost}</td>
-              <td class="note-cell" contenteditable="true" data-notes="${trip.id}:${day.id}:${ridx}">${r.notes}</td><td><button class="row-delete" data-delrow="${trip.id}:${day.id}:${ridx}" title="Delete row">×</button></td>
-            </tr>`).join('')}
-          </table>
-        </div>` : '';
+    const dayItems = trip.days.map((day, dayIdx)=>{
       const dateField = dayIdx===0
         ? `<input type="date" data-daydate="${trip.id}:${day.id}" value="${dateInput(day.date)}" onclick="event.stopPropagation()">`
-        : `<span class="day-date-readonly" title="Follows Day 1 automatically">${dateInput(day.date) ? formatDisplayDate(dateInput(day.date)) : '—'}</span>`;
-      return `<div class="day-block">
-        <div class="day-head" data-day="${trip.id}:${day.id}">
-          <span class="day-plus" data-addrow="${trip.id}:${day.id}" title="Add a row">+</span>
-          <span class="day-title" contenteditable="true" data-daytitle="${trip.id}:${day.id}">${day.title}</span>
-          <span>–</span>
+        : `<span class="itin-day-date" title="Follows Day 1 automatically">${dateInput(day.date) ? formatDisplayDate(dateInput(day.date)) : '—'}</span>`;
+      return `<div class="itin-day">
+        <span class="itin-dot"></span>
+        <div class="itin-day-head" data-day="${trip.id}:${day.id}">
+          <span class="itin-day-title" contenteditable="true" data-daytitle="${trip.id}:${day.id}">${day.title}</span>
           ${dateField}
-          <span class="day-total">Total: ${dayTotal(day)}</span>
           <span class="day-dots" data-delday="${trip.id}:${day.id}" title="Delete day">⋯</span>
         </div>
-        <div style="${day.collapsed?'display:none;':''}">${table}</div>
+        ${renderDayBlocks(trip, day)}
       </div>`;
     }).join('');
 
@@ -1069,18 +1196,35 @@ function renderTravel(){
         ${bpLink}
       </div>`;
 
-    const tripTotal = trip.days.reduce((s,d)=>s+dayTotal(d),0);
+    const tripTotal = tripItemsTotal(trip);
+    const dateRange = tripDateRange(trip);
 
     return `<div class="trip-section" style="margin-bottom:0.8rem;">
       <div class="trip-head" data-trip="${trip.id}">
         <button class="arrow-btn ${trip.collapsed?'collapsed':''}">▾</button>
         <span class="trip-title" contenteditable="true" data-triptitle="${trip.id}">${trip.title}</span>
-        <span class="trip-total">Total: ${tripTotal.toLocaleString()}</span>
+        <span class="trip-total">${(tripTotal.gbp||tripTotal.inr) ? `Total: GBP ${tripTotal.gbp} · INR ${tripTotal.inr}` : ''}</span>
       </div>
       <div style="${trip.collapsed?'display:none;':''}">
-        ${boarding}
-        ${dayRows}
-        <button class="add-plus-btn" data-addday="${trip.id}" style="margin-top:0.7rem;font-size:0.78rem;width:auto;padding:0.3rem 0.7rem;gap:0.3rem;">+ Add day</button>
+        <div class="trip-layout">
+          <div class="trip-summary-card">
+            <div class="trip-summary-title" contenteditable="true" data-triptitle="${trip.id}">${trip.title||''}</div>
+            <div class="trip-summary-dates">${dateRange}</div>
+            <div class="trip-summary-section-label">Flight Details</div>
+            <div class="trip-summary-line" contenteditable="true" data-flightnum="${trip.id}" data-ph="Flight number…">${trip.flightNumber||''}</div>
+            <div class="trip-summary-line" contenteditable="true" data-flightdep="${trip.id}" data-ph="Departure — airport &amp; time…">${trip.flightDeparture||''}</div>
+            <div class="trip-summary-line" contenteditable="true" data-flightarr="${trip.id}" data-ph="Arrival — airport &amp; time…">${trip.flightArrival||''}</div>
+            <div class="trip-summary-divider"></div>
+            <div class="trip-summary-section-label">Accommodation</div>
+            <div class="trip-summary-line" contenteditable="true" data-tripaccom="${trip.id}" data-ph="Hotel name and address…">${trip.accommodationText||''}</div>
+            <div class="trip-summary-divider"></div>
+            ${boarding}
+          </div>
+          <div class="itin-timeline">
+            ${dayItems}
+            <button class="add-plus-btn" data-addday="${trip.id}" style="margin-top:0.4rem;font-size:0.78rem;width:auto;padding:0.3rem 0.7rem;gap:0.3rem;">+ Add day</button>
+          </div>
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -1096,21 +1240,10 @@ function renderTravel(){
   document.querySelectorAll('[data-day]').forEach(el=>{
     el.onclick = (e)=>{
       if(e.target.closest('[contenteditable]')) return;
-      if(e.target.closest('[data-addrow]') || e.target.closest('[data-delday]')) return;
+      if(e.target.closest('[data-delday]')) return;
       const [tripId, dayId] = el.dataset.day.split(':');
-      const trip = trips.find(t=>t.id===tripId);
-      const day = trip.days.find(d=>d.id===dayId);
-      day.collapsed = !day.collapsed;
-      renderTravel();
-    };
-  });
-  document.querySelectorAll('[data-addrow]').forEach(el=>{
-    el.onclick = (e)=>{
-      e.stopPropagation();
-      const [tripId, dayId] = el.dataset.addrow.split(':');
       const day = getDay(tripId, dayId);
-      day.rows.push({place:'', pcost:0, food:'', fcost:0, stay:'', scost:0, notes:''});
-      day.collapsed = false;
+      day.collapsed = !day.collapsed;
       renderTravel();
     };
   });
@@ -1126,23 +1259,99 @@ function renderTravel(){
       }
     };
   });
-  document.querySelectorAll('[data-delrow]').forEach(el=>{
-    el.onclick = async (e)=>{
-      e.stopPropagation();
-      const ok = await showConfirm('Delete this row?');
-      if(!ok) return;
-      const [tripId,dayId,ridx]=el.dataset.delrow.split(':'); const day=getDay(tripId,dayId); day.rows.splice(Number(ridx),1); renderTravel();
-    };
-  });
   document.querySelectorAll('[data-addday]').forEach(el=>{
     el.onclick = (e)=>{
       e.stopPropagation();
       const trip = trips.find(t=>t.id===el.dataset.addday);
       const n = trip.days.length+1;
       const previous=trip.days[trip.days.length-1]; const next=previous&&dateInput(previous.date) ? new Date(dateInput(previous.date)+'T00:00:00') : null; if(next) next.setDate(next.getDate()+1);
-      trip.days.push({id:uid(), title:'Day '+n, date:next?next.toISOString().slice(0,10):'', total:null, collapsed:false, rows:[]});
+      trip.days.push({id:uid(), title:'Day '+n, date:next?next.toISOString().slice(0,10):'', collapsed:false, blocks:[{id:uid(), heading:'', items:[{id:uid(), text:'', paid:false, amount:{gbp:0,inr:0}}]}]});
       renderTravel();
     };
+  });
+  document.querySelectorAll('[data-addblock]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const [tripId, dayId] = el.dataset.addblock.split(':');
+      const day = getDay(tripId, dayId);
+      day.blocks.push({id:uid(), heading:'', items:[{id:uid(), text:'', paid:false, amount:{gbp:0,inr:0}}]});
+      renderTravel();
+    };
+  });
+  document.querySelectorAll('[data-delblock]').forEach(el=>{
+    el.onclick = async (e)=>{
+      e.stopPropagation();
+      const ok = await showConfirm('Delete this section and its items?');
+      if(!ok) return;
+      const [tripId, dayId, blockId] = el.dataset.delblock.split(':');
+      const day = getDay(tripId, dayId);
+      day.blocks = day.blocks.filter(b=>b.id!==blockId);
+      renderTravel();
+    };
+  });
+  document.querySelectorAll('[data-delitinitem]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const [tripId, dayId, blockId, itemId] = el.dataset.delitinitem.split(':');
+      const block = getItinBlock(tripId, dayId, blockId);
+      if(block) block.items = block.items.filter(i=>i.id!==itemId);
+      renderTravel();
+    };
+  });
+  document.querySelectorAll('[data-itinpriceadd]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const [tripId, dayId, blockId, itemId] = el.dataset.itinpriceadd.split(':');
+      const item = getItinItem(tripId, dayId, blockId, itemId);
+      if(item){ item.paid = true; item.amount = item.amount || {gbp:0,inr:0}; renderTravel(); }
+    };
+  });
+  document.querySelectorAll('[data-itinpricedel]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const [tripId, dayId, blockId, itemId] = el.dataset.itinpricedel.split(':');
+      const item = getItinItem(tripId, dayId, blockId, itemId);
+      if(item){ item.paid = false; renderTravel(); }
+    };
+  });
+  document.querySelectorAll('[data-itintext]').forEach(el=>{
+    el.addEventListener('click', e=>e.stopPropagation());
+    el.addEventListener('blur', ()=>{
+      const [tripId, dayId, blockId, itemId] = el.dataset.itintext.split(':');
+      const item = getItinItem(tripId, dayId, blockId, itemId);
+      if(item) item.text = el.textContent.trim();
+      scheduleSave();
+    });
+    el.addEventListener('keydown', e=>{
+      if(e.key==='Enter'){
+        e.preventDefault();
+        const [tripId, dayId, blockId, itemId] = el.dataset.itintext.split(':');
+        const block = getItinBlock(tripId, dayId, blockId);
+        const item = getItinItem(tripId, dayId, blockId, itemId);
+        if(!block || !item) return;
+        item.text = el.textContent.trim();
+        const newItem = {id:uid(), text:'', paid:false, amount:{gbp:0,inr:0}};
+        const idx = block.items.findIndex(i=>i.id===itemId);
+        block.items.splice(idx+1, 0, newItem);
+        renderTravel();
+        requestAnimationFrame(()=>{
+          const ne = document.querySelector(`[data-itintext="${tripId}:${dayId}:${blockId}:${newItem.id}"]`);
+          if(ne) ne.focus();
+        });
+      }
+    });
+  });
+  bindEditable('[data-moneytext^="itin:"]', el=>{
+    const parts = el.dataset.moneytext.split(':');
+    const [, tripId, dayId, blockId, itemId] = parts;
+    const item = getItinItem(tripId, dayId, blockId, itemId);
+    if(item) item.amount = readMoney(el.textContent);
+    renderTravel();
+  });
+  bindEditable('[data-itinheading]', el=>{
+    const [tripId, dayId, blockId] = el.dataset.itinheading.split(':');
+    const block = getItinBlock(tripId, dayId, blockId);
+    if(block) block.heading = el.textContent.trim();
   });
   document.querySelectorAll('[data-bpinput]').forEach(el=>{
     el.addEventListener('click', e=> e.stopPropagation());
@@ -1167,49 +1376,28 @@ function renderTravel(){
     };
   });
 
-  function getDay(tripId, dayId){
-    return trips.find(t=>t.id===tripId).days.find(d=>d.id===dayId);
-  }
   bindEditable('[data-triptitle]', el=>{
     trips.find(t=>t.id===el.dataset.triptitle).title = el.textContent.trim();
+    renderTravel();
   });
   bindEditable('[data-daytitle]', el=>{
     const [tripId, dayId] = el.dataset.daytitle.split(':');
     getDay(tripId, dayId).title = el.textContent.trim();
   });
+  bindEditable('[data-flightnum]', el=>{
+    trips.find(t=>t.id===el.dataset.flightnum).flightNumber = el.textContent.trim();
+  });
+  bindEditable('[data-flightdep]', el=>{
+    trips.find(t=>t.id===el.dataset.flightdep).flightDeparture = el.textContent.trim();
+  });
+  bindEditable('[data-flightarr]', el=>{
+    trips.find(t=>t.id===el.dataset.flightarr).flightArrival = el.textContent.trim();
+  });
+  bindEditable('[data-tripaccom]', el=>{
+    trips.find(t=>t.id===el.dataset.tripaccom).accommodationText = el.textContent.trim();
+  });
   document.querySelectorAll('[data-daydate]').forEach(el=>el.onchange=()=>{
     const [tripId,dayId]=el.dataset.daydate.split(':'); const trip=trips.find(t=>t.id===tripId); const index=trip.days.findIndex(d=>d.id===dayId); if(index<0||!el.value) return; const start=new Date(el.value+'T00:00:00'); trip.days.forEach((day,i)=>{ if(i>=index){ const d=new Date(start); d.setDate(start.getDate()+i-index); day.date=d.toISOString().slice(0,10); }}); renderTravel();
-  });
-  bindEditable('[data-place]', el=>{
-    const [tripId, dayId, ridx] = el.dataset.place.split(':');
-    getDay(tripId, dayId).rows[ridx].place = el.textContent.trim();
-  });
-  bindEditable('[data-pcost]', el=>{
-    const [tripId, dayId, ridx] = el.dataset.pcost.split(':');
-    getDay(tripId, dayId).rows[ridx].pcost = parseGBP(el.textContent);
-    renderTravel();
-  });
-  bindEditable('[data-food]', el=>{
-    const [tripId, dayId, ridx] = el.dataset.food.split(':');
-    getDay(tripId, dayId).rows[ridx].food = el.textContent.trim();
-  });
-  bindEditable('[data-fcost]', el=>{
-    const [tripId, dayId, ridx] = el.dataset.fcost.split(':');
-    getDay(tripId, dayId).rows[ridx].fcost = parseGBP(el.textContent);
-    renderTravel();
-  });
-  bindEditable('[data-stay]', el=>{
-    const [tripId, dayId, ridx] = el.dataset.stay.split(':');
-    getDay(tripId, dayId).rows[ridx].stay = el.textContent.trim();
-  });
-  bindEditable('[data-scost]', el=>{
-    const [tripId, dayId, ridx] = el.dataset.scost.split(':');
-    getDay(tripId, dayId).rows[ridx].scost = parseGBP(el.textContent);
-    renderTravel();
-  });
-  bindEditable('[data-notes]', el=>{
-    const [tripId, dayId, ridx] = el.dataset.notes.split(':');
-    getDay(tripId, dayId).rows[ridx].notes = el.textContent.trim();
   });
   scheduleSave();
 }
@@ -1223,12 +1411,16 @@ document.getElementById('accAddBtn').onclick = ()=>{
   accommodation.push({name:'', rent:'', bills:'N', status:'not'});
   renderAccommodation();
 };
+document.getElementById('appAddBtn').onclick = ()=>{
+  applications.push({company:'', role:'', status:'applied', salaryRange:'', dateApplied:''});
+  renderApplications();
+};
 document.getElementById('shopAddBtn').onclick = ()=>{
   shopping.push({id:uid(), title:'', collapsed:false, items:[]});
   renderShopping();
 };
 document.getElementById('tripAddBtn').onclick = ()=>{
-  trips.push({id:uid(),title:'',collapsed:false,days:[]});
+  trips.push({id:uid(),title:'',collapsed:false,flightNumber:'',flightDeparture:'',flightArrival:'',accommodationText:'',boardingPass:'',days:[]});
   renderTravel();
 };
 
@@ -1245,19 +1437,21 @@ function renderProfile(){
 /* ===================== PERSISTENCE ===================== */
 let loaded = false;
 let saveTimer = null;
-let panelLayout = null; // {left:[...panelkeys], right:[...panelkeys]}
-const DEFAULT_PANEL_LAYOUT = { left:['tasks','shopping','accommodation'], right:['calendar','travel'] };
+let panelLayout = null; // {left:[...panelkeys], right:[...panelkeys], full:[...panelkeys]}
+const DEFAULT_PANEL_LAYOUT = { left:['tasks','shopping','accommodation'], right:['calendar'], full:['apptracker','travel'] };
 
 function savePanelLayout(){
   panelLayout = {
     left: Array.from(document.querySelectorAll('.col-left > [data-panelkey]')).map(el=>el.dataset.panelkey),
-    right: Array.from(document.querySelectorAll('.col-right > [data-panelkey]')).map(el=>el.dataset.panelkey)
+    right: Array.from(document.querySelectorAll('.col-right > [data-panelkey]')).map(el=>el.dataset.panelkey),
+    full: Array.from(document.querySelectorAll('.full-width-stack > [data-panelkey]')).map(el=>el.dataset.panelkey)
   };
 }
 function applyPanelLayout(layout){
   layout = layout || panelLayout || DEFAULT_PANEL_LAYOUT;
   const colLeft = document.querySelector('.col-left');
   const colRight = document.querySelector('.col-right');
+  const full = document.querySelector('.full-width-stack');
   (layout.left||[]).forEach(key=>{
     const el = document.querySelector(`[data-panelkey="${key}"]`);
     if(el) colLeft.appendChild(el);
@@ -1266,20 +1460,24 @@ function applyPanelLayout(layout){
     const el = document.querySelector(`[data-panelkey="${key}"]`);
     if(el) colRight.appendChild(el);
   });
+  (layout.full||[]).forEach(key=>{
+    const el = document.querySelector(`[data-panelkey="${key}"]`);
+    if(el) full.appendChild(el);
+  });
 }
 function wirePanelDrag(){
   let draggedPanel = null;
-  document.querySelectorAll('.dash-grid .panel-grip').forEach(grip=>{
+  document.querySelectorAll('.dash-grid .panel-grip, .full-width-stack .panel-grip').forEach(grip=>{
     grip.addEventListener('dragstart', e=>{
       draggedPanel = grip.closest('[data-panelkey]');
       e.dataTransfer.effectAllowed = 'move';
     });
     grip.addEventListener('dragend', ()=>{
       draggedPanel = null;
-      document.querySelectorAll('.dash-grid [data-panelkey]').forEach(p=>p.classList.remove('drag-over'));
+      document.querySelectorAll('[data-panelkey]').forEach(p=>p.classList.remove('drag-over'));
     });
   });
-  document.querySelectorAll('.dash-grid [data-panelkey]').forEach(panel=>{
+  document.querySelectorAll('.dash-grid [data-panelkey], .full-width-stack [data-panelkey]').forEach(panel=>{
     panel.addEventListener('dragover', e=>{ e.preventDefault(); if(draggedPanel && draggedPanel!==panel) panel.classList.add('drag-over'); });
     panel.addEventListener('dragleave', ()=> panel.classList.remove('drag-over'));
     panel.addEventListener('drop', e=>{
@@ -1297,15 +1495,41 @@ function wirePanelDrag(){
 }
 
 function snapshot(){
-  return { version:2, profile, tasks, accommodation, shopping, trips, calendar, panelLayout };
+  return { version:2, profile, tasks, accommodation, shopping, trips, applications, calendar, panelLayout };
 }
 function normaliseTasks(list){
   (list||[]).forEach(node=>{ if(node && node.paid) node.amount=money(node.amount); if(node && node.children) normaliseTasks(node.children); });
+}
+function migrateTripDays(tripList){
+  (tripList||[]).forEach(trip=>{
+    (trip.days||[]).forEach(day=>{
+      if(!day.blocks){
+        const items = (day.rows||[])
+          .filter(r=>r.place||r.food||r.stay||r.notes||r.pcost||r.fcost||r.scost)
+          .map(r=>{
+            const parts = [];
+            if(r.place) parts.push(r.place);
+            if(r.food) parts.push('Food: '+r.food);
+            if(r.stay) parts.push('Stay: '+r.stay);
+            if(r.notes) parts.push(r.notes);
+            const cost = (Number(r.pcost)||0)+(Number(r.fcost)||0)+(Number(r.scost)||0);
+            return { id: uid(), text: parts.join(' — '), paid: cost>0, amount: {gbp:cost, inr:0} };
+          });
+        day.blocks = [{
+          id: uid(),
+          heading: '',
+          items: items.length ? items : [{id:uid(), text:'', paid:false, amount:{gbp:0,inr:0}}]
+        }];
+        delete day.rows;
+      }
+    });
+  });
 }
 function normaliseState(s){
   if(!s || typeof s!=='object') return s;
   if(Array.isArray(s.tasks)) normaliseTasks(s.tasks);
   if(Array.isArray(s.shopping)) s.shopping.forEach(cat=>(cat.items||[]).forEach(item=>item.price=money(item.price)));
+  if(Array.isArray(s.trips)) migrateTripDays(s.trips);
   if(s.calendar){ s.calendar.events=s.calendar.events||{}; Object.keys(s.calendar.events).forEach(key=>{ if(s.calendar.events[key]===true) s.calendar.events[key]=['Event']; }); }
   return s;
 }
@@ -1317,6 +1541,7 @@ function applyState(s){
   if(Array.isArray(s.accommodation)) accommodation = s.accommodation;
   if(Array.isArray(s.shopping)) shopping = s.shopping;
   if(Array.isArray(s.trips)) trips = s.trips;
+  if(Array.isArray(s.applications)) applications = s.applications;
   if(s.calendar) calendar = s.calendar;
   if(s.panelLayout) panelLayout = s.panelLayout;
 }
@@ -1324,6 +1549,7 @@ function renderAll(){
   renderProfile();
   renderTasks();
   renderAccommodation();
+  renderApplications();
   renderCalendar();
   renderShopping();
   renderTravel();
