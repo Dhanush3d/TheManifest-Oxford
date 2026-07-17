@@ -66,15 +66,18 @@ body{
 .save-status.show{opacity:1;}
 .save-status.err{color:var(--danger);}
 
-.dash-grid{display:grid;grid-template-columns:1fr;gap:1.3rem;align-items:start;}
-@media(min-width:980px){ .dash-grid{grid-template-columns:0.95fr 1.15fr;} }
+.dash-grid{display:flex;flex-direction:column;gap:1.3rem;}
 
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.15rem 1.2rem;margin-bottom:1.3rem;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 12px 36px rgba(0,0,0,0.35);}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.15rem 1.2rem;margin-bottom:1.3rem;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 12px 36px rgba(0,0,0,0.35);position:relative;z-index:1;}
+.panel.menu-open{z-index:60;}
 .panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;position:relative;}
 .panel-title{font-weight:700;font-size:1rem;}
 .panel-total{color:var(--muted);font-size:0.75rem;font-weight:600;white-space:nowrap;}
 .icon-btn{width:26px;height:26px;border-radius:7px;border:none;background:rgba(255,255,255,0.06);color:var(--text);font-size:0.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;}
 .icon-btn:hover{background:rgba(255,255,255,0.12);}
+.shop-total-pill{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:9px;padding:0.32rem 0.7rem;white-space:nowrap;}
+.shop-total-pill-label{font-size:0.68rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.3px;}
+.shop-total-pill-values{font-size:0.82rem;color:#4ade80;font-weight:700;}
 
 /* ===== TASKS ===== */
 .task-block{margin-bottom:0.25rem;}
@@ -136,11 +139,14 @@ body{
 .status-interviewing{background:rgba(226,165,58,0.18);color:#f0b94d;}
 .status-rejected{background:rgba(239,68,68,0.18);color:#ff8b8b;}
 
-.full-width-stack{margin-top:1.3rem;}
 .app-table{width:100%;border-collapse:collapse;font-size:0.85rem;white-space:nowrap;}
 .app-table th{text-align:left;color:var(--muted);font-weight:500;font-size:0.7rem;padding:0 0.5rem 0.55rem;}
 .app-table td{padding:0.55rem 0.5rem;border-top:1px solid var(--border);vertical-align:middle;}
 .app-company{font-weight:600;}
+.app-cell{border-radius:7px;}
+.app-cell[contenteditable]{border:1px solid transparent;padding:0.3rem 0.5rem;margin:-0.05rem -0.5rem;}
+.app-cell[contenteditable]:hover{border-color:var(--border);}
+.app-cell[contenteditable]:focus{border-color:rgba(255,255,255,0.18);}
 @media(max-width:700px){.app-table{font-size:0.78rem;}}
 
 /* ===== CALENDAR ===== */
@@ -165,6 +171,7 @@ body{
 .shop-items{margin-left:1.5rem;}
 .shop-item{display:flex;align-items:center;gap:0.6rem;padding:0.38rem 0;}
 .shop-item-name{flex:1;font-size:0.87rem;}
+.shop-item-name.done{text-decoration:line-through;color:var(--muted);}
 .shop-item-price{font-size:0.83rem;color:var(--muted);min-width:44px;}
 .shop-divider{height:1px;background:var(--border);margin:0.3rem 0;}
 .panel-grip{cursor:grab;color:var(--muted);margin-right:0.5rem;user-select:none;font-size:0.95rem;line-height:1;flex:none;}
@@ -176,11 +183,11 @@ body{
 .trip-section{border:1px solid var(--border);border-radius:10px;padding:.65rem .75rem;background:rgba(0,0,0,.12);}
 .trip-title{font-weight:700;font-size:0.95rem;flex:1;}
 .trip-total{color:#4ade80;font-weight:700;font-size:0.9rem;}
-.boarding-row{display:flex;align-items:center;gap:0.6rem;margin:0.7rem 0 0.9rem;flex-wrap:wrap;}
-.boarding-label{font-size:0.82rem;color:var(--muted);flex:none;}
 .upload-btn{background:rgba(255,255,255,0.08);border:none;color:var(--text);border-radius:7px;padding:0.4rem 0.9rem;font-size:0.8rem;cursor:pointer;}
-.paste-input{flex:1;min-width:120px;background:transparent;border:1px solid var(--border);border-radius:7px;padding:0.4rem 0.7rem;color:var(--text);font-size:0.8rem;}
-.or-text{color:var(--muted);font-size:0.8rem;}
+.trip-summary-line-row{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.4rem;}
+.trip-summary-line-row .trip-summary-line{margin-bottom:0;flex:1;min-width:0;}
+.trip-link-open{color:#6ba3ff;text-decoration:none;font-size:0.85rem;flex:none;padding:0.1rem 0.2rem;}
+.trip-link-open:hover{text-decoration:underline;}
 .day-block{border-top:1px solid var(--border);padding-top:0.55rem;margin-top:0.55rem;}
 .day-head{display:flex;align-items:center;gap:0.55rem;cursor:pointer;background:rgba(255,255,255,.035);border-radius:7px;padding:.45rem .5rem;}
 .day-plus{width:19px;height:19px;border-radius:5px;background:var(--primary);color:#fff;font-size:0.75rem;display:flex;align-items:center;justify-content:center;flex:none;}
@@ -192,7 +199,6 @@ body{
 .day-table td{padding:0.4rem 0.5rem;color:var(--text);}
 .day-table td.note-cell{color:var(--muted);white-space:normal;font-size:0.76rem;}
 .day-head input[type="date"]{background:transparent;border:0;color:var(--muted);font-size:0.72rem;max-width:104px;padding:0.1rem 0;}
-.col-right{display:flex;flex-direction:column;}
 @media(max-width:560px){.day-head{flex-wrap:wrap}.day-total{width:100%;padding-left:27px}.day-head input[type="date"]{margin-left:27px}.money-pair{font-size:.7rem}.shop-item{flex-wrap:wrap}.shop-item-name{min-width:50%;}}
 
 .reset-row{text-align:center;margin-top:1.5rem;display:flex;justify-content:center;gap:1.4rem;}
@@ -214,7 +220,16 @@ body{
 .row-delete{border:0;background:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0 .2rem;}
 .row-delete:hover{color:var(--danger);}
 .trip-add{margin-left:auto;}
-.calendar-events{border-top:1px solid var(--border);margin-top:1rem;padding-top:.75rem;}
+.calendar-events{margin-top:0;padding-top:0;}
+
+/* ===== CALENDAR 3-BOX LAYOUT ===== */
+.cal-boxes{display:grid;grid-template-columns:1.15fr 1fr 0.85fr;gap:1rem;align-items:start;}
+@media(max-width:860px){.cal-boxes{grid-template-columns:1fr;}}
+.cal-box{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:0.9rem;}
+.cal-box-title{font-size:0.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:0.6rem;}
+.cal-box-progress{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:0.5rem;}
+.donut-caption{font-size:0.8rem;color:var(--muted);font-weight:600;}
 .events-title{font-size:.78rem;font-weight:700;margin-bottom:.5rem;}
 .event-line{display:flex;gap:.45rem;align-items:center;padding:.25rem 0;font-size:.8rem;}
 .event-line span{flex:1;}
@@ -328,8 +343,6 @@ body{
   </div>
 
   <div class="dash-grid">
-    <!-- LEFT -->
-    <div class="col-left">
 
       <!-- TASKS -->
       <div class="panel" data-panelkey="tasks">
@@ -372,55 +385,53 @@ body{
         </div>
       </div>
 
-    </div>
-
-    <!-- RIGHT -->
-    <div class="col-right">
-
       <!-- CALENDAR -->
       <div class="panel" data-panelkey="calendar">
-        <div class="panel-head" style="margin-bottom:0;">
+        <div class="panel-head">
           <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
+          <div class="panel-title">Calendar</div>
         </div>
-        <div class="cal-nav">
-          <button id="calPrev">‹</button>
-          <div class="cal-month" id="calMonthLabel">August 2026</div>
-          <button id="calNext">&rsaquo;</button>
+        <div class="cal-boxes">
+          <div class="cal-box">
+            <div class="cal-nav">
+              <button id="calPrev">‹</button>
+              <div class="cal-month" id="calMonthLabel">August 2026</div>
+              <button id="calNext">&rsaquo;</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+          <div class="cal-box">
+            <div class="cal-box-title">Reminders</div>
+            <div class="calendar-events" id="calendarEvents"></div>
+          </div>
+          <div class="cal-box cal-box-progress" id="taskProgressBox"></div>
         </div>
-        <div class="cal-grid" id="calGrid"></div>
-        <div class="calendar-events" id="calendarEvents"></div>
       </div>
 
-    </div>
-  </div>
-
-  <!-- FULL WIDTH SECTIONS -->
-  <div class="full-width-stack">
-
-    <!-- APPLICATION TRACKER -->
-    <div class="panel" data-panelkey="apptracker">
-      <div class="panel-head">
-        <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
-        <div class="panel-title">Application Tracker</div>
-        <button class="icon-btn" id="appAddBtn" style="margin-left:auto;">+ Add Application</button>
+      <!-- APPLICATION TRACKER -->
+      <div class="panel" data-panelkey="apptracker">
+        <div class="panel-head">
+          <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
+          <div class="panel-title">Application Tracker</div>
+          <button class="icon-btn" id="appAddBtn" style="margin-left:auto;">+</button>
+        </div>
+        <div style="width:100%;overflow-x:auto;">
+          <table class="app-table">
+            <tbody><tr><th>Company</th><th>Role</th><th>Status</th><th>Salary Range</th><th>Date Applied</th><th></th></tr>
+            </tbody><tbody id="appBody"></tbody>
+          </table>
+        </div>
       </div>
-      <div style="width:100%;overflow-x:auto;">
-        <table class="app-table">
-          <tbody><tr><th>Company</th><th>Role</th><th>Status</th><th>Salary Range</th><th>Date Applied</th><th></th></tr>
-          </tbody><tbody id="appBody"></tbody>
-        </table>
-      </div>
-    </div>
 
-    <!-- TRIPS -->
-    <div class="panel" data-panelkey="travel">
-      <div class="panel-head">
-        <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
-        <div class="panel-title">Travel</div>
-        <button class="icon-btn" id="tripAddBtn">+</button>
+      <!-- TRAVEL -->
+      <div class="panel" data-panelkey="travel">
+        <div class="panel-head">
+          <span class="panel-grip" draggable="true" title="Drag to rearrange">⠿</span>
+          <div class="panel-title">Travel</div>
+          <button class="icon-btn" id="tripAddBtn">+</button>
+        </div>
+        <div id="travelRoot"></div>
       </div>
-      <div id="travelRoot"></div>
-    </div>
 
   </div>
 
@@ -472,6 +483,8 @@ function money(value){ return typeof value==='object' && value ? value : {gbp:Nu
 function moneyFields(value, key){ const m=money(value); return `<span class="money-pair" contenteditable="true" data-moneytext="${key}" title="Edit as: GBP 100 · INR 10000">GBP ${m.gbp} · INR ${m.inr}</span>`; }
 function readMoney(text, fallback){ const values=String(text).match(/-?\d+(?:\.\d+)?/g)||[]; return {gbp:Number(values[0])||0,inr:Number(values[1])||0}; }
 function moneyTotal(items){ return items.reduce((s,item)=>{ const m=money(item.price); return {gbp:s.gbp+m.gbp,inr:s.inr+m.inr}; },{gbp:0,inr:0}); }
+function isHttpUrl(str){ return /^https?:\/\/\S+$/i.test(String(str||'').trim()); }
+function linkOpenBtn(url){ return isHttpUrl(url) ? `<a class="trip-link-open" href="${String(url).trim()}" target="_blank" rel="noopener" title="Open link" onclick="event.stopPropagation()">↗</a>` : ''; }
 
 /* ===================== CONFIRM MODAL ===================== */
 function showConfirm(message){
@@ -573,6 +586,7 @@ function renderTaskNode(node, nested){
       <span class="grip" draggable="true">::</span>
       <span class="link-icon">🔗</span>
       <span class="task-link" contenteditable="true" data-linktext="${node.id}">${node.text}</span>
+      ${linkOpenBtn(node.text)}
       <span class="more-dots" data-delitem="${node.id}" title="Delete" style="opacity:0.6;margin-left:0;">×</span>
     </div>`;
   }
@@ -600,6 +614,7 @@ function renderTasks(){
   const badge = document.getElementById('tasksTotalBadge');
   if(badge) badge.textContent = (total.gbp || total.inr) ? `Spent: GBP ${total.gbp} · INR ${total.inr}` : '';
   wireTasks();
+  renderTaskProgress();
   scheduleSave();
 }
 
@@ -795,7 +810,10 @@ function wireTasks(){
 }
 
 /* block-menu add */
-document.addEventListener('click', ()=> document.getElementById('blockMenu').classList.remove('open'));
+document.addEventListener('click', ()=>{
+  document.getElementById('blockMenu').classList.remove('open');
+  document.querySelectorAll('.panel.menu-open').forEach(p=>p.classList.remove('menu-open'));
+});
 document.getElementById('blockMenu').querySelectorAll('.block-menu-item[data-block]').forEach(item=>{
   item.onclick = (e)=>{
     e.stopPropagation();
@@ -809,6 +827,7 @@ document.getElementById('blockMenu').querySelectorAll('.block-menu-item[data-blo
     else if(kind==='toggle'){ tasks.push({type:'section', id:uid(), title:'', collapsed:false, children:[]}); }
     else { return; }
     document.getElementById('blockMenu').classList.remove('open');
+    document.querySelectorAll('.panel.menu-open').forEach(p=>p.classList.remove('menu-open'));
     renderTasks();
   };
 });
@@ -889,6 +908,34 @@ function renderApplications(){
   scheduleSave();
 }
 
+function computeTaskStats(list){
+  let total=0, done=0;
+  (list||[]).forEach(n=>{
+    if(n.type==='todo'){ total++; if(n.done) done++; }
+    if(n.children){ const r=computeTaskStats(n.children); total+=r.total; done+=r.done; }
+  });
+  return {total, done};
+}
+function renderTaskProgress(){
+  const el = document.getElementById('taskProgressBox');
+  if(!el) return;
+  const {total, done} = computeTaskStats(tasks);
+  const pct = total ? Math.round(done/total*100) : 0;
+  const r = 38, c = 2*Math.PI*r;
+  const offset = c - (c*pct/100);
+  el.innerHTML = `
+    <div class="cal-box-title">Tasks Completed</div>
+    <div class="donut-wrap">
+      <svg width="96" height="96" viewBox="0 0 96 96">
+        <circle cx="48" cy="48" r="${r}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="10"/>
+        <circle cx="48" cy="48" r="${r}" fill="none" stroke="var(--accent)" stroke-width="10" stroke-linecap="round"
+          stroke-dasharray="${c}" stroke-dashoffset="${offset}" transform="rotate(-90 48 48)" style="transition:stroke-dashoffset .4s ease;"/>
+        <text x="48" y="53" text-anchor="middle" font-size="17" fill="#F5F5F5" font-weight="700">${pct}%</text>
+      </svg>
+      <div class="donut-caption">${done} of ${total} done</div>
+    </div>`;
+}
+
 /* ===================== CALENDAR ===================== */
 function isoDate(y,m,d){ return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
 function eventList(iso){ const value=calendar.events[iso]; return Array.isArray(value)?value:(value?['Event']:[]); }
@@ -926,6 +973,7 @@ function renderCalendar(){
   document.getElementById('calendarEvents').innerHTML=`<div class="events-title">Events on ${calendar.selected}</div>${selectedEvents.map((name,i)=>`<div class="event-line"><span>${name}</span><button class="event-delete" data-delevent="${i}" title="Delete event">×</button></div>`).join('')||'<div class="event-line"><span style="color:var(--muted)">No events yet</span></div>'}<div class="event-add"><input id="eventName" placeholder="Add an event for this date"><button class="upload-btn" id="eventAdd">Add</button></div>`;
   document.querySelectorAll('[data-delevent]').forEach(el=>el.onclick=()=>{ const list=eventList(calendar.selected); list.splice(Number(el.dataset.delevent),1); if(list.length) calendar.events[calendar.selected]=list; else delete calendar.events[calendar.selected]; renderCalendar(); });
   document.getElementById('eventAdd').onclick=()=>{ const input=document.getElementById('eventName'); const name=input.value.trim(); if(!name) return; const list=eventList(calendar.selected); list.push(name); calendar.events[calendar.selected]=list; renderCalendar(); };
+  renderTaskProgress();
   scheduleSave();
 }
 document.getElementById('calPrev').onclick = ()=>{
@@ -975,11 +1023,8 @@ function moveShopItem(fromKey, toKey, appendToCatEnd){
 }
 function renderShopping(){
   const grand = shopping.reduce((s,cat)=>{ const t=moneyTotal(cat.items); return {gbp:s.gbp+t.gbp, inr:s.inr+t.inr}; },{gbp:0,inr:0});
-  const totalBox = `<div class="shop-total-box">
-    <div class="shop-total-label">Total spent so far</div>
-    <div class="shop-total-values"><span>₹${grand.inr}</span><span>£${grand.gbp}</span></div>
-  </div>`;
-  document.getElementById('shopRoot').innerHTML = totalBox + shopping.map(cat=>{
+  document.getElementById('shopTotalBadge').innerHTML = `<span class="shop-total-pill" title="Total spent so far"><span class="shop-total-pill-label">Total spent</span><span class="shop-total-pill-values">₹${grand.inr} · £${grand.gbp}</span></span>`;
+  document.getElementById('shopRoot').innerHTML = shopping.map(cat=>{
     const total = moneyTotal(cat.items);
     return `<div class="shop-cat">
       <div class="shop-cat-head" data-shopcat="${cat.id}">
@@ -994,7 +1039,7 @@ function renderShopping(){
           <div class="shop-item" data-shopitemrow="${cat.id}:${idx}">
             <span class="grip" draggable="true" data-shopgrip="${cat.id}:${idx}">::</span>
             <div class="check ${it.paid?'checked':''}" data-shopcheck="${cat.id}:${idx}"></div>
-            <span class="shop-item-name" contenteditable="true" data-shopname="${cat.id}:${idx}">${it.name}</span>
+            <span class="shop-item-name ${it.paid?'done':''}" contenteditable="true" data-shopname="${cat.id}:${idx}">${it.name}</span>
             ${moneyFields(it.price,`shop:${cat.id}:${idx}`)}
             <span class="more-dots" data-shopdel="${cat.id}:${idx}" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
           </div>`).join('')}
@@ -1185,16 +1230,19 @@ function renderTravel(){
       </div>`;
     }).join('');
 
-    const bp = trip.boardingPass || '';
-    const bpLink = bp ? `<a class="acc-url" href="${/^https?:\/\//.test(bp)?bp:'#'}" target="_blank" rel="noopener" style="margin-top:0;flex:none;">${bp}</a>` : '';
-    const boarding = `
-      <div class="boarding-row">
-        <span class="boarding-label">Flight Link</span>
-        <button class="upload-btn" data-bpupload="${trip.id}">Upload</button>
-        <span class="or-text">or</span>
-        <input class="paste-input" data-bpinput="${trip.id}" value="${bp.replace(/"/g,'&quot;')}" placeholder="Paste flight link here…">
-        ${bpLink}
-      </div>`;
+    const url = (trip.flightNumber||'').trim();
+    const isLink = isHttpUrl(url);
+    const urlField = `<div class="trip-summary-line-row">
+      <span class="trip-summary-line" contenteditable="true" data-flightnum="${trip.id}" data-ph="Paste a link…" style="${isLink?'color:#6ba3ff;':''}">${trip.flightNumber||''}</span>
+      ${linkOpenBtn(url)}
+    </div>`;
+
+    const accList = (trip.accommodation && trip.accommodation.length) ? trip.accommodation : [''];
+    const accLines = accList.map((line,idx)=>`
+      <div class="trip-summary-line-row">
+        <span class="trip-summary-line" contenteditable="true" data-tripaccom="${trip.id}:${idx}" data-ph="Hotel name and address…">${line}</span>
+        ${accList.length>1 ? `<span class="more-dots" data-tripaccdel="${trip.id}:${idx}" title="Remove" style="opacity:0.5;">×</span>` : ''}
+      </div>`).join('');
 
     const tripTotal = tripItemsTotal(trip);
     const dateRange = tripDateRange(trip);
@@ -1211,14 +1259,15 @@ function renderTravel(){
             <div class="trip-summary-title" contenteditable="true" data-triptitle="${trip.id}">${trip.title||''}</div>
             <div class="trip-summary-dates">${dateRange}</div>
             <div class="trip-summary-section-label">Flight Details</div>
-            <div class="trip-summary-line" contenteditable="true" data-flightnum="${trip.id}" data-ph="Flight number…">${trip.flightNumber||''}</div>
+            ${urlField}
             <div class="trip-summary-line" contenteditable="true" data-flightdep="${trip.id}" data-ph="Departure — airport &amp; time…">${trip.flightDeparture||''}</div>
             <div class="trip-summary-line" contenteditable="true" data-flightarr="${trip.id}" data-ph="Arrival — airport &amp; time…">${trip.flightArrival||''}</div>
             <div class="trip-summary-divider"></div>
-            <div class="trip-summary-section-label">Accommodation</div>
-            <div class="trip-summary-line" contenteditable="true" data-tripaccom="${trip.id}" data-ph="Hotel name and address…">${trip.accommodationText||''}</div>
-            <div class="trip-summary-divider"></div>
-            ${boarding}
+            <div class="trip-summary-section-label" style="display:flex;align-items:center;justify-content:space-between;">
+              <span>Accommodation</span>
+              <span class="add-plus-btn" data-tripaddacc="${trip.id}" title="Add another accommodation" style="width:19px;height:19px;font-size:0.8rem;">+</span>
+            </div>
+            ${accLines}
           </div>
           <div class="itin-timeline">
             ${dayItems}
@@ -1353,29 +1402,6 @@ function renderTravel(){
     const block = getItinBlock(tripId, dayId, blockId);
     if(block) block.heading = el.textContent.trim();
   });
-  document.querySelectorAll('[data-bpinput]').forEach(el=>{
-    el.addEventListener('click', e=> e.stopPropagation());
-    el.addEventListener('change', ()=>{
-      trips.find(t=>t.id===el.dataset.bpinput).boardingPass = el.value.trim();
-      scheduleSave();
-    });
-  });
-  document.querySelectorAll('[data-bpupload]').forEach(el=>{
-    el.onclick = (e)=>{
-      e.stopPropagation();
-      const inp = document.createElement('input');
-      inp.type = 'file';
-      inp.accept = 'image/*,.pdf';
-      inp.onchange = ()=>{
-        if(inp.files && inp.files[0]){
-          trips.find(t=>t.id===el.dataset.bpupload).boardingPass = inp.files[0].name;
-          renderTravel();
-        }
-      };
-      inp.click();
-    };
-  });
-
   bindEditable('[data-triptitle]', el=>{
     trips.find(t=>t.id===el.dataset.triptitle).title = el.textContent.trim();
     renderTravel();
@@ -1386,6 +1412,7 @@ function renderTravel(){
   });
   bindEditable('[data-flightnum]', el=>{
     trips.find(t=>t.id===el.dataset.flightnum).flightNumber = el.textContent.trim();
+    renderTravel();
   });
   bindEditable('[data-flightdep]', el=>{
     trips.find(t=>t.id===el.dataset.flightdep).flightDeparture = el.textContent.trim();
@@ -1394,7 +1421,28 @@ function renderTravel(){
     trips.find(t=>t.id===el.dataset.flightarr).flightArrival = el.textContent.trim();
   });
   bindEditable('[data-tripaccom]', el=>{
-    trips.find(t=>t.id===el.dataset.tripaccom).accommodationText = el.textContent.trim();
+    const [tripId, idx] = el.dataset.tripaccom.split(':');
+    const trip = trips.find(t=>t.id===tripId);
+    if(!trip.accommodation) trip.accommodation = [];
+    trip.accommodation[idx] = el.textContent.trim();
+  });
+  document.querySelectorAll('[data-tripaddacc]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const trip = trips.find(t=>t.id===el.dataset.tripaddacc);
+      if(!trip.accommodation) trip.accommodation = [];
+      trip.accommodation.push('');
+      renderTravel();
+    };
+  });
+  document.querySelectorAll('[data-tripaccdel]').forEach(el=>{
+    el.onclick = (e)=>{
+      e.stopPropagation();
+      const [tripId, idx] = el.dataset.tripaccdel.split(':');
+      const trip = trips.find(t=>t.id===tripId);
+      trip.accommodation.splice(Number(idx),1);
+      renderTravel();
+    };
   });
   document.querySelectorAll('[data-daydate]').forEach(el=>el.onchange=()=>{
     const [tripId,dayId]=el.dataset.daydate.split(':'); const trip=trips.find(t=>t.id===tripId); const index=trip.days.findIndex(d=>d.id===dayId); if(index<0||!el.value) return; const start=new Date(el.value+'T00:00:00'); trip.days.forEach((day,i)=>{ if(i>=index){ const d=new Date(start); d.setDate(start.getDate()+i-index); day.date=d.toISOString().slice(0,10); }}); renderTravel();
@@ -1405,7 +1453,9 @@ function renderTravel(){
 /* ===================== ADD BUTTONS ===================== */
 document.getElementById('tasksAddTop').onclick = (e)=>{
   e.stopPropagation();
-  document.getElementById('blockMenu').classList.toggle('open');
+  const menu = document.getElementById('blockMenu');
+  menu.classList.toggle('open');
+  menu.closest('.panel').classList.toggle('menu-open', menu.classList.contains('open'));
 };
 document.getElementById('accAddBtn').onclick = ()=>{
   accommodation.push({name:'', rent:'', bills:'N', status:'not'});
@@ -1420,7 +1470,7 @@ document.getElementById('shopAddBtn').onclick = ()=>{
   renderShopping();
 };
 document.getElementById('tripAddBtn').onclick = ()=>{
-  trips.push({id:uid(),title:'',collapsed:false,flightNumber:'',flightDeparture:'',flightArrival:'',accommodationText:'',boardingPass:'',days:[]});
+  trips.push({id:uid(),title:'',collapsed:false,flightNumber:'',flightDeparture:'',flightArrival:'',accommodation:[''],days:[]});
   renderTravel();
 };
 
@@ -1437,37 +1487,23 @@ function renderProfile(){
 /* ===================== PERSISTENCE ===================== */
 let loaded = false;
 let saveTimer = null;
-let panelLayout = null; // {left:[...panelkeys], right:[...panelkeys], full:[...panelkeys]}
-const DEFAULT_PANEL_LAYOUT = { left:['tasks','shopping','accommodation'], right:['calendar'], full:['apptracker','travel'] };
+let panelLayout = null; // flat array of panelkeys, in display order
+const DEFAULT_PANEL_LAYOUT = ['tasks','shopping','accommodation','calendar','apptracker','travel'];
 
 function savePanelLayout(){
-  panelLayout = {
-    left: Array.from(document.querySelectorAll('.col-left > [data-panelkey]')).map(el=>el.dataset.panelkey),
-    right: Array.from(document.querySelectorAll('.col-right > [data-panelkey]')).map(el=>el.dataset.panelkey),
-    full: Array.from(document.querySelectorAll('.full-width-stack > [data-panelkey]')).map(el=>el.dataset.panelkey)
-  };
+  panelLayout = Array.from(document.querySelectorAll('.dash-grid > [data-panelkey]')).map(el=>el.dataset.panelkey);
 }
 function applyPanelLayout(layout){
   layout = layout || panelLayout || DEFAULT_PANEL_LAYOUT;
-  const colLeft = document.querySelector('.col-left');
-  const colRight = document.querySelector('.col-right');
-  const full = document.querySelector('.full-width-stack');
-  (layout.left||[]).forEach(key=>{
+  const stack = document.querySelector('.dash-grid');
+  layout.forEach(key=>{
     const el = document.querySelector(`[data-panelkey="${key}"]`);
-    if(el) colLeft.appendChild(el);
-  });
-  (layout.right||[]).forEach(key=>{
-    const el = document.querySelector(`[data-panelkey="${key}"]`);
-    if(el) colRight.appendChild(el);
-  });
-  (layout.full||[]).forEach(key=>{
-    const el = document.querySelector(`[data-panelkey="${key}"]`);
-    if(el) full.appendChild(el);
+    if(el) stack.appendChild(el);
   });
 }
 function wirePanelDrag(){
   let draggedPanel = null;
-  document.querySelectorAll('.dash-grid .panel-grip, .full-width-stack .panel-grip').forEach(grip=>{
+  document.querySelectorAll('.dash-grid .panel-grip').forEach(grip=>{
     grip.addEventListener('dragstart', e=>{
       draggedPanel = grip.closest('[data-panelkey]');
       e.dataTransfer.effectAllowed = 'move';
@@ -1477,7 +1513,7 @@ function wirePanelDrag(){
       document.querySelectorAll('[data-panelkey]').forEach(p=>p.classList.remove('drag-over'));
     });
   });
-  document.querySelectorAll('.dash-grid [data-panelkey], .full-width-stack [data-panelkey]').forEach(panel=>{
+  document.querySelectorAll('.dash-grid > [data-panelkey]').forEach(panel=>{
     panel.addEventListener('dragover', e=>{ e.preventDefault(); if(draggedPanel && draggedPanel!==panel) panel.classList.add('drag-over'); });
     panel.addEventListener('dragleave', ()=> panel.classList.remove('drag-over'));
     panel.addEventListener('drop', e=>{
@@ -1502,6 +1538,11 @@ function normaliseTasks(list){
 }
 function migrateTripDays(tripList){
   (tripList||[]).forEach(trip=>{
+    if(!trip.accommodation){
+      trip.accommodation = trip.accommodationText ? [trip.accommodationText] : [''];
+    }
+    delete trip.accommodationText;
+    delete trip.boardingPass;
     (trip.days||[]).forEach(day=>{
       if(!day.blocks){
         const items = (day.rows||[])
@@ -1543,7 +1584,11 @@ function applyState(s){
   if(Array.isArray(s.trips)) trips = s.trips;
   if(Array.isArray(s.applications)) applications = s.applications;
   if(s.calendar) calendar = s.calendar;
-  if(s.panelLayout) panelLayout = s.panelLayout;
+  if(s.panelLayout){
+    panelLayout = Array.isArray(s.panelLayout)
+      ? s.panelLayout
+      : [...(s.panelLayout.left||[]), ...(s.panelLayout.right||[]), ...(s.panelLayout.full||[])];
+  }
 }
 function renderAll(){
   renderProfile();
