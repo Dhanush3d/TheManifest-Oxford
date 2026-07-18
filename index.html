@@ -9,8 +9,8 @@
 
 :root{
   --bg:#08080a;
-  --surface:rgba(24,24,26,0.55);
-  --surface-2:rgba(32,32,35,0.65);
+  --surface:rgba(24,24,26,0.46);
+  --surface-2:rgba(32,32,35,0.58);
   --primary:#2f5aa8;
   --accent:#22c55e;
   --border:rgba(255,255,255,0.07);
@@ -50,8 +50,9 @@ body{
 #bgLayer{
   position:fixed;inset:0;z-index:0;
   background:
-    radial-gradient(ellipse 900px 500px at 78% 0%, rgba(255,176,110,0.16), transparent 60%),
-    radial-gradient(ellipse 700px 400px at 95% 5%, rgba(255,140,90,0.10), transparent 65%),
+    radial-gradient(ellipse 1100px 620px at 80% -4%, rgba(255,176,110,0.24), transparent 62%),
+    radial-gradient(ellipse 800px 460px at 96% 4%, rgba(255,140,90,0.17), transparent 68%),
+    radial-gradient(ellipse 600px 500px at 55% -8%, rgba(255,150,100,0.08), transparent 70%),
     linear-gradient(180deg, #101012 0%, #08080a 40%, #050506 100%);
 }
 .dashboard{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:2rem 1.6rem 0;}
@@ -147,6 +148,12 @@ body{
 .app-cell[contenteditable]{border:1px solid transparent;padding:0.3rem 0.5rem;margin:-0.05rem -0.5rem;}
 .app-cell[contenteditable]:hover{border-color:var(--border);}
 .app-cell[contenteditable]:focus{border-color:rgba(255,255,255,0.18);}
+.acc-name[contenteditable],
+.acc-num[contenteditable]{border:1px solid transparent;border-radius:7px;padding:0.3rem 0.5rem;margin:-0.05rem -0.5rem;}
+.acc-name[contenteditable]:hover,
+.acc-num[contenteditable]:hover{border-color:var(--border);}
+.acc-name[contenteditable]:focus,
+.acc-num[contenteditable]:focus{border-color:rgba(255,255,255,0.18);}
 @media(max-width:700px){.app-table{font-size:0.78rem;}}
 
 /* ===== CALENDAR ===== */
@@ -549,6 +556,7 @@ function renderTaskNode(node, nested){
       <span class="arrow-spacer"></span>
       <div class="check ${node.done?'checked':''}" data-check="${node.id}"></div>
       <span class="task-label ${node.done?'done':''}" style="color:${node.color||''}" contenteditable="true" data-tasktext="${node.id}">${node.text}</span>
+      ${linkOpenBtn(node.text)}
       ${priceHtml}
       <span class="more-dots" data-delitem="${node.id}" title="Delete task" style="opacity:0.6;margin-left:0;">×</span>
     </div>`;
@@ -561,7 +569,7 @@ function renderTaskNode(node, nested){
         <span class="task-label section" style="color:${node.color||'inherit'}" contenteditable="true" data-bgtitle="${node.id}">${node.title}</span>
         <span class="more-dots" data-deltask="${node.id}" title="Delete list" style="opacity:0.6;margin-left:0;">×</span>
       </div>
-      <div>${node.children.map(c=>`<div class="task-row nested" data-dragid="${c.id}"><span class="grip" draggable="true">::</span><span class="bullet-dot"></span><span class="task-label" contenteditable="true" data-bullettext="${c.id}">${c.text}</span><span class="more-dots" data-delitem="${c.id}" title="Delete item" style="opacity:0.6;margin-left:0;">×</span></div>`).join('')}
+      <div>${node.children.map(c=>`<div class="task-row nested" data-dragid="${c.id}"><span class="grip" draggable="true">::</span><span class="bullet-dot"></span><span class="task-label" contenteditable="true" data-bullettext="${c.id}">${c.text}</span>${linkOpenBtn(c.text)}<span class="more-dots" data-delitem="${c.id}" title="Delete item" style="opacity:0.6;margin-left:0;">×</span></div>`).join('')}
       </div>
     </div>`;
   }
@@ -578,6 +586,7 @@ function renderTaskNode(node, nested){
       <span class="grip" draggable="true">::</span>
       <span class="num-label">${idx}.</span>
       <span class="task-label" style="color:${node.color||'inherit'}" contenteditable="true" data-numtext="${node.id}">${node.text}</span>
+      ${linkOpenBtn(node.text)}
       <span class="more-dots" data-delitem="${node.id}" title="Delete" style="opacity:0.6;margin-left:0;">×</span>
     </div>`;
   }
@@ -591,10 +600,10 @@ function renderTaskNode(node, nested){
     </div>`;
   }
   if(node.type==='heading'){
-    return `<div class="task-row" data-dragid="${node.id}"><span class="grip" draggable="true">::</span><span class="task-label section" style="font-size:1rem;color:${node.color||'inherit'}" contenteditable="true" data-headtext="${node.id}">${node.text}</span><span class="more-dots" data-delitem="${node.id}" title="Delete" style="opacity:0.6;margin-left:0;">×</span></div>`;
+    return `<div class="task-row" data-dragid="${node.id}"><span class="grip" draggable="true">::</span><span class="task-label section" style="font-size:1rem;color:${node.color||'inherit'}" contenteditable="true" data-headtext="${node.id}">${node.text}</span>${linkOpenBtn(node.text)}<span class="more-dots" data-delitem="${node.id}" title="Delete" style="opacity:0.6;margin-left:0;">×</span></div>`;
   }
   if(node.type==='text'){
-    return `<div class="task-row" data-dragid="${node.id}"><span class="grip" draggable="true">::</span><span class="task-label" style="color:${node.color||'inherit'}" contenteditable="true" data-texttext="${node.id}">${node.text}</span><span class="more-dots" data-delitem="${node.id}" title="Delete" style="opacity:0.6;margin-left:0;">×</span></div>`;
+    return `<div class="task-row" data-dragid="${node.id}"><span class="grip" draggable="true">::</span><span class="task-label" style="color:${node.color||'inherit'}" contenteditable="true" data-texttext="${node.id}">${node.text}</span>${linkOpenBtn(node.text)}<span class="more-dots" data-delitem="${node.id}" title="Delete" style="opacity:0.6;margin-left:0;">×</span></div>`;
   }
   return '';
 }
@@ -695,7 +704,11 @@ function bindEnterAddSibling(dataAttr, makeNode){
     el.addEventListener('click', e=>e.stopPropagation());
     el.addEventListener('blur', ()=>{
       const node = findNode(tasks, el.dataset[dataAttr]);
-      if(node) node.text = el.textContent.trim();
+      if(node){
+        node.text = el.textContent.trim();
+        renderTasks();
+        return;
+      }
       scheduleSave();
     });
     el.addEventListener('keydown', e=>{
@@ -845,8 +858,8 @@ function renderAccommodation(){
   const statusClass = {shortlisted:'status-shortlisted', review:'status-review', not:'status-not'};
   document.getElementById('accBody').innerHTML = accommodation.map((row,i)=>`
     <tr>
-      <td><div class="acc-name" contenteditable="true" data-accname="${i}">${row.name}</div></td>
-      <td class="acc-num" contenteditable="true" data-accrent="${i}">${row.rent}</td>
+      <td><div style="display:flex;align-items:center;gap:0.35rem;"><div class="acc-name" contenteditable="true" data-accname="${i}">${row.name}</div>${linkOpenBtn(row.name)}</div></td>
+      <td><div class="acc-num" contenteditable="true" data-accrent="${i}">${row.rent}</div></td>
       <td><span class="status-pill bills-toggle ${row.bills==='N'?'no':''}" data-accbills="${i}">${row.bills==='N'?'No':'Yes'}</span></td>
       <td><span class="status-pill ${statusClass[row.status]}" data-accstatus="${i}">${statusLabel[row.status]} ▾</span></td><td><button class="acc-delete" data-accdelete="${i}" title="Delete accommodation">×</button></td>
     </tr>`).join('');
@@ -868,7 +881,7 @@ function renderAccommodation(){
       if(ok){ accommodation.splice(Number(el.dataset.accdelete),1); renderAccommodation(); }
     };
   });
-  bindEditable('[data-accname]', el=>{ accommodation[el.dataset.accname].name = el.textContent.trim(); });
+  bindEditable('[data-accname]', el=>{ accommodation[el.dataset.accname].name = el.textContent.trim(); renderAccommodation(); });
   bindEditable('[data-accrent]', el=>{ accommodation[el.dataset.accrent].rent = el.textContent.trim(); });
   scheduleSave();
 }
@@ -879,11 +892,11 @@ function renderApplications(){
   const statusClass = {working:'status-working', applied:'status-applied', interviewing:'status-interviewing', rejected:'status-rejected'};
   document.getElementById('appBody').innerHTML = applications.map((row,i)=>`
     <tr>
-      <td><div class="app-cell app-company" contenteditable="true" data-appcompany="${i}">${row.company||''}</div></td>
-      <td class="app-cell" contenteditable="true" data-approle="${i}">${row.role||''}</td>
+      <td><div style="display:flex;align-items:center;gap:0.35rem;"><div class="app-cell app-company" contenteditable="true" data-appcompany="${i}">${row.company||''}</div>${linkOpenBtn(row.company)}</div></td>
+      <td><div style="display:flex;align-items:center;gap:0.35rem;"><div class="app-cell" contenteditable="true" data-approle="${i}">${row.role||''}</div>${linkOpenBtn(row.role)}</div></td>
       <td><span class="status-pill ${statusClass[row.status]}" data-appstatus="${i}">${statusLabel[row.status]} ▾</span></td>
-      <td class="app-cell" contenteditable="true" data-appsalary="${i}">${row.salaryRange||''}</td>
-      <td class="app-cell" contenteditable="true" data-appdate="${i}">${row.dateApplied||''}</td>
+      <td><div class="app-cell" contenteditable="true" data-appsalary="${i}">${row.salaryRange||''}</div></td>
+      <td><div class="app-cell" contenteditable="true" data-appdate="${i}">${row.dateApplied||''}</div></td>
       <td><button class="acc-delete" data-appdelete="${i}" title="Delete application">×</button></td>
     </tr>`).join('');
   document.querySelectorAll('[data-appstatus]').forEach(el=>{
@@ -901,8 +914,8 @@ function renderApplications(){
       if(ok){ applications.splice(Number(el.dataset.appdelete),1); renderApplications(); }
     };
   });
-  bindEditable('[data-appcompany]', el=>{ applications[el.dataset.appcompany].company = el.textContent.trim(); });
-  bindEditable('[data-approle]', el=>{ applications[el.dataset.approle].role = el.textContent.trim(); });
+  bindEditable('[data-appcompany]', el=>{ applications[el.dataset.appcompany].company = el.textContent.trim(); renderApplications(); });
+  bindEditable('[data-approle]', el=>{ applications[el.dataset.approle].role = el.textContent.trim(); renderApplications(); });
   bindEditable('[data-appsalary]', el=>{ applications[el.dataset.appsalary].salaryRange = el.textContent.trim(); });
   bindEditable('[data-appdate]', el=>{ applications[el.dataset.appdate].dateApplied = el.textContent.trim(); });
   scheduleSave();
@@ -1040,6 +1053,7 @@ function renderShopping(){
             <span class="grip" draggable="true" data-shopgrip="${cat.id}:${idx}">::</span>
             <div class="check ${it.paid?'checked':''}" data-shopcheck="${cat.id}:${idx}"></div>
             <span class="shop-item-name ${it.paid?'done':''}" contenteditable="true" data-shopname="${cat.id}:${idx}">${it.name}</span>
+            ${linkOpenBtn(it.name)}
             ${moneyFields(it.price,`shop:${cat.id}:${idx}`)}
             <span class="more-dots" data-shopdel="${cat.id}:${idx}" title="Remove" style="opacity:0.6;margin-left:0;">×</span>
           </div>`).join('')}
@@ -1151,6 +1165,7 @@ function renderShopping(){
   bindEditable('[data-shopname]', el=>{
     const [catId, idx] = el.dataset.shopname.split(':');
     shopping.find(c=>c.id===catId).items[idx].name = el.textContent.trim();
+    renderShopping();
   });
   bindEditable('[data-moneytext^="shop:"]', el=>{ const [,catId,idx]=el.dataset.moneytext.split(':'); shopping.find(c=>c.id===catId).items[idx].price=readMoney(el.textContent); renderShopping(); });
   scheduleSave();
@@ -1204,6 +1219,7 @@ function renderDayBlocks(trip, day){
             : `<span class="price-add" data-itinpriceadd="${trip.id}:${day.id}:${block.id}:${item.id}" title="Add a cost">+ cost</span>`;
           return `<li class="itin-item">
             <span class="itin-item-text" contenteditable="true" data-itintext="${trip.id}:${day.id}:${block.id}:${item.id}">${item.text||''}</span>
+            ${linkOpenBtn(item.text)}
             ${priceHtml}
             <span class="more-dots" data-delitinitem="${trip.id}:${day.id}:${block.id}:${item.id}" title="Delete" style="opacity:0.5;margin-left:0;">×</span>
           </li>`;
@@ -1369,7 +1385,7 @@ function renderTravel(){
       const [tripId, dayId, blockId, itemId] = el.dataset.itintext.split(':');
       const item = getItinItem(tripId, dayId, blockId, itemId);
       if(item) item.text = el.textContent.trim();
-      scheduleSave();
+      renderTravel();
     });
     el.addEventListener('keydown', e=>{
       if(e.key==='Enter'){
